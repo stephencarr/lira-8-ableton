@@ -1,0 +1,246 @@
+
+// Adapted from LIRA-8, Copyright Miguel Moreno. See License.txt.
+// Gen port: explicit 64-sample inter-pair feedback; see port notes.
+lira_sat(x) { z=clamp(x,-3,3); return z*(27+z*z)/(27+9*z*z); }
+lira_ramp(x,ms) {
+ History previous(0);
+ History value(0);
+ History remaining(0);
+ History increment(0);
+ if (x != previous) {
+   remaining = max(1, ms * samplerate / 1000);
+   increment = (x - value) / remaining;
+ }
+ previous = x;
+ if (remaining > 0) {
+   value = value + increment;
+   remaining = max(0, remaining - 1);
+ } else {
+   value = x;
+ }
+ return value;
+}
+
+lira_lp(x,f) { History y(0); a=clamp(6.28318530718*f/samplerate,0,1); y=y+a*(x-y); return y; }
+lira_hp(x,f) {
+ History input_memory(0);
+ History output_memory(0);
+ coefficient = clamp(1 - 6.28318530718 * f / samplerate, 0, 1);
+ result = (1 + coefficient) * 0.5 * (x - input_memory) + coefficient * output_memory;
+ input_memory = x;
+ output_memory = result;
+ return result;
+}
+
+lira_blep(p,d) { a=p/max(d,0.00000001); b=(p-1)/max(d,0.00000001); return p<d ? 2*a-a*a-1 : p>1-d ? b*b+2*b+1 : 0; }
+lira_osc(freq,duty) {
+ History phase(0), width(0.53125), last(0), filt(0);
+ f=abs(freq); dt=f/samplerate; p=phase; phase=wrap(p+dt,0,1);
+ if(p<last){width=clamp(duty,0,1);} last=p;
+ q=wrap(p+width,0,1);
+ square=(2*p-1-lira_blep(p,dt))-(2*q-1-lira_blep(q,dt))+2*width-1;
+ a=exp(-6.28318530718*clamp(max(f/4,100),0,samplerate/2)/samplerate);
+ filt=(1-a)*square+a*filt;
+ return square*0.59, filt*2.65-0.145;
+}
+lira_voice(arg_freq,arg_sharp,arg_gate,arg_hold,arg_fast,arg_duty) {
+ envelope_value=lira_ramp(arg_gate,arg_gate>0 ? (arg_fast>0?100:200) : (arg_fast>0?100:8000));
+ sq,tr=lira_osc(arg_freq,arg_duty);
+ return (sq*arg_sharp+tr*(1-arg_sharp)+sin(envelope_value*6.28318530718)*0.5)*min(1,envelope_value*envelope_value+arg_hold);
+}
+lira_dynamics(x) {
+ History env(0), sumsq(0);
+ Delay rmsbuf(512);
+ a=exp(-4.60517/(samplerate*0.0025)); env=abs(x)+a*(env-abs(x));
+ gain=clamp(((env-0.2511886432)/5+0.2511886432)/max(env,0.0000000001),0,1);
+ comp=x*lira_sat(gain);
+ sq=comp*comp; old=rmsbuf.read(512); rmsbuf.write(sq);
+ sumsq=max(0,sumsq+sq-old);
+ db=10*log10(max(sumsq/512,0.000000000001));
+ // 512-sample rectangular RMS approximation to Pd env~ Hann detector.
+ eg=lira_ramp(pow(10,min(0,(db+60)*0.8)/20),11);
+ return comp*eg;
+}
+History hpf_0_x(0), hpf_0_y(0);
+History hpf_1_x(0), hpf_1_y(0);
+History hpf_2_x(0), hpf_2_y(0);
+History hpf_3_x(0), hpf_3_y(0);
+History hpf_4_x(0), hpf_4_y(0);
+History hpf_5_x(0), hpf_5_y(0);
+History hpf_6_x(0), hpf_6_y(0);
+History hpf_7_x(0), hpf_7_y(0);
+History hpf_8_x(0), hpf_8_y(0);
+Param level8(127,min=0,max=127);
+Param bend8(0,min=-48,max=48);
+Param press8(0,min=0,max=1);
+Param level7(127,min=0,max=127);
+Param bend7(0,min=-48,max=48);
+Param press7(0,min=0,max=1);
+Param level6(127,min=0,max=127);
+Param bend6(0,min=-48,max=48);
+Param press6(0,min=0,max=1);
+Param level5(127,min=0,max=127);
+Param bend5(0,min=-48,max=48);
+Param press5(0,min=0,max=1);
+Param level4(127,min=0,max=127);
+Param bend4(0,min=-48,max=48);
+Param press4(0,min=0,max=1);
+Param level3(127,min=0,max=127);
+Param bend3(0,min=-48,max=48);
+Param press3(0,min=0,max=1);
+Param level2(127,min=0,max=127);
+Param bend2(0,min=-48,max=48);
+Param press2(0,min=0,max=1);
+Param level1(127,min=0,max=127);
+Param bend1(0,min=-48,max=48);
+Param press1(0,min=0,max=1);
+Param tune1(64,min=0,max=127);
+Param tune2(68,min=0,max=127);
+Param tune3(55,min=0,max=127);
+Param tune4(60,min=0,max=127);
+Param tune5(45,min=0,max=127);
+Param tune6(50,min=0,max=127);
+Param tune7(38,min=0,max=127);
+Param tune8(43,min=0,max=127);
+Param sharp1(40,min=0,max=127);
+Param sharp2(40,min=0,max=127);
+Param sharp3(40,min=0,max=127);
+Param sharp4(40,min=0,max=127);
+Param mod1(0,min=0,max=127);
+Param mod2(0,min=0,max=127);
+Param mod3(0,min=0,max=127);
+Param mod4(0,min=0,max=127);
+Param source1(1,min=0,max=2);
+Param source2(1,min=0,max=2);
+Param source3(1,min=0,max=2);
+Param source4(1,min=0,max=2);
+Param fast1(0,min=0,max=1);
+Param fast2(0,min=0,max=1);
+Param fast3(0,min=0,max=1);
+Param fast4(0,min=0,max=1);
+Param pitch1(63,min=0,max=127);
+Param pitch2(63,min=0,max=127);
+Param hold1(0,min=0,max=127);
+Param hold2(0,min=0,max=127);
+Param lfo1(64,min=0,max=127);
+Param lfo2(72,min=0,max=127);
+Param link(0,min=0,max=1);
+Param andor(0,min=0,max=1);
+Param routing(0,min=0,max=1);
+Param totalfb(0,min=0,max=1);
+Param vibrato(0,min=0,max=1);
+Param quantize(0,min=0,max=1);
+Param time1(60,min=0,max=127);
+Param time2(68,min=0,max=127);
+Param dmod1(0,min=0,max=127);
+Param dmod2(0,min=0,max=127);
+Param feedback(35,min=0,max=127);
+Param dmix(30,min=0,max=127);
+Param dsource(1,min=0,max=2);
+Param dwave(0,min=0,max=1);
+Param drive(20,min=0,max=127);
+Param distmix(30,min=0,max=127);
+Param volume(80,min=0,max=127);
+Param voiceon1(0,min=0,max=1);
+Param voiceon2(0,min=0,max=1);
+Param voiceon3(0,min=0,max=1);
+Param voiceon4(0,min=0,max=1);
+Param voiceon5(0,min=0,max=1);
+Param voiceon6(0,min=0,max=1);
+Param voiceon7(0,min=0,max=1);
+Param voiceon8(0,min=0,max=1);
+Param gate1(0,min=0,max=1);
+Param gate2(0,min=0,max=1);
+Param gate3(0,min=0,max=1);
+Param gate4(0,min=0,max=1);
+Param gate5(0,min=0,max=1);
+Param gate6(0,min=0,max=1);
+Param gate7(0,min=0,max=1);
+Param gate8(0,min=0,max=1);
+
+Delay pair1(64),pair2(64),pair3(64),pair4(64),totaldelay(64);
+Delay delay1(1048576),delay2(1048576);
+History lphase1(0),lphase2(0);
+History pair_state1(0),pair_state2(0),pair_state3(0),pair_state4(0),total_state(0);
+fla=lira_ramp(mtof(pow(lfo1/127,2)*127-75),23.22);
+flb=lira_ramp(mtof(pow(lfo2/127,2)*127-75),23.22);
+ls1=clamp(cos(lphase1*6.28318530718)*1000,-1,1);
+ls2=clamp(cos(lphase2*6.28318530718)*1000,-1,1);
+ltri=((abs(lphase1-0.5)*4-1)+(abs(lphase2-0.5)*4-1))*0.5;
+lsqr=(ls1+ls2)*0.5;
+lmod=andor>0 ? lsqr : ls1*ls2;
+lphase1=wrap(lphase1+fla/samplerate,0,1);
+lphase2=wrap(lphase2+(flb+ls1*flb*0.5*link)/samplerate,0,1);
+p1=pair_state1; p2=pair_state2; p3=pair_state3; p4=pair_state4; tf=total_state;
+pair_state1=pair1.read(63);pair_state2=pair2.read(63);pair_state3=pair3.read(63);pair_state4=pair4.read(63);total_state=totaldelay.read(63);
+src1=((routing>0?0.001:1)*p2+(routing>0?1:0.001)*p4)*(source1==0?1:0.001)+(lmod*(totalfb>0?0.001:1)+tf*(totalfb>0?1:0.001))*(source1==2?1:0.001);
+md1=lira_ramp(pow(mod1/127,4)*2,23.22); sh1=lira_ramp(pow(sharp1/127,2),23.22);
+vib1=cycle(1.13)*lira_ramp(vibrato,23.22);
+src2=((routing>0?0.001:1)*p1+(routing>0?1:0.001)*p1)*(source2==0?1:0.001)+(lmod*(totalfb>0?0.001:1)+tf*(totalfb>0?1:0.001))*(source2==2?1:0.001);
+md2=lira_ramp(pow(mod2/127,4)*2,23.22); sh2=lira_ramp(pow(sharp2/127,2),23.22);
+vib2=cycle(2.31)*lira_ramp(vibrato,23.22);
+src3=((routing>0?0.001:1)*p4+(routing>0?1:0.001)*p2)*(source3==0?1:0.001)+(lmod*(totalfb>0?0.001:1)+tf*(totalfb>0?1:0.001))*(source3==2?1:0.001);
+md3=lira_ramp(pow(mod3/127,4)*2,23.22); sh3=lira_ramp(pow(sharp3/127,2),23.22);
+vib3=cycle(3.17)*lira_ramp(vibrato,23.22);
+src4=((routing>0?0.001:1)*p3+(routing>0?1:0.001)*p3)*(source4==0?1:0.001)+(lmod*(totalfb>0?0.001:1)+tf*(totalfb>0?1:0.001))*(source4==2?1:0.001);
+md4=lira_ramp(pow(mod4/127,4)*2,23.22); sh4=lira_ramp(pow(sharp4/127,2),23.22);
+vib4=cycle(1.79)*lira_ramp(vibrato,23.22);
+raw1=mtof(-16+tune1/127*109)*(0.01+1.99*pitch1/127);
+fq1=lira_ramp(quantize>0?mtof(floor(ftom(raw1)+0.5)):raw1,23.22);
+v1=lira_voice(fq1*pow(2,lira_ramp(bend1,5)/12)*(1+vib1*0.005)*(1+src1*md1),clamp(sh1+lira_ramp(press1,10)*0.6,0,1),max(gate1,voiceon1),lira_ramp(pow(hold1/127,2),23.22),fast1,0.53125+vib1*0.025);
+raw2=mtof(-16+tune2/127*109)*(0.01+1.99*pitch1/127);
+fq2=lira_ramp(quantize>0?mtof(floor(ftom(raw2)+0.5)):raw2,23.22);
+v2=lira_voice(fq2*pow(2,lira_ramp(bend2,5)/12)*(1+vib1*0.005)*(1+src1*md1),clamp(sh1+lira_ramp(press2,10)*0.6,0,1),max(gate2,voiceon2),lira_ramp(pow(hold1/127,2),23.22),fast1,0.53125+vib1*0.025);
+raw3=mtof(7+tune3/127*102)*(0.01+1.99*pitch1/127);
+fq3=lira_ramp(quantize>0?mtof(floor(ftom(raw3)+0.5)):raw3,23.22);
+v3=lira_voice(fq3*pow(2,lira_ramp(bend3,5)/12)*(1+vib2*0.005)*(1+src2*md2),clamp(sh2+lira_ramp(press3,10)*0.6,0,1),max(gate3,voiceon3),lira_ramp(pow(hold1/127,2),23.22),fast2,0.53125+vib2*0.025);
+raw4=mtof(9+tune4/127*98)*(0.01+1.99*pitch1/127);
+fq4=lira_ramp(quantize>0?mtof(floor(ftom(raw4)+0.5)):raw4,23.22);
+v4=lira_voice(fq4*pow(2,lira_ramp(bend4,5)/12)*(1+vib2*0.005)*(1+src2*md2),clamp(sh2+lira_ramp(press4,10)*0.6,0,1),max(gate4,voiceon4),lira_ramp(pow(hold1/127,2),23.22),fast2,0.53125+vib2*0.025);
+raw5=mtof(20+tune5/127*96.54)*(0.01+1.99*pitch2/127);
+fq5=lira_ramp(quantize>0?mtof(floor(ftom(raw5)+0.5)):raw5,23.22);
+v5=lira_voice(fq5*pow(2,lira_ramp(bend5,5)/12)*(1+vib3*0.005)*(1+src3*md3),clamp(sh3+lira_ramp(press5,10)*0.6,0,1),max(gate5,voiceon5),lira_ramp(pow(hold2/127,2),23.22),fast3,0.53125+vib3*0.025);
+raw6=mtof(20+tune6/127*96.54)*(0.01+1.99*pitch2/127);
+fq6=lira_ramp(quantize>0?mtof(floor(ftom(raw6)+0.5)):raw6,23.22);
+v6=lira_voice(fq6*pow(2,lira_ramp(bend6,5)/12)*(1+vib3*0.005)*(1+src3*md3),clamp(sh3+lira_ramp(press6,10)*0.6,0,1),max(gate6,voiceon6),lira_ramp(pow(hold2/127,2),23.22),fast3,0.53125+vib3*0.025);
+raw7=mtof(33+tune7/127*93.24)*(0.01+1.99*pitch2/127);
+fq7=lira_ramp(quantize>0?mtof(floor(ftom(raw7)+0.5)):raw7,23.22);
+v7=lira_voice(fq7*pow(2,lira_ramp(bend7,5)/12)*(1+vib4*0.005)*(1+src4*md4),clamp(sh4+lira_ramp(press7,10)*0.6,0,1),max(gate7,voiceon7),lira_ramp(pow(hold2/127,2),23.22),fast4,0.53125+vib4*0.025);
+raw8=mtof(33+tune8/127*98.22)*(0.01+1.99*pitch2/127);
+fq8=lira_ramp(quantize>0?mtof(floor(ftom(raw8)+0.5)):raw8,23.22);
+v8=lira_voice(fq8*pow(2,lira_ramp(bend8,5)/12)*(1+vib4*0.005)*(1+src4*md4),clamp(sh4+lira_ramp(press8,10)*0.6,0,1),max(gate8,voiceon8),lira_ramp(pow(hold2/127,2),23.22),fast4,0.53125+vib4*0.025);
+hpf_0_a = clamp(1 - 6.28318530718 * (3) / samplerate, 0, 1); hpf_0_input = v1+v2; hpf_0_out = (1+hpf_0_a)*0.5*(hpf_0_input-hpf_0_x)+hpf_0_a*hpf_0_y; hpf_0_x=hpf_0_input; hpf_0_y=hpf_0_out;
+pair1.write(hpf_0_out);
+hpf_1_a = clamp(1 - 6.28318530718 * (3) / samplerate, 0, 1); hpf_1_input = v3+v4; hpf_1_out = (1+hpf_1_a)*0.5*(hpf_1_input-hpf_1_x)+hpf_1_a*hpf_1_y; hpf_1_x=hpf_1_input; hpf_1_y=hpf_1_out;
+pair2.write(hpf_1_out);
+hpf_2_a = clamp(1 - 6.28318530718 * (3) / samplerate, 0, 1); hpf_2_input = v5+v6; hpf_2_out = (1+hpf_2_a)*0.5*(hpf_2_input-hpf_2_x)+hpf_2_a*hpf_2_y; hpf_2_x=hpf_2_input; hpf_2_y=hpf_2_out;
+pair3.write(hpf_2_out);
+hpf_3_a = clamp(1 - 6.28318530718 * (3) / samplerate, 0, 1); hpf_3_input = v7+v8; hpf_3_out = (1+hpf_3_a)*0.5*(hpf_3_input-hpf_3_x)+hpf_3_a*hpf_3_y; hpf_3_x=hpf_3_input; hpf_3_y=hpf_3_out;
+pair4.write(hpf_3_out);
+
+dry=(v1*lira_ramp(level1/127,23.22)+v2*lira_ramp(level2/127,23.22)+v3*lira_ramp(level3/127,23.22)+v4*lira_ramp(level4/127,23.22)+v5*lira_ramp(level5/127,23.22)+v6*lira_ramp(level6/127,23.22)+v7*lira_ramp(level7/127,23.22)+v8*lira_ramp(level8/127,23.22))*0.166667;
+fb=lira_ramp(feedback/127*pow(2,2*feedback/127),23.22);
+dlfo=(dwave>0?lsqr:ltri)*(dsource==2);
+self1=lira_lp(delay1.read(64)*0.5*(dsource==0),689);
+self2=lira_lp(delay2.read(64)*0.5,689)*(dsource==0);
+ms1=lira_ramp(pow(2,time1/127*12)*1.45125,23.22)+(self1+dlfo)*lira_ramp(pow(dmod1/127,2)*10,23.22);
+ms2=lira_ramp(pow(2,time2/127*12)*1.45125,23.22)+(self2+dlfo)*lira_ramp(pow(dmod2/127,2)*10,23.22);
+hpf_4_a = clamp(1 - 6.28318530718 * (1) / samplerate, 0, 1); hpf_4_input = delay1.read(clamp(ms1*samplerate/1000,64,1048575),interp="cubic"); hpf_4_out = (1+hpf_4_a)*0.5*(hpf_4_input-hpf_4_x)+hpf_4_a*hpf_4_y; hpf_4_x=hpf_4_input; hpf_4_y=hpf_4_out;
+d1=lira_dynamics(lira_lp(hpf_4_out,4000));
+hpf_5_a = clamp(1 - 6.28318530718 * (1) / samplerate, 0, 1); hpf_5_input = delay2.read(clamp(ms2*samplerate/1000,64,1048575),interp="cubic"); hpf_5_out = (1+hpf_5_a)*0.5*(hpf_5_input-hpf_5_x)+hpf_5_a*hpf_5_y; hpf_5_x=hpf_5_input; hpf_5_y=hpf_5_out;
+d2=lira_dynamics(lira_lp(hpf_5_out,4000));
+n=noise()*0.001;
+delay1.write(dry+n+d1*fb);delay2.write(dry+n+d2*fb);
+wet=lira_sat((d1+d2)*0.5/max(fb,1.5));
+dm=lira_ramp(dmix/127,23.22); mixed=dry*(1-dm)+wet*dm;
+dg=lira_ramp(pow(10,(pow(3,1+2*drive/127)+3)/20),23.22);
+hpf_6_a = clamp(1 - 6.28318530718 * (20) / samplerate, 0, 1); hpf_6_input = mixed*dg; hpf_6_out = (1+hpf_6_a)*0.5*(hpf_6_input-hpf_6_x)+hpf_6_a*hpf_6_y; hpf_6_x=hpf_6_input; hpf_6_y=hpf_6_out;
+dist=lira_sat(hpf_6_out);
+hpf_7_a = clamp(1 - 6.28318530718 * (10) / samplerate, 0, 1); hpf_7_input = dist+pow(dist,31)*0.25; hpf_7_out = (1+hpf_7_a)*0.5*(hpf_7_input-hpf_7_x)+hpf_7_a*hpf_7_y; hpf_7_x=hpf_7_input; hpf_7_y=hpf_7_out;
+dist=hpf_7_out/clamp(dg,1,4)+mixed*0.1;
+mixd=lira_ramp(distmix/127,23.22);
+master=lira_sat(mixed*(1-mixd)+dist*mixd);
+hpf_8_a = clamp(1 - 6.28318530718 * (3) / samplerate, 0, 1); hpf_8_input = master; hpf_8_out = (1+hpf_8_a)*0.5*(hpf_8_input-hpf_8_x)+hpf_8_a*hpf_8_y; hpf_8_x=hpf_8_input; hpf_8_y=hpf_8_out;
+totaldelay.write(hpf_8_out);
+out1=master*lira_ramp(pow(volume/127,2),23.22);
+out2=out1;
