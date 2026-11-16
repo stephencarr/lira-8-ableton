@@ -5,6 +5,7 @@ p=json.loads((root/'dist/LIRA-Push-Pads.maxpat').read_text())['patcher']
 ranges=[(-16,93),(-16,93),(7,109),(9,107),(20,116.54),(20,116.54),(33,126.24),(33,131.22)]
 notes=[48,52,55,60,64,67,72,76]
 by={e['box']['id']:e['box'] for e in p['boxes']}
+assert 'notetuner' in by, 'This historical harness requires the alpha 10 experiment. Alpha 11 recovery deliberately excludes note tuning.'
 for i,((lo,hi),note) in enumerate(zip(ranges,notes),1):
     by['tune'+str(i)]['saved_attribute_attributes']['valueof']['parameter_initial']=[127*(note-lo-12*math.log2(.01+1.99*63/127))/(hi-lo)]
 by['padmode']['saved_attribute_attributes']['valueof']['parameter_initial']=[0]

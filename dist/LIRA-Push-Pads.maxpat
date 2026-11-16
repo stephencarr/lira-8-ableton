@@ -560,7 +560,7 @@
             20
           ],
           "fontsize": 16,
-          "text": "LIRA \u2022 8 / Pad edition alpha 10 \u00b7 Note tuning"
+          "text": "LIRA \u2022 8 / Pad edition alpha 11 \u00b7 Recovery"
         }
       },
       {
@@ -640,8 +640,7 @@
               "parameter_initial": [
                 64
               ],
-              "parameter_unitstyle": 9,
-              "parameter_units": "%.0f"
+              "parameter_unitstyle": 0
             }
           },
           "fontsize": 10,
@@ -678,7 +677,7 @@
             0.94,
             1
           ],
-          "hint": "Tune 1 \u2014 0\u2013127, same scale as Pure Data \u00b7 Hold Push Shift to select notes (Tune) or transpose in semitones (Pitch)."
+          "hint": "Tune 1 \u2014 0\u2013127, same scale as Pure Data"
         }
       },
       {
@@ -751,8 +750,7 @@
               "parameter_initial": [
                 68
               ],
-              "parameter_unitstyle": 9,
-              "parameter_units": "%.0f"
+              "parameter_unitstyle": 0
             }
           },
           "fontsize": 10,
@@ -789,7 +787,7 @@
             0.94,
             1
           ],
-          "hint": "Tune 2 \u2014 0\u2013127, same scale as Pure Data \u00b7 Hold Push Shift to select notes (Tune) or transpose in semitones (Pitch)."
+          "hint": "Tune 2 \u2014 0\u2013127, same scale as Pure Data"
         }
       },
       {
@@ -862,8 +860,7 @@
               "parameter_initial": [
                 55
               ],
-              "parameter_unitstyle": 9,
-              "parameter_units": "%.0f"
+              "parameter_unitstyle": 0
             }
           },
           "fontsize": 10,
@@ -900,7 +897,7 @@
             0.94,
             1
           ],
-          "hint": "Tune 3 \u2014 0\u2013127, same scale as Pure Data \u00b7 Hold Push Shift to select notes (Tune) or transpose in semitones (Pitch)."
+          "hint": "Tune 3 \u2014 0\u2013127, same scale as Pure Data"
         }
       },
       {
@@ -973,8 +970,7 @@
               "parameter_initial": [
                 60
               ],
-              "parameter_unitstyle": 9,
-              "parameter_units": "%.0f"
+              "parameter_unitstyle": 0
             }
           },
           "fontsize": 10,
@@ -1011,7 +1007,7 @@
             0.94,
             1
           ],
-          "hint": "Tune 4 \u2014 0\u2013127, same scale as Pure Data \u00b7 Hold Push Shift to select notes (Tune) or transpose in semitones (Pitch)."
+          "hint": "Tune 4 \u2014 0\u2013127, same scale as Pure Data"
         }
       },
       {
@@ -1084,8 +1080,7 @@
               "parameter_initial": [
                 45
               ],
-              "parameter_unitstyle": 9,
-              "parameter_units": "%.0f"
+              "parameter_unitstyle": 0
             }
           },
           "fontsize": 10,
@@ -1122,7 +1117,7 @@
             0.94,
             1
           ],
-          "hint": "Tune 5 \u2014 0\u2013127, same scale as Pure Data \u00b7 Hold Push Shift to select notes (Tune) or transpose in semitones (Pitch)."
+          "hint": "Tune 5 \u2014 0\u2013127, same scale as Pure Data"
         }
       },
       {
@@ -1195,8 +1190,7 @@
               "parameter_initial": [
                 50
               ],
-              "parameter_unitstyle": 9,
-              "parameter_units": "%.0f"
+              "parameter_unitstyle": 0
             }
           },
           "fontsize": 10,
@@ -1233,7 +1227,7 @@
             0.94,
             1
           ],
-          "hint": "Tune 6 \u2014 0\u2013127, same scale as Pure Data \u00b7 Hold Push Shift to select notes (Tune) or transpose in semitones (Pitch)."
+          "hint": "Tune 6 \u2014 0\u2013127, same scale as Pure Data"
         }
       },
       {
@@ -1306,8 +1300,7 @@
               "parameter_initial": [
                 38
               ],
-              "parameter_unitstyle": 9,
-              "parameter_units": "%.0f"
+              "parameter_unitstyle": 0
             }
           },
           "fontsize": 10,
@@ -1344,7 +1337,7 @@
             0.94,
             1
           ],
-          "hint": "Tune 7 \u2014 0\u2013127, same scale as Pure Data \u00b7 Hold Push Shift to select notes (Tune) or transpose in semitones (Pitch)."
+          "hint": "Tune 7 \u2014 0\u2013127, same scale as Pure Data"
         }
       },
       {
@@ -1417,8 +1410,7 @@
               "parameter_initial": [
                 43
               ],
-              "parameter_unitstyle": 9,
-              "parameter_units": "%.0f"
+              "parameter_unitstyle": 0
             }
           },
           "fontsize": 10,
@@ -1455,7 +1447,7 @@
             0.94,
             1
           ],
-          "hint": "Tune 8 \u2014 0\u2013127, same scale as Pure Data \u00b7 Hold Push Shift to select notes (Tune) or transpose in semitones (Pitch)."
+          "hint": "Tune 8 \u2014 0\u2013127, same scale as Pure Data"
         }
       },
       {
@@ -3320,8 +3312,7 @@
               "parameter_initial": [
                 63
               ],
-              "parameter_unitstyle": 9,
-              "parameter_units": "%.0f"
+              "parameter_unitstyle": 0
             }
           },
           "fontsize": 10,
@@ -3358,7 +3349,7 @@
             0.94,
             1
           ],
-          "hint": "Pitch 1234 \u2014 0\u2013127, same scale as Pure Data \u00b7 Hold Push Shift to select notes (Tune) or transpose in semitones (Pitch)."
+          "hint": "Pitch 1234 \u2014 0\u2013127, same scale as Pure Data"
         }
       },
       {
@@ -3431,8 +3422,7 @@
               "parameter_initial": [
                 63
               ],
-              "parameter_unitstyle": 9,
-              "parameter_units": "%.0f"
+              "parameter_unitstyle": 0
             }
           },
           "fontsize": 10,
@@ -3469,7 +3459,7 @@
             0.94,
             1
           ],
-          "hint": "Pitch 5678 \u2014 0\u2013127, same scale as Pure Data \u00b7 Hold Push Shift to select notes (Tune) or transpose in semitones (Pitch)."
+          "hint": "Pitch 5678 \u2014 0\u2013127, same scale as Pure Data"
         }
       },
       {
@@ -7668,7 +7658,7 @@
                   "presentation_rect": [
                     260,
                     21,
-                    240,
+                    350,
                     24
                   ],
                   "fontsize": 14,
@@ -7679,7 +7669,7 @@
                     1
                   ],
                   "fontname": "Arial",
-                  "text": "PAD EDITION \u00b7 eight voices"
+                  "text": "PAD EDITION \u00b7 eight voices / eight menu banks"
                 }
               },
               {
@@ -14889,215 +14879,6 @@
                     22
                   ]
                 }
-              },
-              {
-                "box": {
-                  "id": "notelabel_tune1",
-                  "maxclass": "newobj",
-                  "text": "r #0-notelabel-tune1",
-                  "patching_rect": [
-                    20,
-                    900,
-                    200,
-                    22
-                  ]
-                }
-              },
-              {
-                "box": {
-                  "id": "notelabel_tune2",
-                  "maxclass": "newobj",
-                  "text": "r #0-notelabel-tune2",
-                  "patching_rect": [
-                    20,
-                    900,
-                    200,
-                    22
-                  ]
-                }
-              },
-              {
-                "box": {
-                  "id": "notelabel_tune3",
-                  "maxclass": "newobj",
-                  "text": "r #0-notelabel-tune3",
-                  "patching_rect": [
-                    20,
-                    900,
-                    200,
-                    22
-                  ]
-                }
-              },
-              {
-                "box": {
-                  "id": "notelabel_tune4",
-                  "maxclass": "newobj",
-                  "text": "r #0-notelabel-tune4",
-                  "patching_rect": [
-                    20,
-                    900,
-                    200,
-                    22
-                  ]
-                }
-              },
-              {
-                "box": {
-                  "id": "notelabel_tune5",
-                  "maxclass": "newobj",
-                  "text": "r #0-notelabel-tune5",
-                  "patching_rect": [
-                    20,
-                    900,
-                    200,
-                    22
-                  ]
-                }
-              },
-              {
-                "box": {
-                  "id": "notelabel_tune6",
-                  "maxclass": "newobj",
-                  "text": "r #0-notelabel-tune6",
-                  "patching_rect": [
-                    20,
-                    900,
-                    200,
-                    22
-                  ]
-                }
-              },
-              {
-                "box": {
-                  "id": "notelabel_tune7",
-                  "maxclass": "newobj",
-                  "text": "r #0-notelabel-tune7",
-                  "patching_rect": [
-                    20,
-                    900,
-                    200,
-                    22
-                  ]
-                }
-              },
-              {
-                "box": {
-                  "id": "notelabel_tune8",
-                  "maxclass": "newobj",
-                  "text": "r #0-notelabel-tune8",
-                  "patching_rect": [
-                    20,
-                    900,
-                    200,
-                    22
-                  ]
-                }
-              },
-              {
-                "box": {
-                  "id": "notelabel_pitch1",
-                  "maxclass": "newobj",
-                  "text": "r #0-notelabel-pitch1",
-                  "patching_rect": [
-                    20,
-                    900,
-                    200,
-                    22
-                  ]
-                }
-              },
-              {
-                "box": {
-                  "id": "notelabel_pitch2",
-                  "maxclass": "newobj",
-                  "text": "r #0-notelabel-pitch2",
-                  "patching_rect": [
-                    20,
-                    900,
-                    200,
-                    22
-                  ]
-                }
-              },
-              {
-                "box": {
-                  "id": "notemanual",
-                  "maxclass": "textbutton",
-                  "mode": 1,
-                  "text": "Note tune Off",
-                  "texton": "Note tune On",
-                  "presentation": 1,
-                  "presentation_rect": [
-                    510,
-                    14,
-                    150,
-                    26
-                  ],
-                  "patching_rect": [
-                    510,
-                    14,
-                    150,
-                    26
-                  ],
-                  "numinlets": 1,
-                  "numoutlets": 3,
-                  "active": 1,
-                  "legacytextcolor": 1,
-                  "usegradient": 0,
-                  "usebgoncolor": 1,
-                  "fontsize": 12,
-                  "bgcolor": [
-                    0.29,
-                    0.26,
-                    0.29,
-                    1
-                  ],
-                  "bgoncolor": [
-                    0.92,
-                    0.56,
-                    0.7,
-                    1
-                  ],
-                  "textcolor": [
-                    0.96,
-                    0.92,
-                    0.94,
-                    1
-                  ],
-                  "textoncolor": [
-                    0.1,
-                    0.07,
-                    0.1,
-                    1
-                  ]
-                }
-              },
-              {
-                "box": {
-                  "id": "notemanualsend",
-                  "maxclass": "newobj",
-                  "text": "s #0-note-manual",
-                  "patching_rect": [
-                    20,
-                    930,
-                    200,
-                    22
-                  ]
-                }
-              },
-              {
-                "box": {
-                  "id": "notestatusrecv",
-                  "maxclass": "newobj",
-                  "text": "r #0-note-status",
-                  "patching_rect": [
-                    20,
-                    960,
-                    200,
-                    22
-                  ]
-                }
               }
             ],
             "lines": [
@@ -17233,150 +17014,6 @@
                   ],
                   "destination": [
                     "fullmidi",
-                    0
-                  ]
-                }
-              },
-              {
-                "patchline": {
-                  "source": [
-                    "notelabel_tune1",
-                    0
-                  ],
-                  "destination": [
-                    "label_tune1",
-                    0
-                  ]
-                }
-              },
-              {
-                "patchline": {
-                  "source": [
-                    "notelabel_tune2",
-                    0
-                  ],
-                  "destination": [
-                    "label_tune2",
-                    0
-                  ]
-                }
-              },
-              {
-                "patchline": {
-                  "source": [
-                    "notelabel_tune3",
-                    0
-                  ],
-                  "destination": [
-                    "label_tune3",
-                    0
-                  ]
-                }
-              },
-              {
-                "patchline": {
-                  "source": [
-                    "notelabel_tune4",
-                    0
-                  ],
-                  "destination": [
-                    "label_tune4",
-                    0
-                  ]
-                }
-              },
-              {
-                "patchline": {
-                  "source": [
-                    "notelabel_tune5",
-                    0
-                  ],
-                  "destination": [
-                    "label_tune5",
-                    0
-                  ]
-                }
-              },
-              {
-                "patchline": {
-                  "source": [
-                    "notelabel_tune6",
-                    0
-                  ],
-                  "destination": [
-                    "label_tune6",
-                    0
-                  ]
-                }
-              },
-              {
-                "patchline": {
-                  "source": [
-                    "notelabel_tune7",
-                    0
-                  ],
-                  "destination": [
-                    "label_tune7",
-                    0
-                  ]
-                }
-              },
-              {
-                "patchline": {
-                  "source": [
-                    "notelabel_tune8",
-                    0
-                  ],
-                  "destination": [
-                    "label_tune8",
-                    0
-                  ]
-                }
-              },
-              {
-                "patchline": {
-                  "source": [
-                    "notelabel_pitch1",
-                    0
-                  ],
-                  "destination": [
-                    "label_pitch1",
-                    0
-                  ]
-                }
-              },
-              {
-                "patchline": {
-                  "source": [
-                    "notelabel_pitch2",
-                    0
-                  ],
-                  "destination": [
-                    "label_pitch2",
-                    0
-                  ]
-                }
-              },
-              {
-                "patchline": {
-                  "source": [
-                    "notemanual",
-                    0
-                  ],
-                  "destination": [
-                    "notemanualsend",
-                    0
-                  ]
-                }
-              },
-              {
-                "patchline": {
-                  "source": [
-                    "notestatusrecv",
-                    0
-                  ],
-                  "destination": [
-                    "footer",
                     0
                   ]
                 }
@@ -19788,7 +19425,7 @@
             100,
             22
           ],
-          "text": "t b b"
+          "text": "t b"
         }
       },
       {
@@ -21478,7 +21115,7 @@
             150,
             22
           ],
-          "code": "// Embedded in v8.codebox. Native LiveAPI only; no files, network or externals.\ninlets = 1;\noutlets = 4; // 0: saved controls, 1: temporary tuning modifier, 2: status, 3: DSP state sync\nvar surface = null, self = null, song = null, appAPI = null, trackView = null;\nvar controls = [], grabbed = [], active = false, ready = false, enabled = true;\nvar voices = [0,0,0,0,0,0,0,0], pageIndex = 0, queue = [];\nvar levels = [127,127,127,127,127,127,127,127];\nvar parameterRefs=[], surfaceSlot=-1;\nvar hasShift=false, shiftBinding=null;\nvar lastStatus = '', ticks = 0, discoveredCount = 0, redrawTicks = 0;\n// Existing Push palette: muted sage, blue-grey, lavender, mauve.\nvar PAIRS = [53,55,57,59];\nvar PAGES = [{\"name\": \"Voices 1-2\", \"parameters\": [\"Tune 1\", \"Tune 2\", \"FM 12\", \"Sharp 12\", \"Source 12\", \"Fast 12\", \"Pitch 1234\", \"Hold 1234\"]}, {\"name\": \"Voices 3-4\", \"parameters\": [\"Tune 3\", \"Tune 4\", \"FM 34\", \"Sharp 34\", \"Source 34\", \"Fast 34\", \"Pitch 1234\", \"Hold 1234\"]}, {\"name\": \"Voices 5-6\", \"parameters\": [\"Tune 5\", \"Tune 6\", \"FM 56\", \"Sharp 56\", \"Source 56\", \"Fast 56\", \"Pitch 5678\", \"Hold 5678\"]}, {\"name\": \"Voices 7-8\", \"parameters\": [\"Tune 7\", \"Tune 8\", \"FM 78\", \"Sharp 78\", \"Source 78\", \"Fast 78\", \"Pitch 5678\", \"Hold 5678\"]}, {\"name\": \"Hyper LFO\", \"parameters\": [\"LFO A\", \"LFO B\", \"LFO AND OR\", \"LFO Link\", \"Vibrato\", \"Quantize\", \"FM Routing\", \"Total FB\"]}, {\"name\": \"Delay\", \"parameters\": [\"Delay Time 1\", \"Delay Time 2\", \"Delay Mod 1\", \"Delay Mod 2\", \"Feedback\", \"Delay Mix\", \"Delay Source\", \"Delay Wave\"]}, {\"name\": \"Output\", \"parameters\": [\"Drive\", \"Dist Mix\", \"Master\", \"Audio In\", \"Audio From\", \"Audio Tap\", \"Delay Mix\", \"Pad Control\"]}, {\"name\": \"Voice Mixer\", \"parameters\": [\"Voice 1 Level\", \"Voice 2 Level\", \"Voice 3 Level\", \"Voice 4 Level\", \"Voice 5 Level\", \"Voice 6 Level\", \"Voice 7 Level\", \"Voice 8 Level\"]}];\nvar work = new Task(flush, this);\nvar clock = new Task(tick, this);\nclock.interval = 250;\nfunction status(s) {\n var n=/Pads ready/.test(s)?6:/Pads off/.test(s)?1:/Select LIRA/.test(s)?2:/No pad matrix/.test(s)?4:/Press Note/.test(s)?5:/Waiting for Push/.test(s)?3:/error|failed|Reconnecting/.test(s)?7:0;\n outlet(0,'padstatusvalue',n);\n if (s !== lastStatus) { lastStatus=s; outlet(2, 'set', s); post('LIRA Pads: '+s+'\\n'); } }\nfunction idOf(value) {\n var a = Array.isArray(value) ? value : [value];\n for(var i=0;i<a.length;i++) if(a[i]==='id') return Number(a[i+1]);\n return Number(a[0]) || 0;\n}\n// Control-surface/proxy IDs may be negative. Only zero is the null ID.\nfunction ids(value) {\n var a=Array.isArray(value)?value:[value], result=[];\n for(var i=0;i<a.length;i++) if(isFinite(Number(a[i])) && Number(a[i])!==0) result.push(Number(a[i]));\n return result;\n}\nfunction api(id) { return new LiveAPI(null, 'id '+id); }\nfunction schedule(action) { queue.push(action); work.schedule(1); }\nfunction flush() {\n var jobs=queue; queue=[];\n for(var i=0;i<jobs.length;i++) {\n  try { jobs[i](); } catch(e) { release(); status('Pad error: '+e.message); }\n }\n}\nfunction init() {\n shutdown(); ticks=0; lastStatus=\"\";\n try {\n  self=new LiveAPI(null,'this_device'); song=new LiveAPI(null,'live_set'); appAPI=new LiveAPI(null,'live_app'); trackView=new LiveAPI(null,'live_set view selected_track view');\n  if(!self.id) { status('Waiting for Live'); return; }\n  ready=true; bindstate(); clock.repeat(); tick();\n } catch(e) { status('Init error: '+e.message); }\n}\nfunction enable(v) { enabled=Number(v)>0; if(!enabled) release(); if(ready) schedule(tick); }\nfunction state(i,v) { i=Number(i); if(i<0||i>7)return; voices[i]=Number(v)>0?1:0; if(active) schedule(redraw); }\nfunction level(i,v) { i=Number(i); if(i<0||i>7)return; levels[i]=Math.max(0,Math.min(127,Number(v)||0)); if(active)schedule(redraw); }\nfunction page(v) {\n var n=Math.max(0,Math.min(7,Math.round(Number(v)||0)));\n pageIndex=n;\n if(ready) schedule(function(){applypage();paint();});\n}\nfunction applypage() {\n // Recovery: native bank selection only. The previous API request caused\n // a reported Push reboot. Never call it from a pad or restored parameter.\n status('Use display buttons to select banks');\n}\nfunction acceptstate(ref,value){\n var v=Number(Array.isArray(value)?value[0]:value);\n if(!isFinite(v))return;\n if(ref.kind==='level') {level(ref.index,v);outlet(3,'level'+(ref.index+1),v);}\n else state(ref.index,v);\n}\nfunction statecallback(ref){return function(a){if(a&&a[0]==='value')schedule(function(){acceptstate(ref,a[1]);});};}\nfunction bindstate(){\n for(var i=0;i<parameterRefs.length;i++)try{parameterRefs[i].api.property='';}catch(e){}\n parameterRefs=[];\n var all=ids(self.get('parameters'));\n for(var j=0;j<all.length;j++){\n  var p=api(all[j]),name=String(p.get('name')),m=/^Voice ([1-8]) (Level|On)$/.exec(name);\n  if(!m)continue;\n  var r={index:Number(m[1])-1,kind:m[2]==='Level'?'level':'voice'};\n  r.api=new LiveAPI(statecallback(r),'id '+all[j]);parameterRefs.push(r);\n  r.api.property='value';acceptstate(r,r.api.get('value'));\n }\n}\nfunction syncstate(){for(var i=0;i<parameterRefs.length;i++)acceptstate(parameterRefs[i],parameterRefs[i].api.get('value'));}\nfunction discover() {\n var candidates=[], seen={};\n function remember(s,slot) {\n  var id=Number(s.id);\n  if(isFinite(id) && id!==0 && !seen[id]) {seen[id]=true;candidates.push({api:s,slot:slot});}\n }\n // Application's preference-slot list may omit the integrated Push surface.\n // Also resolve the documented root paths; their ordering is independent.\n try {\n  var raw=appAPI.get('control_surfaces'),all=[];\n  if(!Array.isArray(raw))raw=[raw];\n  for(var q=0;q<raw.length;q++)if(raw[q]==='id')all.push(Number(raw[++q]));\n  if(!all.length)all=raw.filter(function(v){return isFinite(Number(v));}).map(Number);\n  for(var i=0;i<all.length;i++)if(all[i])remember(api(all[i]),i);\n } catch(e) {}\n for(var k=0;k<16;k++) {\n  try {remember(new LiveAPI(null,'control_surfaces '+k),-1);} catch(e) {}\n }\n discoveredCount=candidates.length;\n for(var i=0;i<candidates.length;i++) {\n  var s=candidates[i].api;\n  var names;\n  try { names=s.call('get_control_names'); } catch(e) {continue;}\n  if(!(Array.isArray(names))) names=[names];\n  var pads=[];\n  for(var j=0;j<names.length;j++) {\n   var name=String(names[j]), match=/^(\\d+)_Clip_(\\d+)_Button$/.exec(name);\n   if(match && Number(match[1])<8 && Number(match[2])<8) pads.push({name:name,x:Number(match[1]),y:Number(match[2])});\n  }\n  // Fail closed instead of guessing names/coordinates on another controller.\n  if(pads.length!==64) continue;\n  surface=s; surfaceSlot=candidates[i].slot; controls=pads;\n  hasShift=names.indexOf('Shift_Button')!==-1;\n  return true;\n }\n return false;\n}\nfunction acquire() {\n try {\n  syncstate();\n  for(var i=0;i<controls.length;i++) {\n   var c=controls[i];\n   if(c.y===7)continue; // Native note row retains pitch/pressure/slide MIDI.\n   c.id=idOf(surface.call('get_control',c.name));\n   if(!c.id) throw new Error('Missing pad '+c.name);\n   surface.call('grab_control',c.name); grabbed.push(c);\n   c.pressed=false; c.color=-1;\n   c.api=new LiveAPI(c.y===0?null:callback(c),'id '+c.id);\n   if(c.y!==0)c.api.property='value'; // Observe AFTER grabbing (required by Push 3).\n  }\n  active=true; bindshift(); redrawTicks=0; redraw(); status('Pads ready \u2014 use display banks');\n } catch(e) { release(); surface=null; status('Pad setup failed: '+e.message); }\n}\nfunction bindshift(){\n // Observe only. Never grab Shift or the encoders: their native functions remain.\n if(!hasShift)return;\n try{\n  var id=idOf(surface.call('get_control','Shift_Button'));\n  if(!id)return;\n  var binding={api:null};shiftBinding=binding;\n  binding.api=new LiveAPI(function(a){\n   if(!active||shiftBinding!==binding||!a||a[0]!=='value')return;\n   var down=Number(a[1])>0;\n   schedule(function(){if(active&&shiftBinding===binding)outlet(1,'shift',down?1:0);});\n  },'id '+id);\n  binding.api.property='value';\n }catch(e){unbindshift();post('LIRA note tuning: Shift observation unavailable\\n');}\n}\nfunction unbindshift(){\n var old=shiftBinding;shiftBinding=null;\n if(old)try{old.api.property='';}catch(e){}\n outlet(1,'shift',0);\n}\nfunction callback(c) {\n return function(a) {\n  if(!active || c.y===0 || !a || a[0]!=='value') return;\n  var down=Number(a[1])>0;\n  if(down===c.pressed) return; // pressure/repeated values must not re-toggle\n  c.pressed=down;\n  if(!down)return;\n  schedule(function(){\n   if(!active)return;\n   if(c.y===6) outlet(0,'voiceon'+(c.x+1),1-voices[c.x]);\n   else if(c.y===0) return; // Disabled until native bank switching is verified.\n   else if(c.y>=1 && c.y<=5) outlet(0,'level'+(c.x+1),Math.round((5-c.y)*127/4));\n  });\n };\n}\nfunction redraw() {\n if(!active)return;\n for(var i=0;i<controls.length;i++)controls[i].color=-1;\n paint();\n}\nfunction paint() {\n if(!active)return;\n for(var i=0;i<controls.length;i++) {\n  var c=controls[i], color=0;\n  if(c.y===7)continue;\n  if(c.y===6) color=voices[c.x]?PAIRS[Math.floor(c.x/2)]:0;\n  if(c.y===0) color=0; // Disabled page row: native display banks remain available.\n  // Five discrete fader positions: mute, 25%, 50%, 75%, 100% amplitude.\n  if(c.y>=1 && c.y<=5 && levels[c.x]>0 && 5-c.y<=Math.round(levels[c.x]*4/127)) color=PAIRS[Math.floor(c.x/2)];\n  if(color!==c.color) { c.api.call('send_value',color,1); c.color=color; }\n }\n status('Pads ready \u2014 use display banks');\n}\nfunction release() {\n unbindshift();\n if(active)outlet(0,'expressreset',0);\n active=false;\n for(var i=grabbed.length-1;i>=0;i--) {\n  var c=grabbed[i];\n  try { if(c.api) c.api.property=''; } catch(e) {}\n  try { if(surface) surface.call('release_control',c.name); } catch(e) {}\n  c.api=null; c.pressed=false; c.color=-1;\n }\n grabbed=[];\n}\nfunction tick() {\n if(!ready)return;\n try {\n  if(!enabled) { release();status('Pads off');return; }\n  var alive=self.get('is_active');\n  trackView.goto('live_set view selected_track view');\n  var selected=idOf(trackView.get('selected_device'));\n  if(!Number(Array.isArray(alive)?alive[0]:alive) || selected!==Number(self.id)) {\n   if(active)release(); status('Select LIRA Pads to play'); return;\n  }\n  if(!surface || !surface.id) {\n   if(active)release();\n   if((ticks++%4)!==0)return;\n   if(!discover()) {status(discoveredCount?'No pad matrix found':'Waiting for Push');return;}\n  }\n  var layout=String(surface.get('pad_layout'));\n  if(layout.indexOf('note.')!==0) {if(active)release();status('Press Note for LIRA pads');return;}\n  if(!active)acquire();\n  else if(++redrawTicks%4===0)redraw(); // Recover LEDs overwritten by Push layout redraws.\n } catch(e) {release();surface=null;status('Reconnecting to Push');}\n}\nfunction shutdown() { clock.cancel();work.cancel();queue=[];release();ready=false;surface=null;surfaceSlot=-1;controls=[];for(var i=0;i<parameterRefs.length;i++)try{parameterRefs[i].api.property='';}catch(e){}parameterRefs=[]; }\nfunction notifydeleted() { shutdown(); }\n",
+          "code": "// Embedded in v8.codebox. Native LiveAPI only; no files, network or externals.\ninlets = 1;\noutlets = 4; // 0: saved controls, 1: reserved, 2: status, 3: DSP state sync\nvar surface = null, self = null, song = null, appAPI = null, trackView = null;\nvar controls = [], grabbed = [], active = false, ready = false, enabled = true;\nvar voices = [0,0,0,0,0,0,0,0], pageIndex = 0, queue = [];\nvar levels = [127,127,127,127,127,127,127,127];\nvar parameterRefs=[], surfaceSlot=-1;\nvar lastStatus = '', ticks = 0, discoveredCount = 0, redrawTicks = 0;\n// Existing Push palette: muted sage, blue-grey, lavender, mauve.\nvar PAIRS = [53,55,57,59];\nvar PAGES = [{\"name\": \"Voices 1-2\", \"parameters\": [\"Tune 1\", \"Tune 2\", \"FM 12\", \"Sharp 12\", \"Source 12\", \"Fast 12\", \"Pitch 1234\", \"Hold 1234\"]}, {\"name\": \"Voices 3-4\", \"parameters\": [\"Tune 3\", \"Tune 4\", \"FM 34\", \"Sharp 34\", \"Source 34\", \"Fast 34\", \"Pitch 1234\", \"Hold 1234\"]}, {\"name\": \"Voices 5-6\", \"parameters\": [\"Tune 5\", \"Tune 6\", \"FM 56\", \"Sharp 56\", \"Source 56\", \"Fast 56\", \"Pitch 5678\", \"Hold 5678\"]}, {\"name\": \"Voices 7-8\", \"parameters\": [\"Tune 7\", \"Tune 8\", \"FM 78\", \"Sharp 78\", \"Source 78\", \"Fast 78\", \"Pitch 5678\", \"Hold 5678\"]}, {\"name\": \"Hyper LFO\", \"parameters\": [\"LFO A\", \"LFO B\", \"LFO AND OR\", \"LFO Link\", \"Vibrato\", \"Quantize\", \"FM Routing\", \"Total FB\"]}, {\"name\": \"Delay\", \"parameters\": [\"Delay Time 1\", \"Delay Time 2\", \"Delay Mod 1\", \"Delay Mod 2\", \"Feedback\", \"Delay Mix\", \"Delay Source\", \"Delay Wave\"]}, {\"name\": \"Output\", \"parameters\": [\"Drive\", \"Dist Mix\", \"Master\", \"Audio In\", \"Audio From\", \"Audio Tap\", \"Delay Mix\", \"Pad Control\"]}, {\"name\": \"Voice Mixer\", \"parameters\": [\"Voice 1 Level\", \"Voice 2 Level\", \"Voice 3 Level\", \"Voice 4 Level\", \"Voice 5 Level\", \"Voice 6 Level\", \"Voice 7 Level\", \"Voice 8 Level\"]}];\nvar work = new Task(flush, this);\nvar clock = new Task(tick, this);\nclock.interval = 250;\nfunction status(s) {\n var n=/Pads ready/.test(s)?6:/Pads off/.test(s)?1:/Select LIRA/.test(s)?2:/No pad matrix/.test(s)?4:/Press Note/.test(s)?5:/Waiting for Push/.test(s)?3:/error|failed|Reconnecting/.test(s)?7:0;\n outlet(0,'padstatusvalue',n);\n if (s !== lastStatus) { lastStatus=s; outlet(2, 'set', s); post('LIRA Pads: '+s+'\\n'); } }\nfunction idOf(value) {\n var a = Array.isArray(value) ? value : [value];\n for(var i=0;i<a.length;i++) if(a[i]==='id') return Number(a[i+1]);\n return Number(a[0]) || 0;\n}\n// Control-surface/proxy IDs may be negative. Only zero is the null ID.\nfunction ids(value) {\n var a=Array.isArray(value)?value:[value], result=[];\n for(var i=0;i<a.length;i++) if(isFinite(Number(a[i])) && Number(a[i])!==0) result.push(Number(a[i]));\n return result;\n}\nfunction api(id) { return new LiveAPI(null, 'id '+id); }\nfunction schedule(action) { queue.push(action); work.schedule(1); }\nfunction flush() {\n var jobs=queue; queue=[];\n for(var i=0;i<jobs.length;i++) {\n  try { jobs[i](); } catch(e) { release(); status('Pad error: '+e.message); }\n }\n}\nfunction init() {\n shutdown(); ticks=0; lastStatus=\"\";\n try {\n  self=new LiveAPI(null,'this_device'); song=new LiveAPI(null,'live_set'); appAPI=new LiveAPI(null,'live_app'); trackView=new LiveAPI(null,'live_set view selected_track view');\n  if(!self.id) { status('Waiting for Live'); return; }\n  ready=true; bindstate(); clock.repeat(); tick();\n } catch(e) { status('Init error: '+e.message); }\n}\nfunction enable(v) { enabled=Number(v)>0; if(!enabled) release(); if(ready) schedule(tick); }\nfunction state(i,v) { i=Number(i); if(i<0||i>7)return; voices[i]=Number(v)>0?1:0; if(active) schedule(redraw); }\nfunction level(i,v) { i=Number(i); if(i<0||i>7)return; levels[i]=Math.max(0,Math.min(127,Number(v)||0)); if(active)schedule(redraw); }\nfunction page(v) {\n var n=Math.max(0,Math.min(7,Math.round(Number(v)||0)));\n pageIndex=n;\n if(ready) schedule(function(){applypage();paint();});\n}\nfunction applypage() {\n // Recovery: native bank selection only. The previous API request caused\n // a reported Push reboot. Never call it from a pad or restored parameter.\n status('Use display buttons to select banks');\n}\nfunction acceptstate(ref,value){\n var v=Number(Array.isArray(value)?value[0]:value);\n if(!isFinite(v))return;\n if(ref.kind==='level') {level(ref.index,v);outlet(3,'level'+(ref.index+1),v);}\n else state(ref.index,v);\n}\nfunction statecallback(ref){return function(a){if(a&&a[0]==='value')schedule(function(){acceptstate(ref,a[1]);});};}\nfunction bindstate(){\n for(var i=0;i<parameterRefs.length;i++)try{parameterRefs[i].api.property='';}catch(e){}\n parameterRefs=[];\n var all=ids(self.get('parameters'));\n for(var j=0;j<all.length;j++){\n  var p=api(all[j]),name=String(p.get('name')),m=/^Voice ([1-8]) (Level|On)$/.exec(name);\n  if(!m)continue;\n  var r={index:Number(m[1])-1,kind:m[2]==='Level'?'level':'voice'};\n  r.api=new LiveAPI(statecallback(r),'id '+all[j]);parameterRefs.push(r);\n  r.api.property='value';acceptstate(r,r.api.get('value'));\n }\n}\nfunction syncstate(){for(var i=0;i<parameterRefs.length;i++)acceptstate(parameterRefs[i],parameterRefs[i].api.get('value'));}\nfunction discover() {\n var candidates=[], seen={};\n function remember(s,slot) {\n  var id=Number(s.id);\n  if(isFinite(id) && id!==0 && !seen[id]) {seen[id]=true;candidates.push({api:s,slot:slot});}\n }\n // Application's preference-slot list may omit the integrated Push surface.\n // Also resolve the documented root paths; their ordering is independent.\n try {\n  var raw=appAPI.get('control_surfaces'),all=[];\n  if(!Array.isArray(raw))raw=[raw];\n  for(var q=0;q<raw.length;q++)if(raw[q]==='id')all.push(Number(raw[++q]));\n  if(!all.length)all=raw.filter(function(v){return isFinite(Number(v));}).map(Number);\n  for(var i=0;i<all.length;i++)if(all[i])remember(api(all[i]),i);\n } catch(e) {}\n for(var k=0;k<16;k++) {\n  try {remember(new LiveAPI(null,'control_surfaces '+k),-1);} catch(e) {}\n }\n discoveredCount=candidates.length;\n for(var i=0;i<candidates.length;i++) {\n  var s=candidates[i].api;\n  var names;\n  try { names=s.call('get_control_names'); } catch(e) {continue;}\n  if(!(Array.isArray(names))) names=[names];\n  var pads=[];\n  for(var j=0;j<names.length;j++) {\n   var name=String(names[j]), match=/^(\\d+)_Clip_(\\d+)_Button$/.exec(name);\n   if(match && Number(match[1])<8 && Number(match[2])<8) pads.push({name:name,x:Number(match[1]),y:Number(match[2])});\n  }\n  // Fail closed instead of guessing names/coordinates on another controller.\n  if(pads.length!==64) continue;\n  surface=s; surfaceSlot=candidates[i].slot; controls=pads;\n  return true;\n }\n return false;\n}\nfunction acquire() {\n try {\n  syncstate();\n  for(var i=0;i<controls.length;i++) {\n   var c=controls[i];\n   if(c.y===7)continue; // Native note row retains pitch/pressure/slide MIDI.\n   c.id=idOf(surface.call('get_control',c.name));\n   if(!c.id) throw new Error('Missing pad '+c.name);\n   surface.call('grab_control',c.name); grabbed.push(c);\n   c.pressed=false; c.color=-1;\n   c.api=new LiveAPI(c.y===0?null:callback(c),'id '+c.id);\n   if(c.y!==0)c.api.property='value'; // Observe AFTER grabbing (required by Push 3).\n  }\n  active=true; redrawTicks=0; redraw(); status('Pads ready \u2014 use display banks');\n } catch(e) { release(); surface=null; status('Pad setup failed: '+e.message); }\n}\nfunction callback(c) {\n return function(a) {\n  if(!active || c.y===0 || !a || a[0]!=='value') return;\n  var down=Number(a[1])>0;\n  if(down===c.pressed) return; // pressure/repeated values must not re-toggle\n  c.pressed=down;\n  if(!down)return;\n  schedule(function(){\n   if(!active)return;\n   if(c.y===6) outlet(0,'voiceon'+(c.x+1),1-voices[c.x]);\n   else if(c.y===0) return; // Disabled until native bank switching is verified.\n   else if(c.y>=1 && c.y<=5) outlet(0,'level'+(c.x+1),Math.round((5-c.y)*127/4));\n  });\n };\n}\nfunction redraw() {\n if(!active)return;\n for(var i=0;i<controls.length;i++)controls[i].color=-1;\n paint();\n}\nfunction paint() {\n if(!active)return;\n for(var i=0;i<controls.length;i++) {\n  var c=controls[i], color=0;\n  if(c.y===7)continue;\n  if(c.y===6) color=voices[c.x]?PAIRS[Math.floor(c.x/2)]:0;\n  if(c.y===0) color=0; // Disabled page row: native display banks remain available.\n  // Five discrete fader positions: mute, 25%, 50%, 75%, 100% amplitude.\n  if(c.y>=1 && c.y<=5 && levels[c.x]>0 && 5-c.y<=Math.round(levels[c.x]*4/127)) color=PAIRS[Math.floor(c.x/2)];\n  if(color!==c.color) { c.api.call('send_value',color,1); c.color=color; }\n }\n status('Pads ready \u2014 use display banks');\n}\nfunction release() {\n if(active)outlet(0,'expressreset',0);\n active=false;\n for(var i=grabbed.length-1;i>=0;i--) {\n  var c=grabbed[i];\n  try { if(c.api) c.api.property=''; } catch(e) {}\n  try { if(surface) surface.call('release_control',c.name); } catch(e) {}\n  c.api=null; c.pressed=false; c.color=-1;\n }\n grabbed=[];\n}\nfunction tick() {\n if(!ready)return;\n try {\n  if(!enabled) { release();status('Pads off');return; }\n  var alive=self.get('is_active');\n  trackView.goto('live_set view selected_track view');\n  var selected=idOf(trackView.get('selected_device'));\n  if(!Number(Array.isArray(alive)?alive[0]:alive) || selected!==Number(self.id)) {\n   if(active)release(); status('Select LIRA Pads to play'); return;\n  }\n  if(!surface || !surface.id) {\n   if(active)release();\n   if((ticks++%4)!==0)return;\n   if(!discover()) {status(discoveredCount?'No pad matrix found':'Waiting for Push');return;}\n  }\n  var layout=String(surface.get('pad_layout'));\n  if(layout.indexOf('note.')!==0) {if(active)release();status('Press Note for LIRA pads');return;}\n  if(!active)acquire();\n  else if(++redrawTicks%4===0)redraw(); // Recover LEDs overwritten by Push layout redraws.\n } catch(e) {release();surface=null;status('Reconnecting to Push');}\n}\nfunction shutdown() { clock.cancel();work.cancel();queue=[];release();ready=false;surface=null;surfaceSlot=-1;controls=[];for(var i=0;i<parameterRefs.length;i++)try{parameterRefs[i].api.property='';}catch(e){}parameterRefs=[]; }\nfunction notifydeleted() { shutdown(); }\n",
           "filename": "none",
           "numinlets": 1,
           "numoutlets": 4,
@@ -22821,345 +22458,6 @@
           ],
           "text": "reset"
         }
-      },
-      {
-        "box": {
-          "id": "notetuner",
-          "maxclass": "v8.codebox",
-          "patching_rect": [
-            20,
-            1100,
-            240,
-            22
-          ],
-          "code": "// Temporary chromatic tuning. Keeps saved 0..127 parameters and all banks fixed.\n// No synthesis changes: invert the existing per-voice tuning law, including Pitch.\ninlets=1; outlets=5;\nvar ranges=[[-16,93],[-16,93],[7,109],[9,107],[20,116.54],[20,116.54],[33,126.24],[33,131.22]];\nvar values={tune1:64,tune2:68,tune3:55,tune4:60,tune5:45,tune6:50,tune7:38,tune8:43,pitch1:63,pitch2:63};\nvar names=Object.keys(values), refs={}, formats={}, running=false, held=false, desktop=false, snapping=false;\nvar origin=[63,63], steps=[0,0];\nvar suspended=false, resumeTask=new Task(resume,this);\nfunction clamp(v,a,b){return Math.max(a,Math.min(b,v));}\nfunction offset(v){return 12*Math.log(0.01+1.99*v/127)/Math.LN2;}\nfunction midi(i,v,p){return ranges[i][0]+v/127*(ranges[i][1]-ranges[i][0])+offset(p);}\nfunction raw(i,n,p){return 127*(n-ranges[i][0]-offset(p))/(ranges[i][1]-ranges[i][0]);}\nfunction note(n){n=Math.round(n);return ['C','C#','D','D#','E','F','F#','G','G#','A','A#','B'][((n%12)+12)%12]+(Math.floor(n/12)-2);}\nfunction output(n,v){values[n]=v;outlet(0,n,v);outlet(3,n,'set',v);}\nfunction write(n,v){output(n,v);outlet(1,n,'set',v);}\nfunction format(n,f,label){\n if(formats[n]!==f){formats[n]=f;outlet(1,n,'_parameter_units',f);}\n outlet(2,n,'set',label);\n}\nfunction refresh(){\n for(var i=0;i<8;i++){\n  var n='tune'+(i+1),m=midi(i,values[n],values[i<4?'pitch1':'pitch2']);\n  var label=note(m)+(Math.abs(m-Math.round(m))>0.001?'~':'');\n  format(n,snapping?label+' %.2f':'%.0f','Tune '+(i+1)+(snapping?' \u00b7 '+label:''));\n }\n for(var g=0;g<2;g++){\n  var label=(steps[g]>=0?'+':'')+steps[g]+'st';\n  format('pitch'+(g+1),snapping?label+' %.1f':'%.0f','Pitch '+(g===0?'1234':'5678')+(snapping?' \u00b7 '+label:''));\n }\n}\nfunction mode(){\n var next=running&&!suspended&&(held||desktop);\n if(next===snapping)return;\n snapping=next;\n if(next){origin=[values.pitch1,values.pitch2];steps=[0,0];}\n refresh();\n outlet(4,'set',next?'NOTE TUNE \u00b7 turn Tune for notes / Pitch for semitone transposition':'Hold Push Shift while turning Tune to choose notes. Release for continuous tuning.');\n}\nfunction shift(v){held=Number(v)>0;mode();}\nfunction manual(v){desktop=Number(v)>0;mode();}\nfunction preset(){suspended=true;mode();resumeTask.cancel();resumeTask.schedule(50);}\nfunction resume(){suspended=false;mode();}\nfunction automated(n){try{return refs[n]&&Number(refs[n].get('automation_state')[0])===1;}catch(e){return true;}}\nfunction input(n,v){\n if(!Object.prototype.hasOwnProperty.call(values,n))return;\n v=Number(v);if(!isFinite(v))return;v=clamp(v,0,127);\n var old=values[n],delta=v-old;\n // 'set' writes do not emit from live.dial. Also ignore float round-off echoes.\n if(Math.abs(delta)<0.00002){output(n,old);return;}\n if(!snapping||automated(n)){\n  output(n,v);\n  if(snapping){if(n.indexOf('pitch')===0){var g=Number(n.slice(5))-1;origin[g]=v;steps[g]=0;}refresh();}\n  return;\n }\n var direction=delta>0?1:-1,result;\n if(n.indexOf('tune')===0){\n  var i=Number(n.slice(4))-1,p=values[i<4?'pitch1':'pitch2'];\n  var current=midi(i,old,p);\n  var target=direction>0?Math.floor(current+0.0001)+1:Math.ceil(current-0.0001)-1;\n  target=clamp(target,Math.ceil(midi(i,0,p)-0.00001),Math.floor(midi(i,127,p)+0.00001));\n  result=clamp(raw(i,target,p),0,127);\n }else{\n  var g=Number(n.slice(5))-1,next=steps[g]+direction;\n  result=127*((0.01+1.99*origin[g]/127)*Math.pow(2,next/12)-0.01)/1.99;\n  if(result<0||result>127){write(n,old);return;}\n  steps[g]=next;\n }\n write(n,result);refresh();\n}\nfunction anything(){if(arguments.length)input(messagename,arguments[0]);}\nfunction init(){\n resumeTask.cancel();suspended=false;running=false;held=false;desktop=false;snapping=false;refs={};formats={};\n try{\n  var device=new LiveAPI(null,'this_device'),ps=device.get('parameters');\n  for(var i=0;i<ps.length;i++)if(ps[i]==='id'){\n   var p=new LiveAPI(null,'id '+Number(ps[++i])),name=String(p.get('name'));\n   var match=/^(Tune [1-8]|Pitch (?:1234|5678|1[\u2013-]4|5[\u2013-]8))$/.exec(name);\n   if(!match)continue;\n   var n=name.indexOf('Tune')===0?'tune'+name.slice(5):/^Pitch 1/.test(name)?'pitch1':'pitch2';\n   refs[n]=p;output(n,Number(p.get('value')[0]));\n  }\n  if(Object.keys(refs).length!==10)throw new Error('Missing tuning parameters');\n  running=true;refresh();\n  outlet(4,'set','Hold Push Shift while turning Tune to choose notes. Release for continuous tuning.');\n }catch(e){shutdown();outlet(4,'set','Note tuning unavailable: '+String(e));}\n}\nfunction shutdown(){resumeTask.cancel();suspended=false;held=false;desktop=false;running=false;mode();refs={};}\nfunction notifydeleted(){shutdown();}\n",
-          "filename": "none",
-          "numinlets": 1,
-          "numoutlets": 5,
-          "outlettype": [
-            "",
-            "",
-            "",
-            "",
-            ""
-          ],
-          "varname": "notetuner"
-        }
-      },
-      {
-        "box": {
-          "id": "tunedefer",
-          "maxclass": "newobj",
-          "patching_rect": [
-            20,
-            1100,
-            240,
-            22
-          ],
-          "text": "deferlow"
-        }
-      },
-      {
-        "box": {
-          "id": "tuneroute_root",
-          "maxclass": "newobj",
-          "patching_rect": [
-            20,
-            1100,
-            240,
-            22
-          ],
-          "numoutlets": 11,
-          "text": "route tune1 tune2 tune3 tune4 tune5 tune6 tune7 tune8 pitch1 pitch2"
-        }
-      },
-      {
-        "box": {
-          "id": "tuneroute_label",
-          "maxclass": "newobj",
-          "patching_rect": [
-            20,
-            1100,
-            240,
-            22
-          ],
-          "numoutlets": 11,
-          "text": "route tune1 tune2 tune3 tune4 tune5 tune6 tune7 tune8 pitch1 pitch2"
-        }
-      },
-      {
-        "box": {
-          "id": "tunelabelsend_tune1",
-          "maxclass": "newobj",
-          "patching_rect": [
-            20,
-            1100,
-            240,
-            22
-          ],
-          "text": "s #0-notelabel-tune1"
-        }
-      },
-      {
-        "box": {
-          "id": "tunelabelsend_tune2",
-          "maxclass": "newobj",
-          "patching_rect": [
-            20,
-            1100,
-            240,
-            22
-          ],
-          "text": "s #0-notelabel-tune2"
-        }
-      },
-      {
-        "box": {
-          "id": "tunelabelsend_tune3",
-          "maxclass": "newobj",
-          "patching_rect": [
-            20,
-            1100,
-            240,
-            22
-          ],
-          "text": "s #0-notelabel-tune3"
-        }
-      },
-      {
-        "box": {
-          "id": "tunelabelsend_tune4",
-          "maxclass": "newobj",
-          "patching_rect": [
-            20,
-            1100,
-            240,
-            22
-          ],
-          "text": "s #0-notelabel-tune4"
-        }
-      },
-      {
-        "box": {
-          "id": "tunelabelsend_tune5",
-          "maxclass": "newobj",
-          "patching_rect": [
-            20,
-            1100,
-            240,
-            22
-          ],
-          "text": "s #0-notelabel-tune5"
-        }
-      },
-      {
-        "box": {
-          "id": "tunelabelsend_tune6",
-          "maxclass": "newobj",
-          "patching_rect": [
-            20,
-            1100,
-            240,
-            22
-          ],
-          "text": "s #0-notelabel-tune6"
-        }
-      },
-      {
-        "box": {
-          "id": "tunelabelsend_tune7",
-          "maxclass": "newobj",
-          "patching_rect": [
-            20,
-            1100,
-            240,
-            22
-          ],
-          "text": "s #0-notelabel-tune7"
-        }
-      },
-      {
-        "box": {
-          "id": "tunelabelsend_tune8",
-          "maxclass": "newobj",
-          "patching_rect": [
-            20,
-            1100,
-            240,
-            22
-          ],
-          "text": "s #0-notelabel-tune8"
-        }
-      },
-      {
-        "box": {
-          "id": "tunelabelsend_pitch1",
-          "maxclass": "newobj",
-          "patching_rect": [
-            20,
-            1100,
-            240,
-            22
-          ],
-          "text": "s #0-notelabel-pitch1"
-        }
-      },
-      {
-        "box": {
-          "id": "tunelabelsend_pitch2",
-          "maxclass": "newobj",
-          "patching_rect": [
-            20,
-            1100,
-            240,
-            22
-          ],
-          "text": "s #0-notelabel-pitch2"
-        }
-      },
-      {
-        "box": {
-          "id": "tuneroute_mirror",
-          "maxclass": "newobj",
-          "patching_rect": [
-            20,
-            1100,
-            240,
-            22
-          ],
-          "numoutlets": 11,
-          "text": "route tune1 tune2 tune3 tune4 tune5 tune6 tune7 tune8 pitch1 pitch2"
-        }
-      },
-      {
-        "box": {
-          "id": "tuneboot",
-          "maxclass": "newobj",
-          "patching_rect": [
-            20,
-            1100,
-            240,
-            22
-          ],
-          "text": "live.thisdevice"
-        }
-      },
-      {
-        "box": {
-          "id": "tuneinitdefer",
-          "maxclass": "newobj",
-          "patching_rect": [
-            20,
-            1100,
-            240,
-            22
-          ],
-          "text": "deferlow"
-        }
-      },
-      {
-        "box": {
-          "id": "tunesettle",
-          "maxclass": "newobj",
-          "patching_rect": [
-            20,
-            1100,
-            240,
-            22
-          ],
-          "text": "delay 450"
-        }
-      },
-      {
-        "box": {
-          "id": "tuneinit",
-          "maxclass": "message",
-          "patching_rect": [
-            20,
-            1100,
-            240,
-            22
-          ],
-          "text": "init"
-        }
-      },
-      {
-        "box": {
-          "id": "tuneclose",
-          "maxclass": "newobj",
-          "patching_rect": [
-            20,
-            1100,
-            240,
-            22
-          ],
-          "text": "closebang"
-        }
-      },
-      {
-        "box": {
-          "id": "tuneshutdown",
-          "maxclass": "message",
-          "patching_rect": [
-            20,
-            1100,
-            240,
-            22
-          ],
-          "text": "shutdown"
-        }
-      },
-      {
-        "box": {
-          "id": "tunepreset",
-          "maxclass": "message",
-          "patching_rect": [
-            20,
-            1100,
-            240,
-            22
-          ],
-          "text": "preset"
-        }
-      },
-      {
-        "box": {
-          "id": "tunemanualrecv",
-          "maxclass": "newobj",
-          "patching_rect": [
-            20,
-            1100,
-            240,
-            22
-          ],
-          "text": "r #0-note-manual"
-        }
-      },
-      {
-        "box": {
-          "id": "tunemanual",
-          "maxclass": "newobj",
-          "patching_rect": [
-            20,
-            1100,
-            240,
-            22
-          ],
-          "text": "prepend manual"
-        }
-      },
-      {
-        "box": {
-          "id": "tunestatussend",
-          "maxclass": "newobj",
-          "patching_rect": [
-            20,
-            1100,
-            240,
-            22
-          ],
-          "text": "s #0-note-status"
-        }
       }
     ],
     "lines": [
@@ -23230,7 +22528,7 @@
             0
           ],
           "destination": [
-            "tunedefer",
+            "engine",
             0
           ]
         }
@@ -23254,7 +22552,7 @@
             0
           ],
           "destination": [
-            "tunedefer",
+            "engine",
             0
           ]
         }
@@ -23278,7 +22576,7 @@
             0
           ],
           "destination": [
-            "tunedefer",
+            "engine",
             0
           ]
         }
@@ -23302,7 +22600,7 @@
             0
           ],
           "destination": [
-            "tunedefer",
+            "engine",
             0
           ]
         }
@@ -23326,7 +22624,7 @@
             0
           ],
           "destination": [
-            "tunedefer",
+            "engine",
             0
           ]
         }
@@ -23350,7 +22648,7 @@
             0
           ],
           "destination": [
-            "tunedefer",
+            "engine",
             0
           ]
         }
@@ -23374,7 +22672,7 @@
             0
           ],
           "destination": [
-            "tunedefer",
+            "engine",
             0
           ]
         }
@@ -23398,7 +22696,7 @@
             0
           ],
           "destination": [
-            "tunedefer",
+            "engine",
             0
           ]
         }
@@ -23806,7 +23104,7 @@
             0
           ],
           "destination": [
-            "tunedefer",
+            "engine",
             0
           ]
         }
@@ -23830,7 +23128,7 @@
             0
           ],
           "destination": [
-            "tunedefer",
+            "engine",
             0
           ]
         }
@@ -25002,6 +24300,18 @@
       {
         "patchline": {
           "source": [
+            "tune1",
+            0
+          ],
+          "destination": [
+            "ui_set_tune1",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
             "ui_set_tune1",
             0
           ],
@@ -25043,6 +24353,18 @@
           ],
           "destination": [
             "tune2",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "tune2",
+            0
+          ],
+          "destination": [
+            "ui_set_tune2",
             0
           ]
         }
@@ -25098,6 +24420,18 @@
       {
         "patchline": {
           "source": [
+            "tune3",
+            0
+          ],
+          "destination": [
+            "ui_set_tune3",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
             "ui_set_tune3",
             0
           ],
@@ -25139,6 +24473,18 @@
           ],
           "destination": [
             "tune4",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "tune4",
+            0
+          ],
+          "destination": [
+            "ui_set_tune4",
             0
           ]
         }
@@ -25194,6 +24540,18 @@
       {
         "patchline": {
           "source": [
+            "tune5",
+            0
+          ],
+          "destination": [
+            "ui_set_tune5",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
             "ui_set_tune5",
             0
           ],
@@ -25235,6 +24593,18 @@
           ],
           "destination": [
             "tune6",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "tune6",
+            0
+          ],
+          "destination": [
+            "ui_set_tune6",
             0
           ]
         }
@@ -25290,6 +24660,18 @@
       {
         "patchline": {
           "source": [
+            "tune7",
+            0
+          ],
+          "destination": [
+            "ui_set_tune7",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
             "ui_set_tune7",
             0
           ],
@@ -25331,6 +24713,18 @@
           ],
           "destination": [
             "tune8",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "tune8",
+            0
+          ],
+          "destination": [
+            "ui_set_tune8",
             0
           ]
         }
@@ -26346,6 +25740,18 @@
       {
         "patchline": {
           "source": [
+            "pitch1",
+            0
+          ],
+          "destination": [
+            "ui_set_pitch1",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
             "ui_set_pitch1",
             0
           ],
@@ -26387,6 +25793,18 @@
           ],
           "destination": [
             "pitch2",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "pitch2",
+            0
+          ],
+          "destination": [
+            "ui_set_pitch2",
             0
           ]
         }
@@ -31751,570 +31169,6 @@
           ],
           "destination": [
             "expression",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tunedefer",
-            0
-          ],
-          "destination": [
-            "notetuner",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "notetuner",
-            0
-          ],
-          "destination": [
-            "engine",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "notetuner",
-            1
-          ],
-          "destination": [
-            "tuneroute_root",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tuneroute_root",
-            0
-          ],
-          "destination": [
-            "tune1",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tuneroute_root",
-            1
-          ],
-          "destination": [
-            "tune2",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tuneroute_root",
-            2
-          ],
-          "destination": [
-            "tune3",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tuneroute_root",
-            3
-          ],
-          "destination": [
-            "tune4",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tuneroute_root",
-            4
-          ],
-          "destination": [
-            "tune5",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tuneroute_root",
-            5
-          ],
-          "destination": [
-            "tune6",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tuneroute_root",
-            6
-          ],
-          "destination": [
-            "tune7",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tuneroute_root",
-            7
-          ],
-          "destination": [
-            "tune8",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tuneroute_root",
-            8
-          ],
-          "destination": [
-            "pitch1",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tuneroute_root",
-            9
-          ],
-          "destination": [
-            "pitch2",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "notetuner",
-            2
-          ],
-          "destination": [
-            "tuneroute_label",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tuneroute_label",
-            0
-          ],
-          "destination": [
-            "tunelabelsend_tune1",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tuneroute_label",
-            1
-          ],
-          "destination": [
-            "tunelabelsend_tune2",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tuneroute_label",
-            2
-          ],
-          "destination": [
-            "tunelabelsend_tune3",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tuneroute_label",
-            3
-          ],
-          "destination": [
-            "tunelabelsend_tune4",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tuneroute_label",
-            4
-          ],
-          "destination": [
-            "tunelabelsend_tune5",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tuneroute_label",
-            5
-          ],
-          "destination": [
-            "tunelabelsend_tune6",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tuneroute_label",
-            6
-          ],
-          "destination": [
-            "tunelabelsend_tune7",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tuneroute_label",
-            7
-          ],
-          "destination": [
-            "tunelabelsend_tune8",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tuneroute_label",
-            8
-          ],
-          "destination": [
-            "tunelabelsend_pitch1",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tuneroute_label",
-            9
-          ],
-          "destination": [
-            "tunelabelsend_pitch2",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "notetuner",
-            3
-          ],
-          "destination": [
-            "tuneroute_mirror",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tuneroute_mirror",
-            0
-          ],
-          "destination": [
-            "ui_state_tune1",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tuneroute_mirror",
-            1
-          ],
-          "destination": [
-            "ui_state_tune2",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tuneroute_mirror",
-            2
-          ],
-          "destination": [
-            "ui_state_tune3",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tuneroute_mirror",
-            3
-          ],
-          "destination": [
-            "ui_state_tune4",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tuneroute_mirror",
-            4
-          ],
-          "destination": [
-            "ui_state_tune5",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tuneroute_mirror",
-            5
-          ],
-          "destination": [
-            "ui_state_tune6",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tuneroute_mirror",
-            6
-          ],
-          "destination": [
-            "ui_state_tune7",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tuneroute_mirror",
-            7
-          ],
-          "destination": [
-            "ui_state_tune8",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tuneroute_mirror",
-            8
-          ],
-          "destination": [
-            "ui_state_pitch1",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tuneroute_mirror",
-            9
-          ],
-          "destination": [
-            "ui_state_pitch2",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tuneboot",
-            0
-          ],
-          "destination": [
-            "tuneinitdefer",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tuneinitdefer",
-            0
-          ],
-          "destination": [
-            "tunesettle",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tunesettle",
-            0
-          ],
-          "destination": [
-            "tuneinit",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tuneinit",
-            0
-          ],
-          "destination": [
-            "notetuner",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tuneclose",
-            0
-          ],
-          "destination": [
-            "tuneshutdown",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tuneshutdown",
-            0
-          ],
-          "destination": [
-            "notetuner",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "padcontroller",
-            1
-          ],
-          "destination": [
-            "tunedefer",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "pdtrigger",
-            1
-          ],
-          "destination": [
-            "tunepreset",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tunepreset",
-            0
-          ],
-          "destination": [
-            "tunedefer",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tunemanualrecv",
-            0
-          ],
-          "destination": [
-            "tunemanual",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "tunemanual",
-            0
-          ],
-          "destination": [
-            "tunedefer",
-            0
-          ]
-        }
-      },
-      {
-        "patchline": {
-          "source": [
-            "notetuner",
-            4
-          ],
-          "destination": [
-            "tunestatussend",
             0
           ]
         }

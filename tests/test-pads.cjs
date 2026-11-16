@@ -4,17 +4,16 @@ let pending=[], events=[], observers=new Map(), owned=new Set(), layout='note.me
 const idSign=Number(process.env.LIRA_ID_SIGN)||1;
 const surfaceID=200*idSign;
 const padID=i=>(300+i)*idSign;
-const shiftID=400*idSign;
 const hardwareLEDs=new Map();
 const savedLevels=[0,32,64,95,127,64,32,127], savedVoices=Array(8).fill(0);
-const padNames=Array.from({length:64},(_,i)=>`${i%8}_Clip_${Math.floor(i/8)}_Button`).concat(['Shift_Button']);
+const padNames=Array.from({length:64},(_,i)=>`${i%8}_Clip_${Math.floor(i/8)}_Button`);
 class Task {constructor(fn,ctx){this.fn=fn.bind(ctx);}schedule(){if(!pending.includes(this))pending.push(this);}repeat(){}cancel(){pending=pending.filter(x=>x!==this);}}
 class LiveAPI {
  constructor(cb,path){this.cb=cb;this.path=path;this.id=path==='this_device'?100:path==='live_set'?101:path==='live_app'?102:Number(path.split(' ')[1]);if(path.startsWith('control_surfaces '))this.id=!missing&&rootOnly&&path==='control_surfaces 2'?surfaceID:0;this.type='ControlSurface';}
  goto(path){this.path=path;}
  get(name){if(name==='parameters')return Array.from({length:16},(_,i)=>['id',500+i]).flat();if(name==='name')return ['Voice '+((this.id-500)%8+1)+' '+(this.id<508?'Level':'On')];if(name==='value')return [this.id<508?savedLevels[this.id-500]:savedVoices[this.id-508]];if(name==='control_surfaces')return missing||rootOnly?[]:['id',0,'id',String(199*idSign),'id',0,'id',String(surfaceID)];if(name==='appointed_device'||name==='selected_device')return ['id',appointed];if(name==='is_active')return enabled;if(name==='pad_layout')return [layout];throw Error(name);}
  set property(p){this.prop=p;if(p==='value')observers.set(this.id,this.cb);else observers.delete(this.id);}
- call(name,...a){if(name==='send_value')hardwareLEDs.set(this.id,a[0]);assert(['get_control_names','get_control','grab_control','release_control','send_value'].includes(name),'Unexpected API call: '+name);events.push([name,...a]);if(name==='get_control_names')return this.id===surfaceID?padNames:['Unrelated_Button'];if(name==='get_control')return ['id',a[0]==='Shift_Button'?shiftID:padID(padNames.indexOf(a[0]))];if(name==='grab_control'){if(owned.size===failGrab)throw Error('simulated acquisition failure');owned.add(a[0]);}if(name==='release_control')owned.delete(a[0]);}
+ call(name,...a){if(name==='send_value')hardwareLEDs.set(this.id,a[0]);assert(['get_control_names','get_control','grab_control','release_control','send_value'].includes(name),'Unexpected API call: '+name);events.push([name,...a]);if(name==='get_control_names')return this.id===surfaceID?padNames:['Unrelated_Button'];if(name==='get_control')return ['id',padID(padNames.indexOf(a[0]))];if(name==='grab_control'){if(owned.size===failGrab)throw Error('simulated acquisition failure');owned.add(a[0]);}if(name==='release_control')owned.delete(a[0]);}
 }
 const ctx={Task,LiveAPI,post(){},outlet(n,...a){if(a.length===1&&Array.isArray(a[0]))a=a[0];events.push(['outlet',n,...a]);if(n===0){if(a[0]==='padpage')ctx.page(a[1]);else if(a[0].startsWith('voiceon')){let i=Number(a[0].slice(7))-1;savedVoices[i]=a[1];ctx.state(i,a[1]);}else if(a[0].startsWith('level')){let i=Number(a[0].slice(5))-1;savedLevels[i]=a[1];ctx.level(i,a[1]);}}}};vm.createContext(ctx);vm.runInContext(code,ctx);
 function drain(){let guard=100;while(pending.length&&guard--)pending.shift().fn();assert(guard>0,'no feedback loop');}
@@ -56,6 +55,3 @@ console.log('PASS: all voice latches, release/pressure filtering, inert top row,
 
 rootOnly=true;ctx.init();assert.equal(owned.size,56,'root path finds integrated controller with empty application list');assert.equal(ctx.discoveredCount,1);ctx.shutdown();rootOnly=false;
 console.log('PASS: empty application surface list with valid root-path surface; invalid earlier slots skipped.');
-
-ctx.init();observers.get(shiftID)(['value',127]);drain();assert(events.some(e=>e[0]==='outlet'&&e[1]===1&&e[2]==='shift'&&e[3]===1));assert(!owned.has('Shift_Button'));const stale=observers.get(shiftID);ctx.release();stale(['value',127]);drain();assert.equal(events.filter(e=>e[0]==='outlet'&&e[1]===1&&e[2]==='shift').at(-1)[3],0);assert(!observers.has(shiftID));ctx.shutdown();
-console.log('PASS: passive Shift observation, no Shift grab, release resets tuning and ignores stale notifications.');

@@ -1,4 +1,4 @@
-.PHONY: all test clean
+.PHONY: all test test-experimental-tuning clean
 
 all:
 	python3 src/build.py
@@ -14,6 +14,9 @@ test: all
 	node tests/test-expression.cjs
 	node tests/test-audio-input.cjs
 	LIRA_ID_SIGN=-1 node tests/test-audio-input.cjs
+
+# Retained calculations from withdrawn alpha 10; not part of the shipped device.
+test-experimental-tuning:
 	node tests/test-tuning.cjs
 	LIRA_ID_SIGN=-1 node tests/test-tuning.cjs
 

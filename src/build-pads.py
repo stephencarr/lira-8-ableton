@@ -83,7 +83,7 @@ popup['lines'].append({'patchline':{'source':['padstatusrecv',0],'destination':[
 # Do not auto-open a desktop window when the standalone instrument loads.
 lines[:]=[l for l in lines if not(l['patchline']['source'][0]=='deferopen' and l['patchline']['destination'][0]=='openmsg')]
 by['brand']['text']='LIRA • PADS'
-by['title']['text']='LIRA • 8 / Pad edition alpha 10 · Note tuning'
+by['title']['text']='LIRA • 8 / Pad edition alpha 11 · Recovery'
 # Hybrid surface: native serial-note bottom row, seven grabbed UI rows.
 p['is_mpe']=1
 # Native note LEDs use the named colours supported by live.push; the custom
@@ -115,8 +115,6 @@ modified=modified.replace('dry=(v1+v2+v3+v4+v5+v6+v7+v8)*0.166667;', 'dry=('+ '+
 assert modified.count('pow(2,lira_ramp(bend')==8
 assert modified.count('lira_ramp(press')==8
 gen['code']=modified
-from tuning import add_tuning
-add_tuning(p,ROOT)
 (OUT/'LIRA-engine.genexpr').write_text(modified)
 raw=json.dumps({'patcher':p},indent=2).encode()+b'\0'
 (OUT/'LIRA-Push-Pads.maxpat').write_bytes(raw[:-1])
@@ -124,4 +122,4 @@ raw=json.dumps({'patcher':p},indent=2).encode()+b'\0'
 (OUT/'LIRA-Pads-controller.js').write_text(code)
 (OUT/'pages.json').write_text(json.dumps(pages,indent=2))
 shutil.copy(ROOT/'build/LIRA-Push/License.txt',OUT/'License.txt')
-print('Built alpha 10; temporary note tuning, 69 saved parameters, eight permanent banks.')
+print('Built alpha 11 recovery; alpha 9 pad/audio paths, 69 parameters, eight permanent banks.')
