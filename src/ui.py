@@ -41,9 +41,12 @@ def apply_ui(p,params,root):
  layout['routing']=[1179,116,71,18];layout['totalfb']=[1179,139,71,18]
  panel('distpanel','DISTORTION / OUT',[1264,4,170,160])
  for j,n in enumerate(['drive','distmix','volume']):layout[n]=[1272+(j%2)*78,29+(j//2)*67,68,60];short[n]={'drive':'Drive','distmix':'Mix','volume':'Master'}[n]
- label('midi_hint','C1–G1\nMIDI 36–43',[1350,105,80,38],10)
+ layout['extgain']=[1350,96,68,60];short['extgain']='Audio In'
+ layout['extsource']=[10,900,200,20];layout['exttap']=[220,900,130,20]
  boxes.extend(old)
  menus={**{f'source{i}':['Pair','Off','LFO / FB'] for i in range(1,5)},'andor':['AND','OR'],'dsource':['Self','Off','LFO'],'dwave':['Triangle','Square']}
+ menus['extsource']=['Off','Input 1','Input 2','Input 1/2']+[f'Track {i}' for i in range(1,65)]
+ menus['exttap']=['Pre FX','Post FX','Post Mixer']
  toggles={**{f'voiceon{i}':f'Voice {i} On' for i in range(1,9)},**{f'fast{i}':'Fast' for i in range(1,5)},'link':'Link','vibrato':'Vibrato','quantize':'Quantize','routing':'Route swap','totalfb':'Total FB'}
  def style_control(b,n,rect,labelname,enabled=True):
   b.update(presentation=1,presentation_rect=rect,patching_rect=rect,fontsize=10,parameter_enable=int(enabled))
@@ -57,11 +60,13 @@ def apply_ui(p,params,root):
   if n in menus:attrs.update(parameter_type=2,parameter_enum=menus[n],parameter_unitstyle=9)
  for n,l,v,m in params:
   style_control(by[n],n,layout[n],short.get(n,l));by[n]['hint']=l+' — '+('0–127, same scale as Pure Data' if m==127 else 'Select '+l)
+ by['extsource']['presentation']=0;by['exttap']['presentation']=0
+ by['extgain']['hint']='External audio level: 0 muted, 127 unity. Select the source in the full panel or Push Output bank.'
  # Full window with mirrored controls. Native Max only: no JS or external graphics.
- popup={'fileversion':1,'classnamespace':'box','rect':[80,70,1064,580],'openinpresentation':1,'bgcolor':BG,'editing_bgcolor':BG,'boxes':[],'lines':[],'default_fontname':'Arial','default_fontsize':12}
+ popup={'fileversion':1,'classnamespace':'box','rect':[80,70,1064,658],'openinpresentation':1,'bgcolor':BG,'editing_bgcolor':BG,'boxes':[],'lines':[],'default_fontname':'Arial','default_fontsize':12}
  mainboxes,mainlines=boxes,lines;boxes=popup['boxes'];lines=popup['lines']
  add('window_inlet','inlet',numinlets=0,numoutlets=1)
- visual('fullbg','panel',[0,0,1064,580],bgcolor=BG,border=0)
+ visual('fullbg','panel',[0,0,1064,658],bgcolor=BG,border=0)
  label('fullbrand','LIRA • 8',[20,12,230,36],28,PINK)
  label('fullsubtitle','Eight voices · four interacting pairs',[260,21,350,24],14)
  visual('fullclose','textbutton',[990,4,58,22],text='Close',fontsize=11,active=1,legacytextcolor=1,usegradient=0,bgcolor=PANEL,textcolor=WHITE,mode=0)
@@ -85,7 +90,11 @@ def apply_ui(p,params,root):
   for j,n in enumerate(['mod','sharp']):full[n+str(k+1)]=[x+18+j*116,442,94,60]
   label('sourcelabel'+str(k),'SOURCE',[x+15,513,70,18],10)
   full['source'+str(k+1)]=[x+91,510,71,24];full['fast'+str(k+1)]=[x+174,510,58,24]
- label('footer','Tune sets each voice’s pitch. Mod, Sharp, Source and Fast are shared by the pair. Off releases a voice; Hold can keep its group sounding.',[20,551,1020,22],12)
+ panel('fullaudio','EXTERNAL AUDIO → VOICES + DELAY + TOTAL FEEDBACK',[16,548,1032,78])
+ full['extgain']=[30,567,90,56];full['extsource']=[146,586,200,24];full['exttap']=[368,586,150,24]
+ label('extsourcelabel','AUDIO FROM',[146,566,200,18],11);label('exttaplabel','TRACK TAP',[368,566,150,18],11)
+ label('audio_status','Audio input off',[540,586,490,24],12)
+ label('footer','Tune sets each voice’s pitch. Mod, Sharp, Source and Fast are shared by the pair. Off releases a voice; Hold can keep its group sounding.',[20,634,1020,22],12)
  for n,l,v,m in params:
   rect=full[n];x,y,w,h=rect
   if n in menus:

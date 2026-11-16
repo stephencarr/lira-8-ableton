@@ -12,6 +12,8 @@ test: all
 	node tests/test-pads.cjs
 	LIRA_ID_SIGN=-1 node tests/test-pads.cjs
 	node tests/test-expression.cjs
+	node tests/test-audio-input.cjs
+	LIRA_ID_SIGN=-1 node tests/test-audio-input.cjs
 
 clean:
 	rm -rf build

@@ -12,9 +12,9 @@ def check(g):
   if 'patcher' in b['box']:check(b['box']['patcher'])
 check(j)
 live=[b['box'] for b in j['boxes'] if b['box'].get('parameter_enable')==1]
-assert len(live)==55
+assert len(live)==58
 names={b['saved_attribute_attributes']['valueof']['parameter_longname'] for b in live}
-assert len(names)==55, 'Parameter Long Names must be unique'
+assert len(names)==58, 'Parameter Long Names must be unique'
 assert names=={v[0] for k,v in j['parameters'].items() if k not in ('parameterbanks','inherited_shortname')}
 for b in j['parameters']['parameterbanks'].values():
  assert len(b['parameters'])==8
@@ -29,5 +29,5 @@ for i in range(1,9):
  assert any(l['patchline']['source']==[n,0] and l['patchline']['destination']==['send_'+n,0] for l in j['lines'])
  assert any(l['patchline']['source']==['send_'+n,0] and l['patchline']['destination']==['engine',0] for l in j['lines'])
 assert not j['dependency_cache']
-print('PASS: container lengths, JSON, unique IDs, all patch-cord endpoints, 55 parameters, eight eight-slot banks, embedded source consistency.')
+print('PASS: container lengths, JSON, unique IDs, all patch-cord endpoints, 58 parameters, eight eight-slot banks, embedded source consistency.')
 print('NOT TESTED: Max compilation, audio, Live state, Push standalone.')

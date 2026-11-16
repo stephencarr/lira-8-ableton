@@ -92,9 +92,7 @@ for n in names+['inputgain']:
 
 gp = copy.deepcopy(by['engine']['patcher'])
 gp['boxes'][0]['box'].update(code=code, numinlets=2)
-for i in [1,2]:
-    gp['boxes'].append({'box':dict(id=f'in{i}',maxclass='newobj',text=f'in {i}',patching_rect=[i*100,0,50,22],numinlets=0,numoutlets=1)})
-    gp['lines'].append({'patchline':dict(source=[f'in{i}',0],destination=['code',i-1])})
+# The base synth now already declares its two audio inlets.
 add('engine', text='gen~', patcher=gp, numinlets=2, numoutlets=2, outlettype=['signal','signal'])
 add('input', text='plugin~', numinlets=2, numoutlets=2, outlettype=['signal','signal'])
 add('output', text='plugout~', numinlets=2, numoutlets=0)

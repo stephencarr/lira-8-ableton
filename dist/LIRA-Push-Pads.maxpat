@@ -358,34 +358,6 @@
       },
       {
         "box": {
-          "id": "midi_hint",
-          "maxclass": "comment",
-          "patching_rect": [
-            1350,
-            105,
-            80,
-            38
-          ],
-          "presentation": 1,
-          "presentation_rect": [
-            1350,
-            105,
-            80,
-            38
-          ],
-          "fontsize": 10,
-          "textcolor": [
-            0.96,
-            0.93,
-            0.94,
-            1
-          ],
-          "fontname": "Arial",
-          "text": "C1\u2013G1\nMIDI 36\u201343"
-        }
-      },
-      {
-        "box": {
           "id": "engine",
           "maxclass": "newobj",
           "patching_rect": [
@@ -408,8 +380,8 @@
                 "box": {
                   "id": "code",
                   "maxclass": "codebox",
-                  "code": "\n// Adapted from LIRA-8, Copyright Miguel Moreno. See License.txt.\n// Gen port: explicit 64-sample inter-pair feedback; see port notes.\nlira_sat(x) { z=clamp(x,-3,3); return z*(27+z*z)/(27+9*z*z); }\nlira_ramp(x,ms) {\n History previous(0);\n History value(0);\n History remaining(0);\n History increment(0);\n if (x != previous) {\n   remaining = max(1, ms * samplerate / 1000);\n   increment = (x - value) / remaining;\n }\n previous = x;\n if (remaining > 0) {\n   value = value + increment;\n   remaining = max(0, remaining - 1);\n } else {\n   value = x;\n }\n return value;\n}\n\nlira_lp(x,f) { History y(0); a=clamp(6.28318530718*f/samplerate,0,1); y=y+a*(x-y); return y; }\nlira_hp(x,f) {\n History input_memory(0);\n History output_memory(0);\n coefficient = clamp(1 - 6.28318530718 * f / samplerate, 0, 1);\n result = (1 + coefficient) * 0.5 * (x - input_memory) + coefficient * output_memory;\n input_memory = x;\n output_memory = result;\n return result;\n}\n\nlira_blep(p,d) { a=p/max(d,0.00000001); b=(p-1)/max(d,0.00000001); return p<d ? 2*a-a*a-1 : p>1-d ? b*b+2*b+1 : 0; }\nlira_osc(freq,duty) {\n History phase(0), width(0.53125), last(0), filt(0);\n f=abs(freq); dt=f/samplerate; p=phase; phase=wrap(p+dt,0,1);\n if(p<last){width=clamp(duty,0,1);} last=p;\n q=wrap(p+width,0,1);\n square=(2*p-1-lira_blep(p,dt))-(2*q-1-lira_blep(q,dt))+2*width-1;\n a=exp(-6.28318530718*clamp(max(f/4,100),0,samplerate/2)/samplerate);\n filt=(1-a)*square+a*filt;\n return square*0.59, filt*2.65-0.145;\n}\nlira_voice(arg_freq,arg_sharp,arg_gate,arg_hold,arg_fast,arg_duty) {\n envelope_value=lira_ramp(arg_gate,arg_gate>0 ? (arg_fast>0?100:200) : (arg_fast>0?100:8000));\n sq,tr=lira_osc(arg_freq,arg_duty);\n return (sq*arg_sharp+tr*(1-arg_sharp)+sin(envelope_value*6.28318530718)*0.5)*min(1,envelope_value*envelope_value+arg_hold);\n}\nlira_dynamics(x) {\n History env(0), sumsq(0);\n Delay rmsbuf(512);\n a=exp(-4.60517/(samplerate*0.0025)); env=abs(x)+a*(env-abs(x));\n gain=clamp(((env-0.2511886432)/5+0.2511886432)/max(env,0.0000000001),0,1);\n comp=x*lira_sat(gain);\n sq=comp*comp; old=rmsbuf.read(512); rmsbuf.write(sq);\n sumsq=max(0,sumsq+sq-old);\n db=10*log10(max(sumsq/512,0.000000000001));\n // 512-sample rectangular RMS approximation to Pd env~ Hann detector.\n eg=lira_ramp(pow(10,min(0,(db+60)*0.8)/20),11);\n return comp*eg;\n}\nHistory hpf_0_x(0), hpf_0_y(0);\nHistory hpf_1_x(0), hpf_1_y(0);\nHistory hpf_2_x(0), hpf_2_y(0);\nHistory hpf_3_x(0), hpf_3_y(0);\nHistory hpf_4_x(0), hpf_4_y(0);\nHistory hpf_5_x(0), hpf_5_y(0);\nHistory hpf_6_x(0), hpf_6_y(0);\nHistory hpf_7_x(0), hpf_7_y(0);\nHistory hpf_8_x(0), hpf_8_y(0);\nParam level8(127,min=0,max=127);\nParam bend8(0,min=-48,max=48);\nParam press8(0,min=0,max=1);\nParam level7(127,min=0,max=127);\nParam bend7(0,min=-48,max=48);\nParam press7(0,min=0,max=1);\nParam level6(127,min=0,max=127);\nParam bend6(0,min=-48,max=48);\nParam press6(0,min=0,max=1);\nParam level5(127,min=0,max=127);\nParam bend5(0,min=-48,max=48);\nParam press5(0,min=0,max=1);\nParam level4(127,min=0,max=127);\nParam bend4(0,min=-48,max=48);\nParam press4(0,min=0,max=1);\nParam level3(127,min=0,max=127);\nParam bend3(0,min=-48,max=48);\nParam press3(0,min=0,max=1);\nParam level2(127,min=0,max=127);\nParam bend2(0,min=-48,max=48);\nParam press2(0,min=0,max=1);\nParam level1(127,min=0,max=127);\nParam bend1(0,min=-48,max=48);\nParam press1(0,min=0,max=1);\nParam tune1(64,min=0,max=127);\nParam tune2(68,min=0,max=127);\nParam tune3(55,min=0,max=127);\nParam tune4(60,min=0,max=127);\nParam tune5(45,min=0,max=127);\nParam tune6(50,min=0,max=127);\nParam tune7(38,min=0,max=127);\nParam tune8(43,min=0,max=127);\nParam sharp1(40,min=0,max=127);\nParam sharp2(40,min=0,max=127);\nParam sharp3(40,min=0,max=127);\nParam sharp4(40,min=0,max=127);\nParam mod1(0,min=0,max=127);\nParam mod2(0,min=0,max=127);\nParam mod3(0,min=0,max=127);\nParam mod4(0,min=0,max=127);\nParam source1(1,min=0,max=2);\nParam source2(1,min=0,max=2);\nParam source3(1,min=0,max=2);\nParam source4(1,min=0,max=2);\nParam fast1(0,min=0,max=1);\nParam fast2(0,min=0,max=1);\nParam fast3(0,min=0,max=1);\nParam fast4(0,min=0,max=1);\nParam pitch1(63,min=0,max=127);\nParam pitch2(63,min=0,max=127);\nParam hold1(0,min=0,max=127);\nParam hold2(0,min=0,max=127);\nParam lfo1(64,min=0,max=127);\nParam lfo2(72,min=0,max=127);\nParam link(0,min=0,max=1);\nParam andor(0,min=0,max=1);\nParam routing(0,min=0,max=1);\nParam totalfb(0,min=0,max=1);\nParam vibrato(0,min=0,max=1);\nParam quantize(0,min=0,max=1);\nParam time1(60,min=0,max=127);\nParam time2(68,min=0,max=127);\nParam dmod1(0,min=0,max=127);\nParam dmod2(0,min=0,max=127);\nParam feedback(35,min=0,max=127);\nParam dmix(30,min=0,max=127);\nParam dsource(1,min=0,max=2);\nParam dwave(0,min=0,max=1);\nParam drive(20,min=0,max=127);\nParam distmix(30,min=0,max=127);\nParam volume(80,min=0,max=127);\nParam voiceon1(0,min=0,max=1);\nParam voiceon2(0,min=0,max=1);\nParam voiceon3(0,min=0,max=1);\nParam voiceon4(0,min=0,max=1);\nParam voiceon5(0,min=0,max=1);\nParam voiceon6(0,min=0,max=1);\nParam voiceon7(0,min=0,max=1);\nParam voiceon8(0,min=0,max=1);\nParam gate1(0,min=0,max=1);\nParam gate2(0,min=0,max=1);\nParam gate3(0,min=0,max=1);\nParam gate4(0,min=0,max=1);\nParam gate5(0,min=0,max=1);\nParam gate6(0,min=0,max=1);\nParam gate7(0,min=0,max=1);\nParam gate8(0,min=0,max=1);\n\nDelay pair1(64),pair2(64),pair3(64),pair4(64),totaldelay(64);\nDelay delay1(1048576),delay2(1048576);\nHistory lphase1(0),lphase2(0);\nHistory pair_state1(0),pair_state2(0),pair_state3(0),pair_state4(0),total_state(0);\nfla=lira_ramp(mtof(pow(lfo1/127,2)*127-75),23.22);\nflb=lira_ramp(mtof(pow(lfo2/127,2)*127-75),23.22);\nls1=clamp(cos(lphase1*6.28318530718)*1000,-1,1);\nls2=clamp(cos(lphase2*6.28318530718)*1000,-1,1);\nltri=((abs(lphase1-0.5)*4-1)+(abs(lphase2-0.5)*4-1))*0.5;\nlsqr=(ls1+ls2)*0.5;\nlmod=andor>0 ? lsqr : ls1*ls2;\nlphase1=wrap(lphase1+fla/samplerate,0,1);\nlphase2=wrap(lphase2+(flb+ls1*flb*0.5*link)/samplerate,0,1);\np1=pair_state1; p2=pair_state2; p3=pair_state3; p4=pair_state4; tf=total_state;\npair_state1=pair1.read(63);pair_state2=pair2.read(63);pair_state3=pair3.read(63);pair_state4=pair4.read(63);total_state=totaldelay.read(63);\nsrc1=((routing>0?0.001:1)*p2+(routing>0?1:0.001)*p4)*(source1==0?1:0.001)+(lmod*(totalfb>0?0.001:1)+tf*(totalfb>0?1:0.001))*(source1==2?1:0.001);\nmd1=lira_ramp(pow(mod1/127,4)*2,23.22); sh1=lira_ramp(pow(sharp1/127,2),23.22);\nvib1=cycle(1.13)*lira_ramp(vibrato,23.22);\nsrc2=((routing>0?0.001:1)*p1+(routing>0?1:0.001)*p1)*(source2==0?1:0.001)+(lmod*(totalfb>0?0.001:1)+tf*(totalfb>0?1:0.001))*(source2==2?1:0.001);\nmd2=lira_ramp(pow(mod2/127,4)*2,23.22); sh2=lira_ramp(pow(sharp2/127,2),23.22);\nvib2=cycle(2.31)*lira_ramp(vibrato,23.22);\nsrc3=((routing>0?0.001:1)*p4+(routing>0?1:0.001)*p2)*(source3==0?1:0.001)+(lmod*(totalfb>0?0.001:1)+tf*(totalfb>0?1:0.001))*(source3==2?1:0.001);\nmd3=lira_ramp(pow(mod3/127,4)*2,23.22); sh3=lira_ramp(pow(sharp3/127,2),23.22);\nvib3=cycle(3.17)*lira_ramp(vibrato,23.22);\nsrc4=((routing>0?0.001:1)*p3+(routing>0?1:0.001)*p3)*(source4==0?1:0.001)+(lmod*(totalfb>0?0.001:1)+tf*(totalfb>0?1:0.001))*(source4==2?1:0.001);\nmd4=lira_ramp(pow(mod4/127,4)*2,23.22); sh4=lira_ramp(pow(sharp4/127,2),23.22);\nvib4=cycle(1.79)*lira_ramp(vibrato,23.22);\nraw1=mtof(-16+tune1/127*109)*(0.01+1.99*pitch1/127);\nfq1=lira_ramp(quantize>0?mtof(floor(ftom(raw1)+0.5)):raw1,23.22);\nv1=lira_voice(fq1*pow(2,lira_ramp(bend1,5)/12)*(1+vib1*0.005)*(1+src1*md1),clamp(sh1+lira_ramp(press1,10)*0.6,0,1),max(gate1,voiceon1),lira_ramp(pow(hold1/127,2),23.22),fast1,0.53125+vib1*0.025);\nraw2=mtof(-16+tune2/127*109)*(0.01+1.99*pitch1/127);\nfq2=lira_ramp(quantize>0?mtof(floor(ftom(raw2)+0.5)):raw2,23.22);\nv2=lira_voice(fq2*pow(2,lira_ramp(bend2,5)/12)*(1+vib1*0.005)*(1+src1*md1),clamp(sh1+lira_ramp(press2,10)*0.6,0,1),max(gate2,voiceon2),lira_ramp(pow(hold1/127,2),23.22),fast1,0.53125+vib1*0.025);\nraw3=mtof(7+tune3/127*102)*(0.01+1.99*pitch1/127);\nfq3=lira_ramp(quantize>0?mtof(floor(ftom(raw3)+0.5)):raw3,23.22);\nv3=lira_voice(fq3*pow(2,lira_ramp(bend3,5)/12)*(1+vib2*0.005)*(1+src2*md2),clamp(sh2+lira_ramp(press3,10)*0.6,0,1),max(gate3,voiceon3),lira_ramp(pow(hold1/127,2),23.22),fast2,0.53125+vib2*0.025);\nraw4=mtof(9+tune4/127*98)*(0.01+1.99*pitch1/127);\nfq4=lira_ramp(quantize>0?mtof(floor(ftom(raw4)+0.5)):raw4,23.22);\nv4=lira_voice(fq4*pow(2,lira_ramp(bend4,5)/12)*(1+vib2*0.005)*(1+src2*md2),clamp(sh2+lira_ramp(press4,10)*0.6,0,1),max(gate4,voiceon4),lira_ramp(pow(hold1/127,2),23.22),fast2,0.53125+vib2*0.025);\nraw5=mtof(20+tune5/127*96.54)*(0.01+1.99*pitch2/127);\nfq5=lira_ramp(quantize>0?mtof(floor(ftom(raw5)+0.5)):raw5,23.22);\nv5=lira_voice(fq5*pow(2,lira_ramp(bend5,5)/12)*(1+vib3*0.005)*(1+src3*md3),clamp(sh3+lira_ramp(press5,10)*0.6,0,1),max(gate5,voiceon5),lira_ramp(pow(hold2/127,2),23.22),fast3,0.53125+vib3*0.025);\nraw6=mtof(20+tune6/127*96.54)*(0.01+1.99*pitch2/127);\nfq6=lira_ramp(quantize>0?mtof(floor(ftom(raw6)+0.5)):raw6,23.22);\nv6=lira_voice(fq6*pow(2,lira_ramp(bend6,5)/12)*(1+vib3*0.005)*(1+src3*md3),clamp(sh3+lira_ramp(press6,10)*0.6,0,1),max(gate6,voiceon6),lira_ramp(pow(hold2/127,2),23.22),fast3,0.53125+vib3*0.025);\nraw7=mtof(33+tune7/127*93.24)*(0.01+1.99*pitch2/127);\nfq7=lira_ramp(quantize>0?mtof(floor(ftom(raw7)+0.5)):raw7,23.22);\nv7=lira_voice(fq7*pow(2,lira_ramp(bend7,5)/12)*(1+vib4*0.005)*(1+src4*md4),clamp(sh4+lira_ramp(press7,10)*0.6,0,1),max(gate7,voiceon7),lira_ramp(pow(hold2/127,2),23.22),fast4,0.53125+vib4*0.025);\nraw8=mtof(33+tune8/127*98.22)*(0.01+1.99*pitch2/127);\nfq8=lira_ramp(quantize>0?mtof(floor(ftom(raw8)+0.5)):raw8,23.22);\nv8=lira_voice(fq8*pow(2,lira_ramp(bend8,5)/12)*(1+vib4*0.005)*(1+src4*md4),clamp(sh4+lira_ramp(press8,10)*0.6,0,1),max(gate8,voiceon8),lira_ramp(pow(hold2/127,2),23.22),fast4,0.53125+vib4*0.025);\nhpf_0_a = clamp(1 - 6.28318530718 * (3) / samplerate, 0, 1); hpf_0_input = v1+v2; hpf_0_out = (1+hpf_0_a)*0.5*(hpf_0_input-hpf_0_x)+hpf_0_a*hpf_0_y; hpf_0_x=hpf_0_input; hpf_0_y=hpf_0_out;\npair1.write(hpf_0_out);\nhpf_1_a = clamp(1 - 6.28318530718 * (3) / samplerate, 0, 1); hpf_1_input = v3+v4; hpf_1_out = (1+hpf_1_a)*0.5*(hpf_1_input-hpf_1_x)+hpf_1_a*hpf_1_y; hpf_1_x=hpf_1_input; hpf_1_y=hpf_1_out;\npair2.write(hpf_1_out);\nhpf_2_a = clamp(1 - 6.28318530718 * (3) / samplerate, 0, 1); hpf_2_input = v5+v6; hpf_2_out = (1+hpf_2_a)*0.5*(hpf_2_input-hpf_2_x)+hpf_2_a*hpf_2_y; hpf_2_x=hpf_2_input; hpf_2_y=hpf_2_out;\npair3.write(hpf_2_out);\nhpf_3_a = clamp(1 - 6.28318530718 * (3) / samplerate, 0, 1); hpf_3_input = v7+v8; hpf_3_out = (1+hpf_3_a)*0.5*(hpf_3_input-hpf_3_x)+hpf_3_a*hpf_3_y; hpf_3_x=hpf_3_input; hpf_3_y=hpf_3_out;\npair4.write(hpf_3_out);\n\ndry=(v1*lira_ramp(level1/127,23.22)+v2*lira_ramp(level2/127,23.22)+v3*lira_ramp(level3/127,23.22)+v4*lira_ramp(level4/127,23.22)+v5*lira_ramp(level5/127,23.22)+v6*lira_ramp(level6/127,23.22)+v7*lira_ramp(level7/127,23.22)+v8*lira_ramp(level8/127,23.22))*0.166667;\nfb=lira_ramp(feedback/127*pow(2,2*feedback/127),23.22);\ndlfo=(dwave>0?lsqr:ltri)*(dsource==2);\nself1=lira_lp(delay1.read(64)*0.5*(dsource==0),689);\nself2=lira_lp(delay2.read(64)*0.5,689)*(dsource==0);\nms1=lira_ramp(pow(2,time1/127*12)*1.45125,23.22)+(self1+dlfo)*lira_ramp(pow(dmod1/127,2)*10,23.22);\nms2=lira_ramp(pow(2,time2/127*12)*1.45125,23.22)+(self2+dlfo)*lira_ramp(pow(dmod2/127,2)*10,23.22);\nhpf_4_a = clamp(1 - 6.28318530718 * (1) / samplerate, 0, 1); hpf_4_input = delay1.read(clamp(ms1*samplerate/1000,64,1048575),interp=\"cubic\"); hpf_4_out = (1+hpf_4_a)*0.5*(hpf_4_input-hpf_4_x)+hpf_4_a*hpf_4_y; hpf_4_x=hpf_4_input; hpf_4_y=hpf_4_out;\nd1=lira_dynamics(lira_lp(hpf_4_out,4000));\nhpf_5_a = clamp(1 - 6.28318530718 * (1) / samplerate, 0, 1); hpf_5_input = delay2.read(clamp(ms2*samplerate/1000,64,1048575),interp=\"cubic\"); hpf_5_out = (1+hpf_5_a)*0.5*(hpf_5_input-hpf_5_x)+hpf_5_a*hpf_5_y; hpf_5_x=hpf_5_input; hpf_5_y=hpf_5_out;\nd2=lira_dynamics(lira_lp(hpf_5_out,4000));\nn=noise()*0.001;\ndelay1.write(dry+n+d1*fb);delay2.write(dry+n+d2*fb);\nwet=lira_sat((d1+d2)*0.5/max(fb,1.5));\ndm=lira_ramp(dmix/127,23.22); mixed=dry*(1-dm)+wet*dm;\ndg=lira_ramp(pow(10,(pow(3,1+2*drive/127)+3)/20),23.22);\nhpf_6_a = clamp(1 - 6.28318530718 * (20) / samplerate, 0, 1); hpf_6_input = mixed*dg; hpf_6_out = (1+hpf_6_a)*0.5*(hpf_6_input-hpf_6_x)+hpf_6_a*hpf_6_y; hpf_6_x=hpf_6_input; hpf_6_y=hpf_6_out;\ndist=lira_sat(hpf_6_out);\nhpf_7_a = clamp(1 - 6.28318530718 * (10) / samplerate, 0, 1); hpf_7_input = dist+pow(dist,31)*0.25; hpf_7_out = (1+hpf_7_a)*0.5*(hpf_7_input-hpf_7_x)+hpf_7_a*hpf_7_y; hpf_7_x=hpf_7_input; hpf_7_y=hpf_7_out;\ndist=hpf_7_out/clamp(dg,1,4)+mixed*0.1;\nmixd=lira_ramp(distmix/127,23.22);\nmaster=lira_sat(mixed*(1-mixd)+dist*mixd);\nhpf_8_a = clamp(1 - 6.28318530718 * (3) / samplerate, 0, 1); hpf_8_input = master; hpf_8_out = (1+hpf_8_a)*0.5*(hpf_8_input-hpf_8_x)+hpf_8_a*hpf_8_y; hpf_8_x=hpf_8_input; hpf_8_y=hpf_8_out;\ntotaldelay.write(hpf_8_out);\nout1=master*lira_ramp(pow(volume/127,2),23.22);\nout2=out1;\n",
-                  "numinlets": 0,
+                  "code": "\n// Adapted from LIRA-8, Copyright Miguel Moreno. See License.txt.\n// Gen port: explicit 64-sample inter-pair feedback; see port notes.\nlira_sat(x) { z=clamp(x,-3,3); return z*(27+z*z)/(27+9*z*z); }\nlira_ramp(x,ms) {\n History previous(0);\n History value(0);\n History remaining(0);\n History increment(0);\n if (x != previous) {\n   remaining = max(1, ms * samplerate / 1000);\n   increment = (x - value) / remaining;\n }\n previous = x;\n if (remaining > 0) {\n   value = value + increment;\n   remaining = max(0, remaining - 1);\n } else {\n   value = x;\n }\n return value;\n}\n\nlira_lp(x,f) { History y(0); a=clamp(6.28318530718*f/samplerate,0,1); y=y+a*(x-y); return y; }\nlira_hp(x,f) {\n History input_memory(0);\n History output_memory(0);\n coefficient = clamp(1 - 6.28318530718 * f / samplerate, 0, 1);\n result = (1 + coefficient) * 0.5 * (x - input_memory) + coefficient * output_memory;\n input_memory = x;\n output_memory = result;\n return result;\n}\n\nlira_blep(p,d) { a=p/max(d,0.00000001); b=(p-1)/max(d,0.00000001); return p<d ? 2*a-a*a-1 : p>1-d ? b*b+2*b+1 : 0; }\nlira_osc(freq,duty) {\n History phase(0), width(0.53125), last(0), filt(0);\n f=abs(freq); dt=f/samplerate; p=phase; phase=wrap(p+dt,0,1);\n if(p<last){width=clamp(duty,0,1);} last=p;\n q=wrap(p+width,0,1);\n square=(2*p-1-lira_blep(p,dt))-(2*q-1-lira_blep(q,dt))+2*width-1;\n a=exp(-6.28318530718*clamp(max(f/4,100),0,samplerate/2)/samplerate);\n filt=(1-a)*square+a*filt;\n return square*0.59, filt*2.65-0.145;\n}\nlira_voice(arg_freq,arg_sharp,arg_gate,arg_hold,arg_fast,arg_duty) {\n envelope_value=lira_ramp(arg_gate,arg_gate>0 ? (arg_fast>0?100:200) : (arg_fast>0?100:8000));\n sq,tr=lira_osc(arg_freq,arg_duty);\n return (sq*arg_sharp+tr*(1-arg_sharp)+sin(envelope_value*6.28318530718)*0.5)*min(1,envelope_value*envelope_value+arg_hold);\n}\nlira_dynamics(x) {\n History env(0), sumsq(0);\n Delay rmsbuf(512);\n a=exp(-4.60517/(samplerate*0.0025)); env=abs(x)+a*(env-abs(x));\n gain=clamp(((env-0.2511886432)/5+0.2511886432)/max(env,0.0000000001),0,1);\n comp=x*lira_sat(gain);\n sq=comp*comp; old=rmsbuf.read(512); rmsbuf.write(sq);\n sumsq=max(0,sumsq+sq-old);\n db=10*log10(max(sumsq/512,0.000000000001));\n // 512-sample rectangular RMS approximation to Pd env~ Hann detector.\n eg=lira_ramp(pow(10,min(0,(db+60)*0.8)/20),11);\n return comp*eg;\n}\nHistory hpf_0_x(0), hpf_0_y(0);\nHistory hpf_1_x(0), hpf_1_y(0);\nHistory hpf_2_x(0), hpf_2_y(0);\nHistory hpf_3_x(0), hpf_3_y(0);\nHistory hpf_4_x(0), hpf_4_y(0);\nHistory hpf_5_x(0), hpf_5_y(0);\nHistory hpf_6_x(0), hpf_6_y(0);\nHistory hpf_7_x(0), hpf_7_y(0);\nHistory hpf_8_x(0), hpf_8_y(0);\nParam level8(127,min=0,max=127);\nParam bend8(0,min=-48,max=48);\nParam press8(0,min=0,max=1);\nParam level7(127,min=0,max=127);\nParam bend7(0,min=-48,max=48);\nParam press7(0,min=0,max=1);\nParam level6(127,min=0,max=127);\nParam bend6(0,min=-48,max=48);\nParam press6(0,min=0,max=1);\nParam level5(127,min=0,max=127);\nParam bend5(0,min=-48,max=48);\nParam press5(0,min=0,max=1);\nParam level4(127,min=0,max=127);\nParam bend4(0,min=-48,max=48);\nParam press4(0,min=0,max=1);\nParam level3(127,min=0,max=127);\nParam bend3(0,min=-48,max=48);\nParam press3(0,min=0,max=1);\nParam level2(127,min=0,max=127);\nParam bend2(0,min=-48,max=48);\nParam press2(0,min=0,max=1);\nParam level1(127,min=0,max=127);\nParam bend1(0,min=-48,max=48);\nParam press1(0,min=0,max=1);\nParam tune1(64,min=0,max=127);\nParam tune2(68,min=0,max=127);\nParam tune3(55,min=0,max=127);\nParam tune4(60,min=0,max=127);\nParam tune5(45,min=0,max=127);\nParam tune6(50,min=0,max=127);\nParam tune7(38,min=0,max=127);\nParam tune8(43,min=0,max=127);\nParam sharp1(40,min=0,max=127);\nParam sharp2(40,min=0,max=127);\nParam sharp3(40,min=0,max=127);\nParam sharp4(40,min=0,max=127);\nParam mod1(0,min=0,max=127);\nParam mod2(0,min=0,max=127);\nParam mod3(0,min=0,max=127);\nParam mod4(0,min=0,max=127);\nParam source1(1,min=0,max=2);\nParam source2(1,min=0,max=2);\nParam source3(1,min=0,max=2);\nParam source4(1,min=0,max=2);\nParam fast1(0,min=0,max=1);\nParam fast2(0,min=0,max=1);\nParam fast3(0,min=0,max=1);\nParam fast4(0,min=0,max=1);\nParam pitch1(63,min=0,max=127);\nParam pitch2(63,min=0,max=127);\nParam hold1(0,min=0,max=127);\nParam hold2(0,min=0,max=127);\nParam lfo1(64,min=0,max=127);\nParam lfo2(72,min=0,max=127);\nParam link(0,min=0,max=1);\nParam andor(0,min=0,max=1);\nParam routing(0,min=0,max=1);\nParam totalfb(0,min=0,max=1);\nParam vibrato(0,min=0,max=1);\nParam quantize(0,min=0,max=1);\nParam time1(60,min=0,max=127);\nParam time2(68,min=0,max=127);\nParam dmod1(0,min=0,max=127);\nParam dmod2(0,min=0,max=127);\nParam feedback(35,min=0,max=127);\nParam dmix(30,min=0,max=127);\nParam dsource(1,min=0,max=2);\nParam dwave(0,min=0,max=1);\nParam drive(20,min=0,max=127);\nParam distmix(30,min=0,max=127);\nParam volume(80,min=0,max=127);\nParam voiceon1(0,min=0,max=1);\nParam voiceon2(0,min=0,max=1);\nParam voiceon3(0,min=0,max=1);\nParam voiceon4(0,min=0,max=1);\nParam voiceon5(0,min=0,max=1);\nParam voiceon6(0,min=0,max=1);\nParam voiceon7(0,min=0,max=1);\nParam voiceon8(0,min=0,max=1);\nParam extgain(0,min=0,max=127);\nParam extsource(0,min=0,max=67);\nParam exttap(1,min=0,max=2);\nParam gate1(0,min=0,max=1);\nParam gate2(0,min=0,max=1);\nParam gate3(0,min=0,max=1);\nParam gate4(0,min=0,max=1);\nParam gate5(0,min=0,max=1);\nParam gate6(0,min=0,max=1);\nParam gate7(0,min=0,max=1);\nParam gate8(0,min=0,max=1);\nParam extready(0,min=0,max=1);\n\nDelay pair1(64),pair2(64),pair3(64),pair4(64),totaldelay(64);\nDelay delay1(1048576),delay2(1048576);\nHistory lphase1(0),lphase2(0);\nHistory pair_state1(0),pair_state2(0),pair_state3(0),pair_state4(0),total_state(0);\nfla=lira_ramp(mtof(pow(lfo1/127,2)*127-75),23.22);\nflb=lira_ramp(mtof(pow(lfo2/127,2)*127-75),23.22);\nls1=clamp(cos(lphase1*6.28318530718)*1000,-1,1);\nls2=clamp(cos(lphase2*6.28318530718)*1000,-1,1);\nltri=((abs(lphase1-0.5)*4-1)+(abs(lphase2-0.5)*4-1))*0.5;\nlsqr=(ls1+ls2)*0.5;\nlmod=andor>0 ? lsqr : ls1*ls2;\nlphase1=wrap(lphase1+fla/samplerate,0,1);\nlphase2=wrap(lphase2+(flb+ls1*flb*0.5*link)/samplerate,0,1);\np1=pair_state1; p2=pair_state2; p3=pair_state3; p4=pair_state4; tf=total_state;\npair_state1=pair1.read(63);pair_state2=pair2.read(63);pair_state3=pair3.read(63);pair_state4=pair4.read(63);total_state=totaldelay.read(63);\nsrc1=((routing>0?0.001:1)*p2+(routing>0?1:0.001)*p4)*(source1==0?1:0.001)+(lmod*(totalfb>0?0.001:1)+tf*(totalfb>0?1:0.001))*(source1==2?1:0.001);\nmd1=lira_ramp(pow(mod1/127,4)*2,23.22); sh1=lira_ramp(pow(sharp1/127,2),23.22);\nvib1=cycle(1.13)*lira_ramp(vibrato,23.22);\nsrc2=((routing>0?0.001:1)*p1+(routing>0?1:0.001)*p1)*(source2==0?1:0.001)+(lmod*(totalfb>0?0.001:1)+tf*(totalfb>0?1:0.001))*(source2==2?1:0.001);\nmd2=lira_ramp(pow(mod2/127,4)*2,23.22); sh2=lira_ramp(pow(sharp2/127,2),23.22);\nvib2=cycle(2.31)*lira_ramp(vibrato,23.22);\nsrc3=((routing>0?0.001:1)*p4+(routing>0?1:0.001)*p2)*(source3==0?1:0.001)+(lmod*(totalfb>0?0.001:1)+tf*(totalfb>0?1:0.001))*(source3==2?1:0.001);\nmd3=lira_ramp(pow(mod3/127,4)*2,23.22); sh3=lira_ramp(pow(sharp3/127,2),23.22);\nvib3=cycle(3.17)*lira_ramp(vibrato,23.22);\nsrc4=((routing>0?0.001:1)*p3+(routing>0?1:0.001)*p3)*(source4==0?1:0.001)+(lmod*(totalfb>0?0.001:1)+tf*(totalfb>0?1:0.001))*(source4==2?1:0.001);\nmd4=lira_ramp(pow(mod4/127,4)*2,23.22); sh4=lira_ramp(pow(sharp4/127,2),23.22);\nvib4=cycle(1.79)*lira_ramp(vibrato,23.22);\nraw1=mtof(-16+tune1/127*109)*(0.01+1.99*pitch1/127);\nfq1=lira_ramp(quantize>0?mtof(floor(ftom(raw1)+0.5)):raw1,23.22);\nv1=lira_voice(fq1*pow(2,lira_ramp(bend1,5)/12)*(1+vib1*0.005)*(1+src1*md1),clamp(sh1+lira_ramp(press1,10)*0.6,0,1),max(gate1,voiceon1),lira_ramp(pow(hold1/127,2),23.22),fast1,0.53125+vib1*0.025);\nraw2=mtof(-16+tune2/127*109)*(0.01+1.99*pitch1/127);\nfq2=lira_ramp(quantize>0?mtof(floor(ftom(raw2)+0.5)):raw2,23.22);\nv2=lira_voice(fq2*pow(2,lira_ramp(bend2,5)/12)*(1+vib1*0.005)*(1+src1*md1),clamp(sh1+lira_ramp(press2,10)*0.6,0,1),max(gate2,voiceon2),lira_ramp(pow(hold1/127,2),23.22),fast1,0.53125+vib1*0.025);\nraw3=mtof(7+tune3/127*102)*(0.01+1.99*pitch1/127);\nfq3=lira_ramp(quantize>0?mtof(floor(ftom(raw3)+0.5)):raw3,23.22);\nv3=lira_voice(fq3*pow(2,lira_ramp(bend3,5)/12)*(1+vib2*0.005)*(1+src2*md2),clamp(sh2+lira_ramp(press3,10)*0.6,0,1),max(gate3,voiceon3),lira_ramp(pow(hold1/127,2),23.22),fast2,0.53125+vib2*0.025);\nraw4=mtof(9+tune4/127*98)*(0.01+1.99*pitch1/127);\nfq4=lira_ramp(quantize>0?mtof(floor(ftom(raw4)+0.5)):raw4,23.22);\nv4=lira_voice(fq4*pow(2,lira_ramp(bend4,5)/12)*(1+vib2*0.005)*(1+src2*md2),clamp(sh2+lira_ramp(press4,10)*0.6,0,1),max(gate4,voiceon4),lira_ramp(pow(hold1/127,2),23.22),fast2,0.53125+vib2*0.025);\nraw5=mtof(20+tune5/127*96.54)*(0.01+1.99*pitch2/127);\nfq5=lira_ramp(quantize>0?mtof(floor(ftom(raw5)+0.5)):raw5,23.22);\nv5=lira_voice(fq5*pow(2,lira_ramp(bend5,5)/12)*(1+vib3*0.005)*(1+src3*md3),clamp(sh3+lira_ramp(press5,10)*0.6,0,1),max(gate5,voiceon5),lira_ramp(pow(hold2/127,2),23.22),fast3,0.53125+vib3*0.025);\nraw6=mtof(20+tune6/127*96.54)*(0.01+1.99*pitch2/127);\nfq6=lira_ramp(quantize>0?mtof(floor(ftom(raw6)+0.5)):raw6,23.22);\nv6=lira_voice(fq6*pow(2,lira_ramp(bend6,5)/12)*(1+vib3*0.005)*(1+src3*md3),clamp(sh3+lira_ramp(press6,10)*0.6,0,1),max(gate6,voiceon6),lira_ramp(pow(hold2/127,2),23.22),fast3,0.53125+vib3*0.025);\nraw7=mtof(33+tune7/127*93.24)*(0.01+1.99*pitch2/127);\nfq7=lira_ramp(quantize>0?mtof(floor(ftom(raw7)+0.5)):raw7,23.22);\nv7=lira_voice(fq7*pow(2,lira_ramp(bend7,5)/12)*(1+vib4*0.005)*(1+src4*md4),clamp(sh4+lira_ramp(press7,10)*0.6,0,1),max(gate7,voiceon7),lira_ramp(pow(hold2/127,2),23.22),fast4,0.53125+vib4*0.025);\nraw8=mtof(33+tune8/127*98.22)*(0.01+1.99*pitch2/127);\nfq8=lira_ramp(quantize>0?mtof(floor(ftom(raw8)+0.5)):raw8,23.22);\nv8=lira_voice(fq8*pow(2,lira_ramp(bend8,5)/12)*(1+vib4*0.005)*(1+src4*md4),clamp(sh4+lira_ramp(press8,10)*0.6,0,1),max(gate8,voiceon8),lira_ramp(pow(hold2/127,2),23.22),fast4,0.53125+vib4*0.025);\nhpf_0_a = clamp(1 - 6.28318530718 * (3) / samplerate, 0, 1); hpf_0_input = v1+v2; hpf_0_out = (1+hpf_0_a)*0.5*(hpf_0_input-hpf_0_x)+hpf_0_a*hpf_0_y; hpf_0_x=hpf_0_input; hpf_0_y=hpf_0_out;\npair1.write(hpf_0_out);\nhpf_1_a = clamp(1 - 6.28318530718 * (3) / samplerate, 0, 1); hpf_1_input = v3+v4; hpf_1_out = (1+hpf_1_a)*0.5*(hpf_1_input-hpf_1_x)+hpf_1_a*hpf_1_y; hpf_1_x=hpf_1_input; hpf_1_y=hpf_1_out;\npair2.write(hpf_1_out);\nhpf_2_a = clamp(1 - 6.28318530718 * (3) / samplerate, 0, 1); hpf_2_input = v5+v6; hpf_2_out = (1+hpf_2_a)*0.5*(hpf_2_input-hpf_2_x)+hpf_2_a*hpf_2_y; hpf_2_x=hpf_2_input; hpf_2_y=hpf_2_out;\npair3.write(hpf_2_out);\nhpf_3_a = clamp(1 - 6.28318530718 * (3) / samplerate, 0, 1); hpf_3_input = v7+v8; hpf_3_out = (1+hpf_3_a)*0.5*(hpf_3_input-hpf_3_x)+hpf_3_a*hpf_3_y; hpf_3_x=hpf_3_input; hpf_3_y=hpf_3_out;\npair4.write(hpf_3_out);\n\ndry=(v1*lira_ramp(level1/127,23.22)+v2*lira_ramp(level2/127,23.22)+v3*lira_ramp(level3/127,23.22)+v4*lira_ramp(level4/127,23.22)+v5*lira_ramp(level5/127,23.22)+v6*lira_ramp(level6/127,23.22)+v7*lira_ramp(level7/127,23.22)+v8*lira_ramp(level8/127,23.22))*0.166667;\ndry=dry+(in1+in2)*0.5*lira_ramp(extgain/127*extready,23.22);\nfb=lira_ramp(feedback/127*pow(2,2*feedback/127),23.22);\ndlfo=(dwave>0?lsqr:ltri)*(dsource==2);\nself1=lira_lp(delay1.read(64)*0.5*(dsource==0),689);\nself2=lira_lp(delay2.read(64)*0.5,689)*(dsource==0);\nms1=lira_ramp(pow(2,time1/127*12)*1.45125,23.22)+(self1+dlfo)*lira_ramp(pow(dmod1/127,2)*10,23.22);\nms2=lira_ramp(pow(2,time2/127*12)*1.45125,23.22)+(self2+dlfo)*lira_ramp(pow(dmod2/127,2)*10,23.22);\nhpf_4_a = clamp(1 - 6.28318530718 * (1) / samplerate, 0, 1); hpf_4_input = delay1.read(clamp(ms1*samplerate/1000,64,1048575),interp=\"cubic\"); hpf_4_out = (1+hpf_4_a)*0.5*(hpf_4_input-hpf_4_x)+hpf_4_a*hpf_4_y; hpf_4_x=hpf_4_input; hpf_4_y=hpf_4_out;\nd1=lira_dynamics(lira_lp(hpf_4_out,4000));\nhpf_5_a = clamp(1 - 6.28318530718 * (1) / samplerate, 0, 1); hpf_5_input = delay2.read(clamp(ms2*samplerate/1000,64,1048575),interp=\"cubic\"); hpf_5_out = (1+hpf_5_a)*0.5*(hpf_5_input-hpf_5_x)+hpf_5_a*hpf_5_y; hpf_5_x=hpf_5_input; hpf_5_y=hpf_5_out;\nd2=lira_dynamics(lira_lp(hpf_5_out,4000));\nn=noise()*0.001;\ndelay1.write(dry+n+d1*fb);delay2.write(dry+n+d2*fb);\nwet=lira_sat((d1+d2)*0.5/max(fb,1.5));\ndm=lira_ramp(dmix/127,23.22); mixed=dry*(1-dm)+wet*dm;\ndg=lira_ramp(pow(10,(pow(3,1+2*drive/127)+3)/20),23.22);\nhpf_6_a = clamp(1 - 6.28318530718 * (20) / samplerate, 0, 1); hpf_6_input = mixed*dg; hpf_6_out = (1+hpf_6_a)*0.5*(hpf_6_input-hpf_6_x)+hpf_6_a*hpf_6_y; hpf_6_x=hpf_6_input; hpf_6_y=hpf_6_out;\ndist=lira_sat(hpf_6_out);\nhpf_7_a = clamp(1 - 6.28318530718 * (10) / samplerate, 0, 1); hpf_7_input = dist+pow(dist,31)*0.25; hpf_7_out = (1+hpf_7_a)*0.5*(hpf_7_input-hpf_7_x)+hpf_7_a*hpf_7_y; hpf_7_x=hpf_7_input; hpf_7_y=hpf_7_out;\ndist=hpf_7_out/clamp(dg,1,4)+mixed*0.1;\nmixd=lira_ramp(distmix/127,23.22);\nmaster=lira_sat(mixed*(1-mixd)+dist*mixd);\nhpf_8_a = clamp(1 - 6.28318530718 * (3) / samplerate, 0, 1); hpf_8_input = master; hpf_8_out = (1+hpf_8_a)*0.5*(hpf_8_input-hpf_8_x)+hpf_8_a*hpf_8_y; hpf_8_x=hpf_8_input; hpf_8_y=hpf_8_out;\ntotaldelay.write(hpf_8_out);\nout1=master*lira_ramp(pow(volume/127,2),23.22);\nout2=out1;\n",
+                  "numinlets": 2,
                   "numoutlets": 2,
                   "patching_rect": [
                     20,
@@ -444,6 +416,36 @@
                     22
                   ]
                 }
+              },
+              {
+                "box": {
+                  "id": "in1",
+                  "maxclass": "newobj",
+                  "text": "in 1",
+                  "patching_rect": [
+                    100,
+                    0,
+                    50,
+                    22
+                  ],
+                  "numinlets": 0,
+                  "numoutlets": 1
+                }
+              },
+              {
+                "box": {
+                  "id": "in2",
+                  "maxclass": "newobj",
+                  "text": "in 2",
+                  "patching_rect": [
+                    200,
+                    0,
+                    50,
+                    22
+                  ],
+                  "numinlets": 0,
+                  "numoutlets": 1
+                }
               }
             ],
             "lines": [
@@ -470,10 +472,34 @@
                     0
                   ]
                 }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "in1",
+                    0
+                  ],
+                  "destination": [
+                    "code",
+                    0
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "in2",
+                    0
+                  ],
+                  "destination": [
+                    "code",
+                    1
+                  ]
+                }
               }
             ]
           },
-          "numinlets": 1,
+          "numinlets": 2,
           "numoutlets": 2,
           "outlettype": [
             "signal",
@@ -484,11 +510,30 @@
       },
       {
         "box": {
-          "id": "output",
+          "id": "audioinput",
           "maxclass": "newobj",
           "patching_rect": [
             20,
             275,
+            160,
+            22
+          ],
+          "numinlets": 2,
+          "numoutlets": 2,
+          "outlettype": [
+            "signal",
+            "signal"
+          ],
+          "text": "plugin~ 1 2"
+        }
+      },
+      {
+        "box": {
+          "id": "output",
+          "maxclass": "newobj",
+          "patching_rect": [
+            20,
+            300,
             160,
             22
           ],
@@ -515,7 +560,7 @@
             20
           ],
           "fontsize": 16,
-          "text": "LIRA \u2022 8 / Pad edition alpha 8"
+          "text": "LIRA \u2022 8 / Pad edition alpha 9 \u00b7 Audio input"
         }
       },
       {
@@ -641,7 +686,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            400,
+            425,
             160,
             22
           ],
@@ -751,7 +796,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            475,
+            500,
             160,
             22
           ],
@@ -861,7 +906,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            550,
+            575,
             160,
             22
           ],
@@ -971,7 +1016,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            625,
+            650,
             160,
             22
           ],
@@ -1081,7 +1126,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            700,
+            725,
             160,
             22
           ],
@@ -1191,7 +1236,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            775,
+            800,
             160,
             22
           ],
@@ -1301,7 +1346,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            850,
+            875,
             160,
             22
           ],
@@ -1411,7 +1456,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            925,
+            950,
             160,
             22
           ],
@@ -1521,7 +1566,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            1000,
+            1025,
             160,
             22
           ],
@@ -1631,7 +1676,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            1075,
+            1100,
             160,
             22
           ],
@@ -1741,7 +1786,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            1150,
+            1175,
             160,
             22
           ],
@@ -1851,7 +1896,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            1225,
+            1250,
             160,
             22
           ],
@@ -1961,7 +2006,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            1300,
+            1325,
             160,
             22
           ],
@@ -2071,7 +2116,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            1375,
+            1400,
             160,
             22
           ],
@@ -2181,7 +2226,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            1450,
+            1475,
             160,
             22
           ],
@@ -2291,7 +2336,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            1525,
+            1550,
             160,
             22
           ],
@@ -2391,7 +2436,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            1600,
+            1625,
             160,
             22
           ],
@@ -2491,7 +2536,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            1675,
+            1700,
             160,
             22
           ],
@@ -2591,7 +2636,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            1750,
+            1775,
             160,
             22
           ],
@@ -2691,7 +2736,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            1825,
+            1850,
             160,
             22
           ],
@@ -2819,7 +2864,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            1900,
+            1925,
             160,
             22
           ],
@@ -2947,7 +2992,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            1975,
+            2000,
             160,
             22
           ],
@@ -3075,7 +3120,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            2050,
+            2075,
             160,
             22
           ],
@@ -3203,7 +3248,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            2125,
+            2150,
             160,
             22
           ],
@@ -3313,7 +3358,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            2200,
+            2225,
             160,
             22
           ],
@@ -3423,7 +3468,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            2275,
+            2300,
             160,
             22
           ],
@@ -3533,7 +3578,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            2350,
+            2375,
             160,
             22
           ],
@@ -3643,7 +3688,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            2425,
+            2450,
             160,
             22
           ],
@@ -3753,7 +3798,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            2500,
+            2525,
             160,
             22
           ],
@@ -3863,7 +3908,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            2575,
+            2600,
             160,
             22
           ],
@@ -3991,7 +4036,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            2650,
+            2675,
             160,
             22
           ],
@@ -4089,7 +4134,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            2725,
+            2750,
             160,
             22
           ],
@@ -4217,7 +4262,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            2800,
+            2825,
             160,
             22
           ],
@@ -4345,7 +4390,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            2875,
+            2900,
             160,
             22
           ],
@@ -4473,7 +4518,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            2950,
+            2975,
             160,
             22
           ],
@@ -4601,7 +4646,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            3025,
+            3050,
             160,
             22
           ],
@@ -4711,7 +4756,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            3100,
+            3125,
             160,
             22
           ],
@@ -4821,7 +4866,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            3175,
+            3200,
             160,
             22
           ],
@@ -4931,7 +4976,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            3250,
+            3275,
             160,
             22
           ],
@@ -5041,7 +5086,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            3325,
+            3350,
             160,
             22
           ],
@@ -5151,7 +5196,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            3400,
+            3425,
             160,
             22
           ],
@@ -5261,7 +5306,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            3475,
+            3500,
             160,
             22
           ],
@@ -5361,7 +5406,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            3550,
+            3575,
             160,
             22
           ],
@@ -5459,7 +5504,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            3625,
+            3650,
             160,
             22
           ],
@@ -5569,7 +5614,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            3700,
+            3725,
             160,
             22
           ],
@@ -5679,7 +5724,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            3775,
+            3800,
             160,
             22
           ],
@@ -5789,7 +5834,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            3850,
+            3875,
             160,
             22
           ],
@@ -5917,7 +5962,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            3925,
+            3950,
             160,
             22
           ],
@@ -6045,7 +6090,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            4000,
+            4025,
             160,
             22
           ],
@@ -6173,7 +6218,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            4075,
+            4100,
             160,
             22
           ],
@@ -6301,7 +6346,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            4150,
+            4175,
             160,
             22
           ],
@@ -6429,7 +6474,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            4225,
+            4250,
             160,
             22
           ],
@@ -6557,7 +6602,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            4300,
+            4325,
             160,
             22
           ],
@@ -6685,7 +6730,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            4375,
+            4400,
             160,
             22
           ],
@@ -6813,7 +6858,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            4450,
+            4475,
             160,
             22
           ],
@@ -6822,11 +6867,451 @@
       },
       {
         "box": {
+          "id": "lab_extgain",
+          "maxclass": "comment",
+          "patching_rect": [
+            603,
+            158,
+            84,
+            16
+          ],
+          "presentation": 0,
+          "presentation_rect": [
+            603,
+            158,
+            84,
+            16
+          ],
+          "fontsize": 9,
+          "text": "Audio In"
+        }
+      },
+      {
+        "box": {
+          "id": "extgain",
+          "maxclass": "live.dial",
+          "patching_rect": [
+            1350,
+            96,
+            68,
+            60
+          ],
+          "presentation": 1,
+          "presentation_rect": [
+            1350,
+            96,
+            68,
+            60
+          ],
+          "numinlets": 1,
+          "numoutlets": 2,
+          "outlettype": [
+            "",
+            "float"
+          ],
+          "parameter_enable": 1,
+          "varname": "extgain",
+          "saved_attribute_attributes": {
+            "valueof": {
+              "parameter_longname": "Audio In",
+              "parameter_shortname": "Audio In",
+              "parameter_type": 0,
+              "parameter_mmin": 0,
+              "parameter_mmax": 127,
+              "parameter_initial_enable": 1,
+              "parameter_initial": [
+                0
+              ],
+              "parameter_unitstyle": 0
+            }
+          },
+          "fontsize": 10,
+          "appearance": 0,
+          "showname": 1,
+          "shownumber": 1,
+          "activefgdialcolor": [
+            0.973,
+            0.643,
+            0.769,
+            1
+          ],
+          "activeneedlecolor": [
+            0.96,
+            0.93,
+            0.94,
+            1
+          ],
+          "activebgcolor": [
+            0.3,
+            0.27,
+            0.3,
+            1
+          ],
+          "textcolor": [
+            0.96,
+            0.93,
+            0.94,
+            1
+          ],
+          "activefgcolor": [
+            0.96,
+            0.93,
+            0.94,
+            1
+          ],
+          "hint": "External audio level: 0 muted, 127 unity. Select the source in the full panel or Push Output bank."
+        }
+      },
+      {
+        "box": {
+          "id": "send_extgain",
+          "maxclass": "newobj",
+          "patching_rect": [
+            20,
+            4550,
+            160,
+            22
+          ],
+          "text": "prepend extgain"
+        }
+      },
+      {
+        "box": {
+          "id": "lab_extsource",
+          "maxclass": "comment",
+          "patching_rect": [
+            688,
+            158,
+            84,
+            16
+          ],
+          "presentation": 0,
+          "presentation_rect": [
+            688,
+            158,
+            84,
+            16
+          ],
+          "fontsize": 9,
+          "text": "Audio From"
+        }
+      },
+      {
+        "box": {
+          "id": "extsource",
+          "maxclass": "live.menu",
+          "patching_rect": [
+            10,
+            900,
+            200,
+            20
+          ],
+          "presentation": 0,
+          "presentation_rect": [
+            10,
+            900,
+            200,
+            20
+          ],
+          "numinlets": 1,
+          "numoutlets": 3,
+          "outlettype": [
+            "",
+            "",
+            "float"
+          ],
+          "parameter_enable": 1,
+          "varname": "extsource",
+          "saved_attribute_attributes": {
+            "valueof": {
+              "parameter_longname": "Audio From",
+              "parameter_shortname": "Audio From",
+              "parameter_type": 2,
+              "parameter_mmin": 0,
+              "parameter_mmax": 67,
+              "parameter_initial_enable": 1,
+              "parameter_initial": [
+                0
+              ],
+              "parameter_unitstyle": 9,
+              "parameter_enum": [
+                "Off",
+                "Input 1",
+                "Input 2",
+                "Input 1/2",
+                "Track 1",
+                "Track 2",
+                "Track 3",
+                "Track 4",
+                "Track 5",
+                "Track 6",
+                "Track 7",
+                "Track 8",
+                "Track 9",
+                "Track 10",
+                "Track 11",
+                "Track 12",
+                "Track 13",
+                "Track 14",
+                "Track 15",
+                "Track 16",
+                "Track 17",
+                "Track 18",
+                "Track 19",
+                "Track 20",
+                "Track 21",
+                "Track 22",
+                "Track 23",
+                "Track 24",
+                "Track 25",
+                "Track 26",
+                "Track 27",
+                "Track 28",
+                "Track 29",
+                "Track 30",
+                "Track 31",
+                "Track 32",
+                "Track 33",
+                "Track 34",
+                "Track 35",
+                "Track 36",
+                "Track 37",
+                "Track 38",
+                "Track 39",
+                "Track 40",
+                "Track 41",
+                "Track 42",
+                "Track 43",
+                "Track 44",
+                "Track 45",
+                "Track 46",
+                "Track 47",
+                "Track 48",
+                "Track 49",
+                "Track 50",
+                "Track 51",
+                "Track 52",
+                "Track 53",
+                "Track 54",
+                "Track 55",
+                "Track 56",
+                "Track 57",
+                "Track 58",
+                "Track 59",
+                "Track 60",
+                "Track 61",
+                "Track 62",
+                "Track 63",
+                "Track 64"
+              ]
+            }
+          },
+          "fontsize": 10,
+          "items": [
+            "Off",
+            "Input 1",
+            "Input 2",
+            "Input 1/2",
+            "Track 1",
+            "Track 2",
+            "Track 3",
+            "Track 4",
+            "Track 5",
+            "Track 6",
+            "Track 7",
+            "Track 8",
+            "Track 9",
+            "Track 10",
+            "Track 11",
+            "Track 12",
+            "Track 13",
+            "Track 14",
+            "Track 15",
+            "Track 16",
+            "Track 17",
+            "Track 18",
+            "Track 19",
+            "Track 20",
+            "Track 21",
+            "Track 22",
+            "Track 23",
+            "Track 24",
+            "Track 25",
+            "Track 26",
+            "Track 27",
+            "Track 28",
+            "Track 29",
+            "Track 30",
+            "Track 31",
+            "Track 32",
+            "Track 33",
+            "Track 34",
+            "Track 35",
+            "Track 36",
+            "Track 37",
+            "Track 38",
+            "Track 39",
+            "Track 40",
+            "Track 41",
+            "Track 42",
+            "Track 43",
+            "Track 44",
+            "Track 45",
+            "Track 46",
+            "Track 47",
+            "Track 48",
+            "Track 49",
+            "Track 50",
+            "Track 51",
+            "Track 52",
+            "Track 53",
+            "Track 54",
+            "Track 55",
+            "Track 56",
+            "Track 57",
+            "Track 58",
+            "Track 59",
+            "Track 60",
+            "Track 61",
+            "Track 62",
+            "Track 63",
+            "Track 64"
+          ],
+          "activebgcolor": [
+            0.19,
+            0.165,
+            0.19,
+            1
+          ],
+          "activetextcolor": [
+            0.96,
+            0.93,
+            0.94,
+            1
+          ],
+          "hint": "Audio From \u2014 Select Audio From"
+        }
+      },
+      {
+        "box": {
+          "id": "send_extsource",
+          "maxclass": "newobj",
+          "patching_rect": [
+            20,
+            4625,
+            160,
+            22
+          ],
+          "text": "prepend extsource"
+        }
+      },
+      {
+        "box": {
+          "id": "lab_exttap",
+          "maxclass": "comment",
+          "patching_rect": [
+            773,
+            158,
+            84,
+            16
+          ],
+          "presentation": 0,
+          "presentation_rect": [
+            773,
+            158,
+            84,
+            16
+          ],
+          "fontsize": 9,
+          "text": "Audio Tap"
+        }
+      },
+      {
+        "box": {
+          "id": "exttap",
+          "maxclass": "live.menu",
+          "patching_rect": [
+            220,
+            900,
+            130,
+            20
+          ],
+          "presentation": 0,
+          "presentation_rect": [
+            220,
+            900,
+            130,
+            20
+          ],
+          "numinlets": 1,
+          "numoutlets": 3,
+          "outlettype": [
+            "",
+            "",
+            "float"
+          ],
+          "parameter_enable": 1,
+          "varname": "exttap",
+          "saved_attribute_attributes": {
+            "valueof": {
+              "parameter_longname": "Audio Tap",
+              "parameter_shortname": "Audio Tap",
+              "parameter_type": 2,
+              "parameter_mmin": 0,
+              "parameter_mmax": 2,
+              "parameter_initial_enable": 1,
+              "parameter_initial": [
+                1
+              ],
+              "parameter_unitstyle": 9,
+              "parameter_enum": [
+                "Pre FX",
+                "Post FX",
+                "Post Mixer"
+              ]
+            }
+          },
+          "fontsize": 10,
+          "items": [
+            "Pre FX",
+            "Post FX",
+            "Post Mixer"
+          ],
+          "activebgcolor": [
+            0.19,
+            0.165,
+            0.19,
+            1
+          ],
+          "activetextcolor": [
+            0.96,
+            0.93,
+            0.94,
+            1
+          ],
+          "hint": "Audio Tap \u2014 Select Audio Tap"
+        }
+      },
+      {
+        "box": {
+          "id": "send_exttap",
+          "maxclass": "newobj",
+          "patching_rect": [
+            20,
+            4700,
+            160,
+            22
+          ],
+          "text": "prepend exttap"
+        }
+      },
+      {
+        "box": {
           "id": "notes",
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            4475,
+            4725,
             160,
             22
           ],
@@ -6841,7 +7326,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            4500,
+            4750,
             160,
             22
           ],
@@ -6854,7 +7339,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            4525,
+            4775,
             160,
             22
           ],
@@ -6869,7 +7354,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            4550,
+            4800,
             160,
             22
           ],
@@ -6882,7 +7367,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            4575,
+            4825,
             160,
             22
           ],
@@ -6895,7 +7380,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            4600,
+            4850,
             160,
             22
           ],
@@ -6908,7 +7393,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            4625,
+            4875,
             160,
             22
           ],
@@ -6921,7 +7406,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            4650,
+            4900,
             160,
             22
           ],
@@ -6934,7 +7419,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            4675,
+            4925,
             160,
             22
           ],
@@ -6947,7 +7432,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            4700,
+            4950,
             160,
             22
           ],
@@ -6960,7 +7445,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            4725,
+            4975,
             160,
             22
           ],
@@ -6973,7 +7458,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            4750,
+            5000,
             160,
             22
           ],
@@ -6986,7 +7471,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            4775,
+            5025,
             160,
             22
           ],
@@ -6999,7 +7484,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            4800,
+            5050,
             160,
             22
           ],
@@ -7012,7 +7497,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            4825,
+            5075,
             160,
             22
           ],
@@ -7025,7 +7510,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            4850,
+            5100,
             160,
             22
           ],
@@ -7038,7 +7523,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            4875,
+            5125,
             160,
             22
           ],
@@ -7051,7 +7536,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            4900,
+            5150,
             160,
             22
           ],
@@ -7064,7 +7549,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            4925,
+            5175,
             160,
             22
           ],
@@ -7077,7 +7562,7 @@
           "maxclass": "newobj",
           "patching_rect": [
             20,
-            4950,
+            5200,
             160,
             22
           ],
@@ -7101,7 +7586,7 @@
               80,
               70,
               1064,
-              580
+              658
             ],
             "openinpresentation": 1,
             "bgcolor": [
@@ -7728,18 +8213,130 @@
               },
               {
                 "box": {
+                  "id": "fullaudiotitle",
+                  "maxclass": "comment",
+                  "patching_rect": [
+                    24,
+                    553,
+                    1016,
+                    18
+                  ],
+                  "presentation": 1,
+                  "presentation_rect": [
+                    24,
+                    553,
+                    1016,
+                    18
+                  ],
+                  "fontsize": 11,
+                  "textcolor": [
+                    0.973,
+                    0.643,
+                    0.769,
+                    1
+                  ],
+                  "fontname": "Arial",
+                  "text": "EXTERNAL AUDIO \u2192 VOICES + DELAY + TOTAL FEEDBACK"
+                }
+              },
+              {
+                "box": {
+                  "id": "extsourcelabel",
+                  "maxclass": "comment",
+                  "patching_rect": [
+                    146,
+                    566,
+                    200,
+                    18
+                  ],
+                  "presentation": 1,
+                  "presentation_rect": [
+                    146,
+                    566,
+                    200,
+                    18
+                  ],
+                  "fontsize": 11,
+                  "textcolor": [
+                    0.96,
+                    0.93,
+                    0.94,
+                    1
+                  ],
+                  "fontname": "Arial",
+                  "text": "AUDIO FROM"
+                }
+              },
+              {
+                "box": {
+                  "id": "exttaplabel",
+                  "maxclass": "comment",
+                  "patching_rect": [
+                    368,
+                    566,
+                    150,
+                    18
+                  ],
+                  "presentation": 1,
+                  "presentation_rect": [
+                    368,
+                    566,
+                    150,
+                    18
+                  ],
+                  "fontsize": 11,
+                  "textcolor": [
+                    0.96,
+                    0.93,
+                    0.94,
+                    1
+                  ],
+                  "fontname": "Arial",
+                  "text": "TRACK TAP"
+                }
+              },
+              {
+                "box": {
+                  "id": "audio_status",
+                  "maxclass": "comment",
+                  "patching_rect": [
+                    540,
+                    586,
+                    490,
+                    24
+                  ],
+                  "presentation": 1,
+                  "presentation_rect": [
+                    540,
+                    586,
+                    490,
+                    24
+                  ],
+                  "fontsize": 12,
+                  "textcolor": [
+                    0.96,
+                    0.93,
+                    0.94,
+                    1
+                  ],
+                  "fontname": "Arial",
+                  "text": "Audio input off"
+                }
+              },
+              {
+                "box": {
                   "id": "footer",
                   "maxclass": "comment",
                   "patching_rect": [
                     20,
-                    551,
+                    634,
                     1020,
                     22
                   ],
                   "presentation": 1,
                   "presentation_rect": [
                     20,
-                    551,
+                    634,
                     1020,
                     22
                   ],
@@ -13499,6 +14096,419 @@
               },
               {
                 "box": {
+                  "id": "label_extgain",
+                  "maxclass": "comment",
+                  "patching_rect": [
+                    30,
+                    567,
+                    90,
+                    18
+                  ],
+                  "presentation": 1,
+                  "presentation_rect": [
+                    30,
+                    567,
+                    90,
+                    18
+                  ],
+                  "fontsize": 12,
+                  "textcolor": [
+                    0.96,
+                    0.93,
+                    0.94,
+                    1
+                  ],
+                  "fontname": "Arial",
+                  "text": "Audio In"
+                }
+              },
+              {
+                "box": {
+                  "id": "ui_extgain",
+                  "maxclass": "dial",
+                  "patching_rect": [
+                    57.0,
+                    587,
+                    36,
+                    36
+                  ],
+                  "presentation": 1,
+                  "presentation_rect": [
+                    57.0,
+                    587,
+                    36,
+                    36
+                  ],
+                  "numinlets": 1,
+                  "numoutlets": 1,
+                  "outlettype": [
+                    "float"
+                  ],
+                  "size": 128,
+                  "min": 0,
+                  "floatoutput": 1,
+                  "mode": 5,
+                  "outlinecolor": [
+                    0.4,
+                    0.35,
+                    0.4,
+                    1
+                  ],
+                  "bgcolor": [
+                    0.19,
+                    0.165,
+                    0.19,
+                    1
+                  ],
+                  "needlecolor": [
+                    0.973,
+                    0.643,
+                    0.769,
+                    1
+                  ]
+                }
+              },
+              {
+                "box": {
+                  "id": "recv_extgain",
+                  "maxclass": "newobj",
+                  "patching_rect": [
+                    20,
+                    350,
+                    100,
+                    22
+                  ],
+                  "text": "r #0-state-extgain"
+                }
+              },
+              {
+                "box": {
+                  "id": "send_extgain",
+                  "maxclass": "newobj",
+                  "patching_rect": [
+                    20,
+                    350,
+                    100,
+                    22
+                  ],
+                  "text": "s #0-ui-extgain"
+                }
+              },
+              {
+                "box": {
+                  "id": "initial_extgain",
+                  "maxclass": "newobj",
+                  "patching_rect": [
+                    20,
+                    350,
+                    100,
+                    22
+                  ],
+                  "text": "loadmess set 0"
+                }
+              },
+              {
+                "box": {
+                  "id": "ui_extsource",
+                  "maxclass": "umenu",
+                  "patching_rect": [
+                    146,
+                    586,
+                    200,
+                    24
+                  ],
+                  "presentation": 1,
+                  "presentation_rect": [
+                    146,
+                    586,
+                    200,
+                    24
+                  ],
+                  "items": [
+                    "Off",
+                    ",",
+                    "Input 1",
+                    ",",
+                    "Input 2",
+                    ",",
+                    "Input 1/2",
+                    ",",
+                    "Track 1",
+                    ",",
+                    "Track 2",
+                    ",",
+                    "Track 3",
+                    ",",
+                    "Track 4",
+                    ",",
+                    "Track 5",
+                    ",",
+                    "Track 6",
+                    ",",
+                    "Track 7",
+                    ",",
+                    "Track 8",
+                    ",",
+                    "Track 9",
+                    ",",
+                    "Track 10",
+                    ",",
+                    "Track 11",
+                    ",",
+                    "Track 12",
+                    ",",
+                    "Track 13",
+                    ",",
+                    "Track 14",
+                    ",",
+                    "Track 15",
+                    ",",
+                    "Track 16",
+                    ",",
+                    "Track 17",
+                    ",",
+                    "Track 18",
+                    ",",
+                    "Track 19",
+                    ",",
+                    "Track 20",
+                    ",",
+                    "Track 21",
+                    ",",
+                    "Track 22",
+                    ",",
+                    "Track 23",
+                    ",",
+                    "Track 24",
+                    ",",
+                    "Track 25",
+                    ",",
+                    "Track 26",
+                    ",",
+                    "Track 27",
+                    ",",
+                    "Track 28",
+                    ",",
+                    "Track 29",
+                    ",",
+                    "Track 30",
+                    ",",
+                    "Track 31",
+                    ",",
+                    "Track 32",
+                    ",",
+                    "Track 33",
+                    ",",
+                    "Track 34",
+                    ",",
+                    "Track 35",
+                    ",",
+                    "Track 36",
+                    ",",
+                    "Track 37",
+                    ",",
+                    "Track 38",
+                    ",",
+                    "Track 39",
+                    ",",
+                    "Track 40",
+                    ",",
+                    "Track 41",
+                    ",",
+                    "Track 42",
+                    ",",
+                    "Track 43",
+                    ",",
+                    "Track 44",
+                    ",",
+                    "Track 45",
+                    ",",
+                    "Track 46",
+                    ",",
+                    "Track 47",
+                    ",",
+                    "Track 48",
+                    ",",
+                    "Track 49",
+                    ",",
+                    "Track 50",
+                    ",",
+                    "Track 51",
+                    ",",
+                    "Track 52",
+                    ",",
+                    "Track 53",
+                    ",",
+                    "Track 54",
+                    ",",
+                    "Track 55",
+                    ",",
+                    "Track 56",
+                    ",",
+                    "Track 57",
+                    ",",
+                    "Track 58",
+                    ",",
+                    "Track 59",
+                    ",",
+                    "Track 60",
+                    ",",
+                    "Track 61",
+                    ",",
+                    "Track 62",
+                    ",",
+                    "Track 63",
+                    ",",
+                    "Track 64"
+                  ],
+                  "numinlets": 1,
+                  "numoutlets": 3,
+                  "outlettype": [
+                    "int",
+                    "",
+                    ""
+                  ],
+                  "bgcolor": [
+                    0.19,
+                    0.165,
+                    0.19,
+                    1
+                  ],
+                  "textcolor": [
+                    0.96,
+                    0.93,
+                    0.94,
+                    1
+                  ],
+                  "fontsize": 12
+                }
+              },
+              {
+                "box": {
+                  "id": "recv_extsource",
+                  "maxclass": "newobj",
+                  "patching_rect": [
+                    20,
+                    350,
+                    100,
+                    22
+                  ],
+                  "text": "r #0-state-extsource"
+                }
+              },
+              {
+                "box": {
+                  "id": "send_extsource",
+                  "maxclass": "newobj",
+                  "patching_rect": [
+                    20,
+                    350,
+                    100,
+                    22
+                  ],
+                  "text": "s #0-ui-extsource"
+                }
+              },
+              {
+                "box": {
+                  "id": "initial_extsource",
+                  "maxclass": "newobj",
+                  "patching_rect": [
+                    20,
+                    350,
+                    100,
+                    22
+                  ],
+                  "text": "loadmess set 0"
+                }
+              },
+              {
+                "box": {
+                  "id": "ui_exttap",
+                  "maxclass": "umenu",
+                  "patching_rect": [
+                    368,
+                    586,
+                    150,
+                    24
+                  ],
+                  "presentation": 1,
+                  "presentation_rect": [
+                    368,
+                    586,
+                    150,
+                    24
+                  ],
+                  "items": [
+                    "Pre FX",
+                    ",",
+                    "Post FX",
+                    ",",
+                    "Post Mixer"
+                  ],
+                  "numinlets": 1,
+                  "numoutlets": 3,
+                  "outlettype": [
+                    "int",
+                    "",
+                    ""
+                  ],
+                  "bgcolor": [
+                    0.19,
+                    0.165,
+                    0.19,
+                    1
+                  ],
+                  "textcolor": [
+                    0.96,
+                    0.93,
+                    0.94,
+                    1
+                  ],
+                  "fontsize": 12
+                }
+              },
+              {
+                "box": {
+                  "id": "recv_exttap",
+                  "maxclass": "newobj",
+                  "patching_rect": [
+                    20,
+                    350,
+                    100,
+                    22
+                  ],
+                  "text": "r #0-state-exttap"
+                }
+              },
+              {
+                "box": {
+                  "id": "send_exttap",
+                  "maxclass": "newobj",
+                  "patching_rect": [
+                    20,
+                    350,
+                    100,
+                    22
+                  ],
+                  "text": "s #0-ui-exttap"
+                }
+              },
+              {
+                "box": {
+                  "id": "initial_exttap",
+                  "maxclass": "newobj",
+                  "patching_rect": [
+                    20,
+                    350,
+                    100,
+                    22
+                  ],
+                  "text": "loadmess set 1"
+                }
+              },
+              {
+                "box": {
                   "id": "global",
                   "maxclass": "panel",
                   "patching_rect": [
@@ -13789,20 +14799,49 @@
               },
               {
                 "box": {
+                  "id": "fullaudio",
+                  "maxclass": "panel",
+                  "patching_rect": [
+                    16,
+                    548,
+                    1032,
+                    78
+                  ],
+                  "presentation": 1,
+                  "presentation_rect": [
+                    16,
+                    548,
+                    1032,
+                    78
+                  ],
+                  "bgcolor": [
+                    0.19,
+                    0.165,
+                    0.19,
+                    1
+                  ],
+                  "rounded": 8,
+                  "border": 0,
+                  "background": 1,
+                  "ignoreclick": 1
+                }
+              },
+              {
+                "box": {
                   "id": "fullbg",
                   "maxclass": "panel",
                   "patching_rect": [
                     0,
                     0,
                     1064,
-                    580
+                    658
                   ],
                   "presentation": 1,
                   "presentation_rect": [
                     0,
                     0,
                     1064,
-                    580
+                    658
                   ],
                   "bgcolor": [
                     0.12,
@@ -13813,6 +14852,19 @@
                   "border": 0,
                   "background": 1,
                   "ignoreclick": 1
+                }
+              },
+              {
+                "box": {
+                  "id": "audiostatusrecv",
+                  "maxclass": "newobj",
+                  "text": "r #0-audio-status",
+                  "patching_rect": [
+                    540,
+                    800,
+                    170,
+                    22
+                  ]
                 }
               },
               {
@@ -15830,6 +16882,126 @@
                   ],
                   "destination": [
                     "ui_voiceon8",
+                    0
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "recv_extgain",
+                    0
+                  ],
+                  "destination": [
+                    "ui_extgain",
+                    0
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "ui_extgain",
+                    0
+                  ],
+                  "destination": [
+                    "send_extgain",
+                    0
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "initial_extgain",
+                    0
+                  ],
+                  "destination": [
+                    "ui_extgain",
+                    0
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "recv_extsource",
+                    0
+                  ],
+                  "destination": [
+                    "ui_extsource",
+                    0
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "ui_extsource",
+                    0
+                  ],
+                  "destination": [
+                    "send_extsource",
+                    0
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "initial_extsource",
+                    0
+                  ],
+                  "destination": [
+                    "ui_extsource",
+                    0
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "recv_exttap",
+                    0
+                  ],
+                  "destination": [
+                    "ui_exttap",
+                    0
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "ui_exttap",
+                    0
+                  ],
+                  "destination": [
+                    "send_exttap",
+                    0
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "initial_exttap",
+                    0
+                  ],
+                  "destination": [
+                    "ui_exttap",
+                    0
+                  ]
+                }
+              },
+              {
+                "patchline": {
+                  "source": [
+                    "audiostatusrecv",
+                    0
+                  ],
+                  "destination": [
+                    "audio_status",
                     0
                   ]
                 }
@@ -18091,6 +19263,123 @@
       },
       {
         "box": {
+          "id": "ui_recv_extgain",
+          "maxclass": "newobj",
+          "patching_rect": [
+            20,
+            350,
+            100,
+            22
+          ],
+          "text": "r #0-ui-extgain"
+        }
+      },
+      {
+        "box": {
+          "id": "ui_set_extgain",
+          "maxclass": "newobj",
+          "patching_rect": [
+            20,
+            350,
+            100,
+            22
+          ],
+          "text": "prepend set"
+        }
+      },
+      {
+        "box": {
+          "id": "ui_state_extgain",
+          "maxclass": "newobj",
+          "patching_rect": [
+            20,
+            350,
+            100,
+            22
+          ],
+          "text": "s #0-state-extgain"
+        }
+      },
+      {
+        "box": {
+          "id": "ui_recv_extsource",
+          "maxclass": "newobj",
+          "patching_rect": [
+            20,
+            350,
+            100,
+            22
+          ],
+          "text": "r #0-ui-extsource"
+        }
+      },
+      {
+        "box": {
+          "id": "ui_set_extsource",
+          "maxclass": "newobj",
+          "patching_rect": [
+            20,
+            350,
+            100,
+            22
+          ],
+          "text": "prepend set"
+        }
+      },
+      {
+        "box": {
+          "id": "ui_state_extsource",
+          "maxclass": "newobj",
+          "patching_rect": [
+            20,
+            350,
+            100,
+            22
+          ],
+          "text": "s #0-state-extsource"
+        }
+      },
+      {
+        "box": {
+          "id": "ui_recv_exttap",
+          "maxclass": "newobj",
+          "patching_rect": [
+            20,
+            350,
+            100,
+            22
+          ],
+          "text": "r #0-ui-exttap"
+        }
+      },
+      {
+        "box": {
+          "id": "ui_set_exttap",
+          "maxclass": "newobj",
+          "patching_rect": [
+            20,
+            350,
+            100,
+            22
+          ],
+          "text": "prepend set"
+        }
+      },
+      {
+        "box": {
+          "id": "ui_state_exttap",
+          "maxclass": "newobj",
+          "patching_rect": [
+            20,
+            350,
+            100,
+            22
+          ],
+          "text": "s #0-state-exttap"
+        }
+      },
+      {
+        "box": {
           "id": "pdrecall",
           "maxclass": "textbutton",
           "patching_rect": [
@@ -19027,6 +20316,143 @@
       },
       {
         "box": {
+          "id": "audiorouter",
+          "maxclass": "v8.codebox",
+          "patching_rect": [
+            10,
+            1000,
+            200,
+            22
+          ],
+          "code": "// Native audio input for the LIRA instrument. All API work runs in a Task.\n// Fixed parameter enums: Off, Input 1, Input 2, Input 1/2, Track 1..64.\n// Track choices mean current track positions. No control-surface API is used.\nautowatch=0; inlets=1; outlets=2;\nvar device=null, bus=null, clock=null, work=null, started=false;\nvar selected=0, tapIndex=1, ready=-1, lastStatus='';\nfunction ids(a){var r=[];for(var i=0;i<a.length;i++)if(a[i]==='id'&&Number(a[i+1]))r.push(Number(a[++i]));return r;}\nfunction value(a){return Number(Array.isArray(a)?a[0]:a)||0;}\nfunction data(api,key){var a=api.get(key);var d=JSON.parse(Array.isArray(a)?a.join(' '):a);return d[key];}\nfunction status(s){if(s!==lastStatus){lastStatus=s;outlet(1,'set',s);}}\nfunction gate(v){if(v!==ready){ready=v;outlet(0,'extready',v);}}\nfunction schedule(ms){if(!started)return;if(!work)work=new Task(apply,this);work.cancel();work.schedule(ms||0);}\nfunction source(v){selected=Math.max(0,Math.min(67,Math.round(Number(v)||0)));schedule();}\nfunction tap(v){tapIndex=Math.max(0,Math.min(2,Math.round(Number(v)||0)));schedule();}\nfunction init(){\n shutdown();started=true;gate(0);\n try {\n  device=new LiveAPI(null,'this_device');\n  // Read recalled parameter values; do not overwrite a saved Live Set with defaults.\n  var ps=ids(device.get('parameters'));\n  for(var i=0;i<ps.length;i++){\n   var p=new LiveAPI(null,'id '+ps[i]);var n=p.get('name').join(' ');\n   if(n==='Audio From')selected=value(p.get('value'));\n   if(n==='Audio Tap')tapIndex=value(p.get('value'));\n  }\n  clock=new Task(apply,this);clock.interval=1000;clock.repeat();schedule();\n }catch(e){status('Audio input unavailable: '+String(e));}\n}\nfunction chooseType(types,name){\n var found=types.filter(function(t){return t.display_name===name;});\n return found.length===1?found[0]:null;\n}\nfunction none(types){\n var off=chooseType(types,'No Input');\n if(off&&data(bus,'routing_type').identifier!==off.identifier)bus.set('routing_type',JSON.stringify(off));\n}\nfunction apply(){\n if(!started||!device)return;\n try {\n  if(!value(device.get('is_active'))){gate(0);return;}\n  var ports=ids(device.get('audio_inputs'));\n  if(!ports.length){gate(0);status('No audio input bus');return;}\n  if(!bus||Number(bus.id)!==ports[0])bus=new LiveAPI(null,'id '+ports[0]);\n  var types=data(bus,'available_routing_types');\n  if(selected===0){gate(0);none(types);status('Audio input off');return;}\n  var wanted=null, chan='', description='';\n  if(selected<=3){\n   wanted=chooseType(types,'Ext. In');chan=['1','2','1/2'][selected-1];description='Input '+chan;\n  }else{\n   var index=selected-4;\n   var tracks=ids(new LiveAPI(null,'live_set').get('tracks'));\n   if(index>=tracks.length){gate(0);none(types);status('Track '+(index+1)+' is unavailable');return;}\n   var track=new LiveAPI(null,'id '+tracks[index]);\n   var name=track.get('name').join(' ');\n   if(!value(track.get('has_audio_output'))){gate(0);none(types);status('Track '+(index+1)+' has no audio');return;}\n   wanted=chooseType(types,name)||chooseType(types,(index+1)+'-'+name);\n   chan=['Pre FX','Post FX','Post Mixer'][tapIndex];description='Track '+(index+1)+': '+name+' / '+chan;\n  }\n  if(!wanted){gate(0);none(types);status('Audio source unavailable or ambiguous');return;}\n  if(data(bus,'routing_type').identifier!==wanted.identifier){\n   gate(0);bus.set('routing_type',JSON.stringify(wanted));schedule(30);return;\n  }\n  var channels=data(bus,'available_routing_channels');\n  var match=channels.filter(function(c){return String(c.display_name).replace(/\\s/g,'')===chan.replace(/\\s/g,'');})[0];\n  if(!match){gate(0);status(description+' unavailable');return;}\n  if(data(bus,'routing_channel').identifier!==match.identifier){\n   gate(0);bus.set('routing_channel',JSON.stringify(match));schedule(30);return;\n  }\n  gate(1);status(description+' \u00b7 raise Audio In');\n }catch(e){gate(0);status('Audio routing error: '+String(e));}\n}\nfunction shutdown(){\n started=false;if(clock)clock.cancel();if(work)work.cancel();clock=null;work=null;\n gate(0);bus=null;device=null;\n}\n",
+          "filename": "none",
+          "numinlets": 1,
+          "numoutlets": 2,
+          "outlettype": [
+            "",
+            ""
+          ]
+        }
+      },
+      {
+        "box": {
+          "id": "audioboot",
+          "maxclass": "newobj",
+          "patching_rect": [
+            10,
+            1000,
+            200,
+            22
+          ],
+          "text": "live.thisdevice"
+        }
+      },
+      {
+        "box": {
+          "id": "audiodefer",
+          "maxclass": "newobj",
+          "patching_rect": [
+            10,
+            1000,
+            200,
+            22
+          ],
+          "text": "deferlow"
+        }
+      },
+      {
+        "box": {
+          "id": "audiosettle",
+          "maxclass": "newobj",
+          "patching_rect": [
+            10,
+            1000,
+            200,
+            22
+          ],
+          "text": "delay 750"
+        }
+      },
+      {
+        "box": {
+          "id": "audioinit",
+          "maxclass": "message",
+          "patching_rect": [
+            10,
+            1000,
+            200,
+            22
+          ],
+          "text": "init"
+        }
+      },
+      {
+        "box": {
+          "id": "audiosend_extsource",
+          "maxclass": "newobj",
+          "patching_rect": [
+            10,
+            1000,
+            200,
+            22
+          ],
+          "text": "prepend source"
+        }
+      },
+      {
+        "box": {
+          "id": "audiosend_exttap",
+          "maxclass": "newobj",
+          "patching_rect": [
+            10,
+            1000,
+            200,
+            22
+          ],
+          "text": "prepend tap"
+        }
+      },
+      {
+        "box": {
+          "id": "audiostatussend",
+          "maxclass": "newobj",
+          "patching_rect": [
+            10,
+            1000,
+            200,
+            22
+          ],
+          "text": "s #0-audio-status"
+        }
+      },
+      {
+        "box": {
+          "id": "audioclose",
+          "maxclass": "newobj",
+          "patching_rect": [
+            10,
+            1000,
+            200,
+            22
+          ],
+          "text": "closebang"
+        }
+      },
+      {
+        "box": {
+          "id": "audioshutdown",
+          "maxclass": "message",
+          "patching_rect": [
+            10,
+            1000,
+            200,
+            22
+          ],
+          "text": "shutdown"
+        }
+      },
+      {
+        "box": {
           "id": "padmode",
           "maxclass": "live.menu",
           "patching_rect": [
@@ -19689,7 +21115,7 @@
             150,
             22
           ],
-          "code": "// Embedded in v8.codebox. Native LiveAPI only; no files, network or externals.\ninlets = 1;\noutlets = 4; // 0: saved controls, 1: reserved, 2: status, 3: DSP state sync\nvar surface = null, self = null, song = null, appAPI = null, trackView = null;\nvar controls = [], grabbed = [], active = false, ready = false, enabled = true;\nvar voices = [0,0,0,0,0,0,0,0], pageIndex = 0, queue = [];\nvar levels = [127,127,127,127,127,127,127,127];\nvar parameterRefs=[], surfaceSlot=-1;\nvar lastStatus = '', ticks = 0, discoveredCount = 0, redrawTicks = 0;\n// Existing Push palette: muted sage, blue-grey, lavender, mauve.\nvar PAIRS = [53,55,57,59];\nvar PAGES = [{\"name\": \"Voices 1-2\", \"parameters\": [\"Tune 1\", \"Tune 2\", \"FM 12\", \"Sharp 12\", \"Source 12\", \"Fast 12\", \"Pitch 1234\", \"Hold 1234\"]}, {\"name\": \"Voices 3-4\", \"parameters\": [\"Tune 3\", \"Tune 4\", \"FM 34\", \"Sharp 34\", \"Source 34\", \"Fast 34\", \"Pitch 1234\", \"Hold 1234\"]}, {\"name\": \"Voices 5-6\", \"parameters\": [\"Tune 5\", \"Tune 6\", \"FM 56\", \"Sharp 56\", \"Source 56\", \"Fast 56\", \"Pitch 5678\", \"Hold 5678\"]}, {\"name\": \"Voices 7-8\", \"parameters\": [\"Tune 7\", \"Tune 8\", \"FM 78\", \"Sharp 78\", \"Source 78\", \"Fast 78\", \"Pitch 5678\", \"Hold 5678\"]}, {\"name\": \"Hyper LFO\", \"parameters\": [\"LFO A\", \"LFO B\", \"LFO AND OR\", \"LFO Link\", \"Vibrato\", \"Quantize\", \"FM Routing\", \"Total FB\"]}, {\"name\": \"Delay\", \"parameters\": [\"Delay Time 1\", \"Delay Time 2\", \"Delay Mod 1\", \"Delay Mod 2\", \"Feedback\", \"Delay Mix\", \"Delay Source\", \"Delay Wave\"]}, {\"name\": \"Output\", \"parameters\": [\"Drive\", \"Dist Mix\", \"Master\", \"Hold 1234\", \"Hold 5678\", \"Feedback\", \"Delay Mix\", \"Pad Control\"]}, {\"name\": \"Voice Mixer\", \"parameters\": [\"Voice 1 Level\", \"Voice 2 Level\", \"Voice 3 Level\", \"Voice 4 Level\", \"Voice 5 Level\", \"Voice 6 Level\", \"Voice 7 Level\", \"Voice 8 Level\"]}];\nvar work = new Task(flush, this);\nvar clock = new Task(tick, this);\nclock.interval = 250;\nfunction status(s) {\n var n=/Pads ready/.test(s)?6:/Pads off/.test(s)?1:/Select LIRA/.test(s)?2:/No pad matrix/.test(s)?4:/Press Note/.test(s)?5:/Waiting for Push/.test(s)?3:/error|failed|Reconnecting/.test(s)?7:0;\n outlet(0,'padstatusvalue',n);\n if (s !== lastStatus) { lastStatus=s; outlet(2, 'set', s); post('LIRA Pads: '+s+'\\n'); } }\nfunction idOf(value) {\n var a = Array.isArray(value) ? value : [value];\n for(var i=0;i<a.length;i++) if(a[i]==='id') return Number(a[i+1]);\n return Number(a[0]) || 0;\n}\n// Control-surface/proxy IDs may be negative. Only zero is the null ID.\nfunction ids(value) {\n var a=Array.isArray(value)?value:[value], result=[];\n for(var i=0;i<a.length;i++) if(isFinite(Number(a[i])) && Number(a[i])!==0) result.push(Number(a[i]));\n return result;\n}\nfunction api(id) { return new LiveAPI(null, 'id '+id); }\nfunction schedule(action) { queue.push(action); work.schedule(1); }\nfunction flush() {\n var jobs=queue; queue=[];\n for(var i=0;i<jobs.length;i++) {\n  try { jobs[i](); } catch(e) { release(); status('Pad error: '+e.message); }\n }\n}\nfunction init() {\n shutdown(); ticks=0; lastStatus=\"\";\n try {\n  self=new LiveAPI(null,'this_device'); song=new LiveAPI(null,'live_set'); appAPI=new LiveAPI(null,'live_app'); trackView=new LiveAPI(null,'live_set view selected_track view');\n  if(!self.id) { status('Waiting for Live'); return; }\n  ready=true; bindstate(); clock.repeat(); tick();\n } catch(e) { status('Init error: '+e.message); }\n}\nfunction enable(v) { enabled=Number(v)>0; if(!enabled) release(); if(ready) schedule(tick); }\nfunction state(i,v) { i=Number(i); if(i<0||i>7)return; voices[i]=Number(v)>0?1:0; if(active) schedule(redraw); }\nfunction level(i,v) { i=Number(i); if(i<0||i>7)return; levels[i]=Math.max(0,Math.min(127,Number(v)||0)); if(active)schedule(redraw); }\nfunction page(v) {\n var n=Math.max(0,Math.min(7,Math.round(Number(v)||0)));\n pageIndex=n;\n if(ready) schedule(function(){applypage();paint();});\n}\nfunction applypage() {\n // Recovery: native bank selection only. The previous API request caused\n // a reported Push reboot. Never call it from a pad or restored parameter.\n status('Use display buttons to select banks');\n}\nfunction acceptstate(ref,value){\n var v=Number(Array.isArray(value)?value[0]:value);\n if(!isFinite(v))return;\n if(ref.kind==='level') {level(ref.index,v);outlet(3,'level'+(ref.index+1),v);}\n else state(ref.index,v);\n}\nfunction statecallback(ref){return function(a){if(a&&a[0]==='value')schedule(function(){acceptstate(ref,a[1]);});};}\nfunction bindstate(){\n for(var i=0;i<parameterRefs.length;i++)try{parameterRefs[i].api.property='';}catch(e){}\n parameterRefs=[];\n var all=ids(self.get('parameters'));\n for(var j=0;j<all.length;j++){\n  var p=api(all[j]),name=String(p.get('name')),m=/^Voice ([1-8]) (Level|On)$/.exec(name);\n  if(!m)continue;\n  var r={index:Number(m[1])-1,kind:m[2]==='Level'?'level':'voice'};\n  r.api=new LiveAPI(statecallback(r),'id '+all[j]);parameterRefs.push(r);\n  r.api.property='value';acceptstate(r,r.api.get('value'));\n }\n}\nfunction syncstate(){for(var i=0;i<parameterRefs.length;i++)acceptstate(parameterRefs[i],parameterRefs[i].api.get('value'));}\nfunction discover() {\n var candidates=[], seen={};\n function remember(s,slot) {\n  var id=Number(s.id);\n  if(isFinite(id) && id!==0 && !seen[id]) {seen[id]=true;candidates.push({api:s,slot:slot});}\n }\n // Application's preference-slot list may omit the integrated Push surface.\n // Also resolve the documented root paths; their ordering is independent.\n try {\n  var raw=appAPI.get('control_surfaces'),all=[];\n  if(!Array.isArray(raw))raw=[raw];\n  for(var q=0;q<raw.length;q++)if(raw[q]==='id')all.push(Number(raw[++q]));\n  if(!all.length)all=raw.filter(function(v){return isFinite(Number(v));}).map(Number);\n  for(var i=0;i<all.length;i++)if(all[i])remember(api(all[i]),i);\n } catch(e) {}\n for(var k=0;k<16;k++) {\n  try {remember(new LiveAPI(null,'control_surfaces '+k),-1);} catch(e) {}\n }\n discoveredCount=candidates.length;\n for(var i=0;i<candidates.length;i++) {\n  var s=candidates[i].api;\n  var names;\n  try { names=s.call('get_control_names'); } catch(e) {continue;}\n  if(!(Array.isArray(names))) names=[names];\n  var pads=[];\n  for(var j=0;j<names.length;j++) {\n   var name=String(names[j]), match=/^(\\d+)_Clip_(\\d+)_Button$/.exec(name);\n   if(match && Number(match[1])<8 && Number(match[2])<8) pads.push({name:name,x:Number(match[1]),y:Number(match[2])});\n  }\n  // Fail closed instead of guessing names/coordinates on another controller.\n  if(pads.length!==64) continue;\n  surface=s; surfaceSlot=candidates[i].slot; controls=pads;\n  return true;\n }\n return false;\n}\nfunction acquire() {\n try {\n  syncstate();\n  for(var i=0;i<controls.length;i++) {\n   var c=controls[i];\n   if(c.y===7)continue; // Native note row retains pitch/pressure/slide MIDI.\n   c.id=idOf(surface.call('get_control',c.name));\n   if(!c.id) throw new Error('Missing pad '+c.name);\n   surface.call('grab_control',c.name); grabbed.push(c);\n   c.pressed=false; c.color=-1;\n   c.api=new LiveAPI(c.y===0?null:callback(c),'id '+c.id);\n   if(c.y!==0)c.api.property='value'; // Observe AFTER grabbing (required by Push 3).\n  }\n  active=true; redrawTicks=0; redraw(); status('Pads ready \u2014 use display banks');\n } catch(e) { release(); surface=null; status('Pad setup failed: '+e.message); }\n}\nfunction callback(c) {\n return function(a) {\n  if(!active || c.y===0 || !a || a[0]!=='value') return;\n  var down=Number(a[1])>0;\n  if(down===c.pressed) return; // pressure/repeated values must not re-toggle\n  c.pressed=down;\n  if(!down)return;\n  schedule(function(){\n   if(!active)return;\n   if(c.y===6) outlet(0,'voiceon'+(c.x+1),1-voices[c.x]);\n   else if(c.y===0) return; // Disabled until native bank switching is verified.\n   else if(c.y>=1 && c.y<=5) outlet(0,'level'+(c.x+1),Math.round((5-c.y)*127/4));\n  });\n };\n}\nfunction redraw() {\n if(!active)return;\n for(var i=0;i<controls.length;i++)controls[i].color=-1;\n paint();\n}\nfunction paint() {\n if(!active)return;\n for(var i=0;i<controls.length;i++) {\n  var c=controls[i], color=0;\n  if(c.y===7)continue;\n  if(c.y===6) color=voices[c.x]?PAIRS[Math.floor(c.x/2)]:0;\n  if(c.y===0) color=0; // Disabled page row: native display banks remain available.\n  // Five discrete fader positions: mute, 25%, 50%, 75%, 100% amplitude.\n  if(c.y>=1 && c.y<=5 && levels[c.x]>0 && 5-c.y<=Math.round(levels[c.x]*4/127)) color=PAIRS[Math.floor(c.x/2)];\n  if(color!==c.color) { c.api.call('send_value',color,1); c.color=color; }\n }\n status('Pads ready \u2014 use display banks');\n}\nfunction release() {\n if(active)outlet(0,'expressreset',0);\n active=false;\n for(var i=grabbed.length-1;i>=0;i--) {\n  var c=grabbed[i];\n  try { if(c.api) c.api.property=''; } catch(e) {}\n  try { if(surface) surface.call('release_control',c.name); } catch(e) {}\n  c.api=null; c.pressed=false; c.color=-1;\n }\n grabbed=[];\n}\nfunction tick() {\n if(!ready)return;\n try {\n  if(!enabled) { release();status('Pads off');return; }\n  var alive=self.get('is_active');\n  trackView.goto('live_set view selected_track view');\n  var selected=idOf(trackView.get('selected_device'));\n  if(!Number(Array.isArray(alive)?alive[0]:alive) || selected!==Number(self.id)) {\n   if(active)release(); status('Select LIRA Pads to play'); return;\n  }\n  if(!surface || !surface.id) {\n   if(active)release();\n   if((ticks++%4)!==0)return;\n   if(!discover()) {status(discoveredCount?'No pad matrix found':'Waiting for Push');return;}\n  }\n  var layout=String(surface.get('pad_layout'));\n  if(layout.indexOf('note.')!==0) {if(active)release();status('Press Note for LIRA pads');return;}\n  if(!active)acquire();\n  else if(++redrawTicks%4===0)redraw(); // Recover LEDs overwritten by Push layout redraws.\n } catch(e) {release();surface=null;status('Reconnecting to Push');}\n}\nfunction shutdown() { clock.cancel();work.cancel();queue=[];release();ready=false;surface=null;surfaceSlot=-1;controls=[];for(var i=0;i<parameterRefs.length;i++)try{parameterRefs[i].api.property='';}catch(e){}parameterRefs=[]; }\nfunction notifydeleted() { shutdown(); }\n",
+          "code": "// Embedded in v8.codebox. Native LiveAPI only; no files, network or externals.\ninlets = 1;\noutlets = 4; // 0: saved controls, 1: reserved, 2: status, 3: DSP state sync\nvar surface = null, self = null, song = null, appAPI = null, trackView = null;\nvar controls = [], grabbed = [], active = false, ready = false, enabled = true;\nvar voices = [0,0,0,0,0,0,0,0], pageIndex = 0, queue = [];\nvar levels = [127,127,127,127,127,127,127,127];\nvar parameterRefs=[], surfaceSlot=-1;\nvar lastStatus = '', ticks = 0, discoveredCount = 0, redrawTicks = 0;\n// Existing Push palette: muted sage, blue-grey, lavender, mauve.\nvar PAIRS = [53,55,57,59];\nvar PAGES = [{\"name\": \"Voices 1-2\", \"parameters\": [\"Tune 1\", \"Tune 2\", \"FM 12\", \"Sharp 12\", \"Source 12\", \"Fast 12\", \"Pitch 1234\", \"Hold 1234\"]}, {\"name\": \"Voices 3-4\", \"parameters\": [\"Tune 3\", \"Tune 4\", \"FM 34\", \"Sharp 34\", \"Source 34\", \"Fast 34\", \"Pitch 1234\", \"Hold 1234\"]}, {\"name\": \"Voices 5-6\", \"parameters\": [\"Tune 5\", \"Tune 6\", \"FM 56\", \"Sharp 56\", \"Source 56\", \"Fast 56\", \"Pitch 5678\", \"Hold 5678\"]}, {\"name\": \"Voices 7-8\", \"parameters\": [\"Tune 7\", \"Tune 8\", \"FM 78\", \"Sharp 78\", \"Source 78\", \"Fast 78\", \"Pitch 5678\", \"Hold 5678\"]}, {\"name\": \"Hyper LFO\", \"parameters\": [\"LFO A\", \"LFO B\", \"LFO AND OR\", \"LFO Link\", \"Vibrato\", \"Quantize\", \"FM Routing\", \"Total FB\"]}, {\"name\": \"Delay\", \"parameters\": [\"Delay Time 1\", \"Delay Time 2\", \"Delay Mod 1\", \"Delay Mod 2\", \"Feedback\", \"Delay Mix\", \"Delay Source\", \"Delay Wave\"]}, {\"name\": \"Output\", \"parameters\": [\"Drive\", \"Dist Mix\", \"Master\", \"Audio In\", \"Audio From\", \"Audio Tap\", \"Delay Mix\", \"Pad Control\"]}, {\"name\": \"Voice Mixer\", \"parameters\": [\"Voice 1 Level\", \"Voice 2 Level\", \"Voice 3 Level\", \"Voice 4 Level\", \"Voice 5 Level\", \"Voice 6 Level\", \"Voice 7 Level\", \"Voice 8 Level\"]}];\nvar work = new Task(flush, this);\nvar clock = new Task(tick, this);\nclock.interval = 250;\nfunction status(s) {\n var n=/Pads ready/.test(s)?6:/Pads off/.test(s)?1:/Select LIRA/.test(s)?2:/No pad matrix/.test(s)?4:/Press Note/.test(s)?5:/Waiting for Push/.test(s)?3:/error|failed|Reconnecting/.test(s)?7:0;\n outlet(0,'padstatusvalue',n);\n if (s !== lastStatus) { lastStatus=s; outlet(2, 'set', s); post('LIRA Pads: '+s+'\\n'); } }\nfunction idOf(value) {\n var a = Array.isArray(value) ? value : [value];\n for(var i=0;i<a.length;i++) if(a[i]==='id') return Number(a[i+1]);\n return Number(a[0]) || 0;\n}\n// Control-surface/proxy IDs may be negative. Only zero is the null ID.\nfunction ids(value) {\n var a=Array.isArray(value)?value:[value], result=[];\n for(var i=0;i<a.length;i++) if(isFinite(Number(a[i])) && Number(a[i])!==0) result.push(Number(a[i]));\n return result;\n}\nfunction api(id) { return new LiveAPI(null, 'id '+id); }\nfunction schedule(action) { queue.push(action); work.schedule(1); }\nfunction flush() {\n var jobs=queue; queue=[];\n for(var i=0;i<jobs.length;i++) {\n  try { jobs[i](); } catch(e) { release(); status('Pad error: '+e.message); }\n }\n}\nfunction init() {\n shutdown(); ticks=0; lastStatus=\"\";\n try {\n  self=new LiveAPI(null,'this_device'); song=new LiveAPI(null,'live_set'); appAPI=new LiveAPI(null,'live_app'); trackView=new LiveAPI(null,'live_set view selected_track view');\n  if(!self.id) { status('Waiting for Live'); return; }\n  ready=true; bindstate(); clock.repeat(); tick();\n } catch(e) { status('Init error: '+e.message); }\n}\nfunction enable(v) { enabled=Number(v)>0; if(!enabled) release(); if(ready) schedule(tick); }\nfunction state(i,v) { i=Number(i); if(i<0||i>7)return; voices[i]=Number(v)>0?1:0; if(active) schedule(redraw); }\nfunction level(i,v) { i=Number(i); if(i<0||i>7)return; levels[i]=Math.max(0,Math.min(127,Number(v)||0)); if(active)schedule(redraw); }\nfunction page(v) {\n var n=Math.max(0,Math.min(7,Math.round(Number(v)||0)));\n pageIndex=n;\n if(ready) schedule(function(){applypage();paint();});\n}\nfunction applypage() {\n // Recovery: native bank selection only. The previous API request caused\n // a reported Push reboot. Never call it from a pad or restored parameter.\n status('Use display buttons to select banks');\n}\nfunction acceptstate(ref,value){\n var v=Number(Array.isArray(value)?value[0]:value);\n if(!isFinite(v))return;\n if(ref.kind==='level') {level(ref.index,v);outlet(3,'level'+(ref.index+1),v);}\n else state(ref.index,v);\n}\nfunction statecallback(ref){return function(a){if(a&&a[0]==='value')schedule(function(){acceptstate(ref,a[1]);});};}\nfunction bindstate(){\n for(var i=0;i<parameterRefs.length;i++)try{parameterRefs[i].api.property='';}catch(e){}\n parameterRefs=[];\n var all=ids(self.get('parameters'));\n for(var j=0;j<all.length;j++){\n  var p=api(all[j]),name=String(p.get('name')),m=/^Voice ([1-8]) (Level|On)$/.exec(name);\n  if(!m)continue;\n  var r={index:Number(m[1])-1,kind:m[2]==='Level'?'level':'voice'};\n  r.api=new LiveAPI(statecallback(r),'id '+all[j]);parameterRefs.push(r);\n  r.api.property='value';acceptstate(r,r.api.get('value'));\n }\n}\nfunction syncstate(){for(var i=0;i<parameterRefs.length;i++)acceptstate(parameterRefs[i],parameterRefs[i].api.get('value'));}\nfunction discover() {\n var candidates=[], seen={};\n function remember(s,slot) {\n  var id=Number(s.id);\n  if(isFinite(id) && id!==0 && !seen[id]) {seen[id]=true;candidates.push({api:s,slot:slot});}\n }\n // Application's preference-slot list may omit the integrated Push surface.\n // Also resolve the documented root paths; their ordering is independent.\n try {\n  var raw=appAPI.get('control_surfaces'),all=[];\n  if(!Array.isArray(raw))raw=[raw];\n  for(var q=0;q<raw.length;q++)if(raw[q]==='id')all.push(Number(raw[++q]));\n  if(!all.length)all=raw.filter(function(v){return isFinite(Number(v));}).map(Number);\n  for(var i=0;i<all.length;i++)if(all[i])remember(api(all[i]),i);\n } catch(e) {}\n for(var k=0;k<16;k++) {\n  try {remember(new LiveAPI(null,'control_surfaces '+k),-1);} catch(e) {}\n }\n discoveredCount=candidates.length;\n for(var i=0;i<candidates.length;i++) {\n  var s=candidates[i].api;\n  var names;\n  try { names=s.call('get_control_names'); } catch(e) {continue;}\n  if(!(Array.isArray(names))) names=[names];\n  var pads=[];\n  for(var j=0;j<names.length;j++) {\n   var name=String(names[j]), match=/^(\\d+)_Clip_(\\d+)_Button$/.exec(name);\n   if(match && Number(match[1])<8 && Number(match[2])<8) pads.push({name:name,x:Number(match[1]),y:Number(match[2])});\n  }\n  // Fail closed instead of guessing names/coordinates on another controller.\n  if(pads.length!==64) continue;\n  surface=s; surfaceSlot=candidates[i].slot; controls=pads;\n  return true;\n }\n return false;\n}\nfunction acquire() {\n try {\n  syncstate();\n  for(var i=0;i<controls.length;i++) {\n   var c=controls[i];\n   if(c.y===7)continue; // Native note row retains pitch/pressure/slide MIDI.\n   c.id=idOf(surface.call('get_control',c.name));\n   if(!c.id) throw new Error('Missing pad '+c.name);\n   surface.call('grab_control',c.name); grabbed.push(c);\n   c.pressed=false; c.color=-1;\n   c.api=new LiveAPI(c.y===0?null:callback(c),'id '+c.id);\n   if(c.y!==0)c.api.property='value'; // Observe AFTER grabbing (required by Push 3).\n  }\n  active=true; redrawTicks=0; redraw(); status('Pads ready \u2014 use display banks');\n } catch(e) { release(); surface=null; status('Pad setup failed: '+e.message); }\n}\nfunction callback(c) {\n return function(a) {\n  if(!active || c.y===0 || !a || a[0]!=='value') return;\n  var down=Number(a[1])>0;\n  if(down===c.pressed) return; // pressure/repeated values must not re-toggle\n  c.pressed=down;\n  if(!down)return;\n  schedule(function(){\n   if(!active)return;\n   if(c.y===6) outlet(0,'voiceon'+(c.x+1),1-voices[c.x]);\n   else if(c.y===0) return; // Disabled until native bank switching is verified.\n   else if(c.y>=1 && c.y<=5) outlet(0,'level'+(c.x+1),Math.round((5-c.y)*127/4));\n  });\n };\n}\nfunction redraw() {\n if(!active)return;\n for(var i=0;i<controls.length;i++)controls[i].color=-1;\n paint();\n}\nfunction paint() {\n if(!active)return;\n for(var i=0;i<controls.length;i++) {\n  var c=controls[i], color=0;\n  if(c.y===7)continue;\n  if(c.y===6) color=voices[c.x]?PAIRS[Math.floor(c.x/2)]:0;\n  if(c.y===0) color=0; // Disabled page row: native display banks remain available.\n  // Five discrete fader positions: mute, 25%, 50%, 75%, 100% amplitude.\n  if(c.y>=1 && c.y<=5 && levels[c.x]>0 && 5-c.y<=Math.round(levels[c.x]*4/127)) color=PAIRS[Math.floor(c.x/2)];\n  if(color!==c.color) { c.api.call('send_value',color,1); c.color=color; }\n }\n status('Pads ready \u2014 use display banks');\n}\nfunction release() {\n if(active)outlet(0,'expressreset',0);\n active=false;\n for(var i=grabbed.length-1;i>=0;i--) {\n  var c=grabbed[i];\n  try { if(c.api) c.api.property=''; } catch(e) {}\n  try { if(surface) surface.call('release_control',c.name); } catch(e) {}\n  c.api=null; c.pressed=false; c.color=-1;\n }\n grabbed=[];\n}\nfunction tick() {\n if(!ready)return;\n try {\n  if(!enabled) { release();status('Pads off');return; }\n  var alive=self.get('is_active');\n  trackView.goto('live_set view selected_track view');\n  var selected=idOf(trackView.get('selected_device'));\n  if(!Number(Array.isArray(alive)?alive[0]:alive) || selected!==Number(self.id)) {\n   if(active)release(); status('Select LIRA Pads to play'); return;\n  }\n  if(!surface || !surface.id) {\n   if(active)release();\n   if((ticks++%4)!==0)return;\n   if(!discover()) {status(discoveredCount?'No pad matrix found':'Waiting for Push');return;}\n  }\n  var layout=String(surface.get('pad_layout'));\n  if(layout.indexOf('note.')!==0) {if(active)release();status('Press Note for LIRA pads');return;}\n  if(!active)acquire();\n  else if(++redrawTicks%4===0)redraw(); // Recover LEDs overwritten by Push layout redraws.\n } catch(e) {release();surface=null;status('Reconnecting to Push');}\n}\nfunction shutdown() { clock.cancel();work.cancel();queue=[];release();ready=false;surface=null;surfaceSlot=-1;controls=[];for(var i=0;i<parameterRefs.length;i++)try{parameterRefs[i].api.property='';}catch(e){}parameterRefs=[]; }\nfunction notifydeleted() { shutdown(); }\n",
           "filename": "none",
           "numinlets": 1,
           "numoutlets": 4,
@@ -20644,6 +22070,45 @@
       },
       {
         "box": {
+          "id": "padread_extgain",
+          "maxclass": "newobj",
+          "patching_rect": [
+            20,
+            800,
+            150,
+            22
+          ],
+          "text": "pattr @bindto extgain @autorestore 0"
+        }
+      },
+      {
+        "box": {
+          "id": "padread_extsource",
+          "maxclass": "newobj",
+          "patching_rect": [
+            20,
+            800,
+            150,
+            22
+          ],
+          "text": "pattr @bindto extsource @autorestore 0"
+        }
+      },
+      {
+        "box": {
+          "id": "padread_exttap",
+          "maxclass": "newobj",
+          "patching_rect": [
+            20,
+            800,
+            150,
+            22
+          ],
+          "text": "pattr @bindto exttap @autorestore 0"
+        }
+      },
+      {
+        "box": {
           "id": "padread_padmode",
           "maxclass": "newobj",
           "patching_rect": [
@@ -20996,6 +22461,30 @@
       }
     ],
     "lines": [
+      {
+        "patchline": {
+          "source": [
+            "audioinput",
+            0
+          ],
+          "destination": [
+            "engine",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "audioinput",
+            1
+          ],
+          "destination": [
+            "engine",
+            1
+          ]
+        }
+      },
       {
         "patchline": {
           "source": [
@@ -22332,6 +23821,78 @@
         "patchline": {
           "source": [
             "send_voiceon8",
+            0
+          ],
+          "destination": [
+            "engine",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "extgain",
+            0
+          ],
+          "destination": [
+            "send_extgain",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "send_extgain",
+            0
+          ],
+          "destination": [
+            "engine",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "extsource",
+            0
+          ],
+          "destination": [
+            "send_extsource",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "send_extsource",
+            0
+          ],
+          "destination": [
+            "engine",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "exttap",
+            0
+          ],
+          "destination": [
+            "send_exttap",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "send_exttap",
             0
           ],
           "destination": [
@@ -26003,6 +27564,186 @@
       {
         "patchline": {
           "source": [
+            "deferopen",
+            0
+          ],
+          "destination": [
+            "padread_extgain",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "openpanel",
+            0
+          ],
+          "destination": [
+            "padread_extgain",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "ui_recv_extgain",
+            0
+          ],
+          "destination": [
+            "extgain",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "extgain",
+            0
+          ],
+          "destination": [
+            "ui_set_extgain",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "ui_set_extgain",
+            0
+          ],
+          "destination": [
+            "ui_state_extgain",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "deferopen",
+            0
+          ],
+          "destination": [
+            "padread_extsource",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "openpanel",
+            0
+          ],
+          "destination": [
+            "padread_extsource",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "ui_recv_extsource",
+            0
+          ],
+          "destination": [
+            "extsource",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "extsource",
+            0
+          ],
+          "destination": [
+            "ui_set_extsource",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "ui_set_extsource",
+            0
+          ],
+          "destination": [
+            "ui_state_extsource",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "deferopen",
+            0
+          ],
+          "destination": [
+            "padread_exttap",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "openpanel",
+            0
+          ],
+          "destination": [
+            "padread_exttap",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "ui_recv_exttap",
+            0
+          ],
+          "destination": [
+            "exttap",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "exttap",
+            0
+          ],
+          "destination": [
+            "ui_set_exttap",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "ui_set_exttap",
+            0
+          ],
+          "destination": [
+            "ui_state_exttap",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
             "pdrecall",
             0
           ],
@@ -27112,6 +28853,150 @@
           ],
           "destination": [
             "quantize",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "audioboot",
+            0
+          ],
+          "destination": [
+            "audiodefer",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "audiodefer",
+            0
+          ],
+          "destination": [
+            "audiosettle",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "audiosettle",
+            0
+          ],
+          "destination": [
+            "audioinit",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "audioinit",
+            0
+          ],
+          "destination": [
+            "audiorouter",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "extsource",
+            0
+          ],
+          "destination": [
+            "audiosend_extsource",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "audiosend_extsource",
+            0
+          ],
+          "destination": [
+            "audiorouter",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "exttap",
+            0
+          ],
+          "destination": [
+            "audiosend_exttap",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "audiosend_exttap",
+            0
+          ],
+          "destination": [
+            "audiorouter",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "audiorouter",
+            0
+          ],
+          "destination": [
+            "engine",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "audiorouter",
+            1
+          ],
+          "destination": [
+            "audiostatussend",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "audioclose",
+            0
+          ],
+          "destination": [
+            "audioshutdown",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "audioshutdown",
+            0
+          ],
+          "destination": [
+            "audiorouter",
             0
           ]
         }
@@ -28931,6 +30816,42 @@
       {
         "patchline": {
           "source": [
+            "padread_extgain",
+            0
+          ],
+          "destination": [
+            "ui_set_extgain",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "padread_extsource",
+            0
+          ],
+          "destination": [
+            "ui_set_extsource",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
+            "padread_exttap",
+            0
+          ],
+          "destination": [
+            "ui_set_exttap",
+            0
+          ]
+        }
+      },
+      {
+        "patchline": {
+          "source": [
             "padread_padmode",
             0
           ],
@@ -29529,6 +31450,21 @@
         "Voice 8 On",
         0
       ],
+      "extgain": [
+        "Audio In",
+        "Audio In",
+        0
+      ],
+      "extsource": [
+        "Audio From",
+        "Audio From",
+        0
+      ],
+      "exttap": [
+        "Audio Tap",
+        "Audio Tap",
+        0
+      ],
       "parameterbanks": {
         "0": {
           "index": 0,
@@ -29621,9 +31557,9 @@
             "Drive",
             "Dist Mix",
             "Master",
-            "Hold 1234",
-            "Hold 5678",
-            "Feedback",
+            "Audio In",
+            "Audio From",
+            "Audio Tap",
             "Delay Mix",
             "Pad Control"
           ]

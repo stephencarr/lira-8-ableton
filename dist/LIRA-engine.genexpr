@@ -149,6 +149,9 @@ Param voiceon5(0,min=0,max=1);
 Param voiceon6(0,min=0,max=1);
 Param voiceon7(0,min=0,max=1);
 Param voiceon8(0,min=0,max=1);
+Param extgain(0,min=0,max=127);
+Param extsource(0,min=0,max=67);
+Param exttap(1,min=0,max=2);
 Param gate1(0,min=0,max=1);
 Param gate2(0,min=0,max=1);
 Param gate3(0,min=0,max=1);
@@ -157,6 +160,7 @@ Param gate5(0,min=0,max=1);
 Param gate6(0,min=0,max=1);
 Param gate7(0,min=0,max=1);
 Param gate8(0,min=0,max=1);
+Param extready(0,min=0,max=1);
 
 Delay pair1(64),pair2(64),pair3(64),pair4(64),totaldelay(64);
 Delay delay1(1048576),delay2(1048576);
@@ -219,6 +223,7 @@ hpf_3_a = clamp(1 - 6.28318530718 * (3) / samplerate, 0, 1); hpf_3_input = v7+v8
 pair4.write(hpf_3_out);
 
 dry=(v1*lira_ramp(level1/127,23.22)+v2*lira_ramp(level2/127,23.22)+v3*lira_ramp(level3/127,23.22)+v4*lira_ramp(level4/127,23.22)+v5*lira_ramp(level5/127,23.22)+v6*lira_ramp(level6/127,23.22)+v7*lira_ramp(level7/127,23.22)+v8*lira_ramp(level8/127,23.22))*0.166667;
+dry=dry+(in1+in2)*0.5*lira_ramp(extgain/127*extready,23.22);
 fb=lira_ramp(feedback/127*pow(2,2*feedback/127),23.22);
 dlfo=(dwave>0?lsqr:ltri)*(dsource==2);
 self1=lira_lp(delay1.read(64)*0.5*(dsource==0),689);

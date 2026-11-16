@@ -13,7 +13,7 @@ groups=[]
 for k in range(1,5):
  g=1 if k<3 else 2
  groups.append((f'Voices {2*k-1}-{2*k}',[f'tune{2*k-1}',f'tune{2*k}',f'mod{k}',f'sharp{k}',f'source{k}',f'fast{k}',f'pitch{g}',f'hold{g}']))
-groups.extend([('Hyper LFO',['lfo1','lfo2','andor','link','vibrato','quantize','routing','totalfb']),('Delay',['time1','time2','dmod1','dmod2','feedback','dmix','dsource','dwave']),('Output',['drive','distmix','volume','hold1','hold2','feedback','dmix','padmode'])])
+groups.extend([('Hyper LFO',['lfo1','lfo2','andor','link','vibrato','quantize','routing','totalfb']),('Delay',['time1','time2','dmod1','dmod2','feedback','dmix','dsource','dwave']),('Output',['drive','distmix','volume','extgain','extsource','exttap','dmix','padmode'])])
 groups.append(('Voice Mixer',['level'+str(i) for i in range(1,9)]))
 def parameter(n,label,initial,choices,rect):
  b=add(n,'live.menu',varname=n,parameter_enable=1,numinlets=1,numoutlets=3,outlettype=['','','float'],items=choices,presentation=1,presentation_rect=rect,saved_attribute_attributes={'valueof':{'parameter_longname':label,'parameter_shortname':label,'parameter_type':2,'parameter_enum':choices,'parameter_mmin':0,'parameter_mmax':len(choices)-1,'parameter_unitstyle':9,'parameter_initial_enable':1,'parameter_initial':[initial]}})
@@ -83,7 +83,7 @@ popup['lines'].append({'patchline':{'source':['padstatusrecv',0],'destination':[
 # Do not auto-open a desktop window when the standalone instrument loads.
 lines[:]=[l for l in lines if not(l['patchline']['source'][0]=='deferopen' and l['patchline']['destination'][0]=='openmsg')]
 by['brand']['text']='LIRA • PADS'
-by['title']['text']='LIRA • 8 / Pad edition alpha 8'
+by['title']['text']='LIRA • 8 / Pad edition alpha 9 · Audio input'
 # Hybrid surface: native serial-note bottom row, seven grabbed UI rows.
 p['is_mpe']=1
 # Native note LEDs use the named colours supported by live.push; the custom
@@ -122,4 +122,4 @@ raw=json.dumps({'patcher':p},indent=2).encode()+b'\0'
 (OUT/'LIRA-Pads-controller.js').write_text(code)
 (OUT/'pages.json').write_text(json.dumps(pages,indent=2))
 shutil.copy(ROOT/'build/LIRA-Push/License.txt',OUT/'License.txt')
-print('Built self-contained pad edition; 66 parameters; pressure expression, eight permanent banks; no Setup.')
+print('Built self-contained pad edition; 69 parameters; external audio, pressure expression, eight permanent banks.')

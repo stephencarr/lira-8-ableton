@@ -8,6 +8,9 @@ for name,label,values in [('sharp','Sharp',[40]*4),('mod','FM',[0]*4),('source',
  for p,v in enumerate(values): param(name+str(p+1),label+' '+['12','34','56','78'][p],v,2 if name=='source' else 1 if name=='fast' else 127)
 for n,l,v,m in [('pitch1','Pitch 1234',63,127),('pitch2','Pitch 5678',63,127),('hold1','Hold 1234',0,127),('hold2','Hold 5678',0,127),('lfo1','LFO A',64,127),('lfo2','LFO B',72,127),('link','LFO Link',0,1),('andor','LFO AND OR',0,1),('routing','FM Routing',0,1),('totalfb','Total FB',0,1),('vibrato','Vibrato',0,1),('quantize','Quantize',0,1),('time1','Delay Time 1',60,127),('time2','Delay Time 2',68,127),('dmod1','Delay Mod 1',0,127),('dmod2','Delay Mod 2',0,127),('feedback','Feedback',35,127),('dmix','Delay Mix',30,127),('dsource','Delay Source',1,2),('dwave','Delay Wave',0,1),('drive','Drive',20,127),('distmix','Dist Mix',30,127),('volume','Master',80,127)]:param(n,l,v,m)
 for i in range(1,9): param('voiceon'+str(i),'Voice '+str(i)+' On',0,1)
+param('extgain','Audio In',0)
+param('extsource','Audio From',0,67)
+param('exttap','Audio Tap',1,2)
 code=r'''
 // Adapted from LIRA-8, Copyright Miguel Moreno. See License.txt.
 // Gen port: explicit 64-sample inter-pair feedback; see port notes.
@@ -74,6 +77,7 @@ lira_dynamics(x) {
 '''
 for n,l,v,m in params: code+=f'Param {n}({v},min=0,max={m});\n'
 for i in range(1,9):code+=f'Param gate{i}(0,min=0,max=1);\n'
+code+='Param extready(0,min=0,max=1);\n'
 code+='''
 Delay pair1(64),pair2(64),pair3(64),pair4(64),totaldelay(64);
 Delay delay1(1048576),delay2(1048576);
@@ -106,6 +110,7 @@ v{i}=lira_voice(fq{i}*(1+vib{p}*0.005)*(1+src{p}*md{p}),sh{p},max(gate{i},voiceo
 for p in range(1,5):code+=f'pair{p}.write(lira_hp(v{2*p-1}+v{2*p},3));\n'
 code+='''
 dry=(v1+v2+v3+v4+v5+v6+v7+v8)*0.166667;
+dry=dry+(in1+in2)*0.5*lira_ramp(extgain/127*extready,23.22);
 fb=lira_ramp(feedback/127*pow(2,2*feedback/127),23.22);
 dlfo=(dwave>0?lsqr:ltri)*(dsource==2);
 self1=lira_lp(delay1.read(64)*0.5*(dsource==0),689);
@@ -136,9 +141,11 @@ def box(id,cls='newobj',text=None,rect=None,**kw):
  if text is not None:b['text']=text
  boxes.append({'box':b});return id
 def wire(a,b,ao=0,bi=0):lines.append({'patchline':{'source':[a,ao],'destination':[b,bi]}})
-gp={'fileversion':1,'classnamespace':'dsp.gen','rect':[0,0,900,650],'boxes':[{'box':{'id':'code','maxclass':'codebox','code':code,'numinlets':0,'numoutlets':2,'patching_rect':[20,20,850,600]}}],'lines':[]}
+gp={'fileversion':1,'classnamespace':'dsp.gen','rect':[0,0,900,650],'boxes':[{'box':{'id':'code','maxclass':'codebox','code':code,'numinlets':2,'numoutlets':2,'patching_rect':[20,20,850,600]}}],'lines':[]}
 for i in [1,2]:gp['boxes'].append({'box':{'id':f'out{i}','maxclass':'newobj','text':f'out {i}','patching_rect':[i*100,640,50,22]}});gp['lines'].append({'patchline':{'source':['code',i-1],'destination':[f'out{i}',0]}})
-box('engine',text='gen~',patcher=gp,numinlets=1,numoutlets=2,outlettype=['signal','signal'])
+for i in [1,2]:gp['boxes'].append({'box':{'id':f'in{i}','maxclass':'newobj','text':f'in {i}','patching_rect':[i*100,0,50,22],'numinlets':0,'numoutlets':1}});gp['lines'].append({'patchline':{'source':[f'in{i}',0],'destination':['code',i-1]}})
+box('engine',text='gen~',patcher=gp,numinlets=2,numoutlets=2,outlettype=['signal','signal'])
+box('audioinput',text='plugin~ 1 2',numinlets=2,numoutlets=2,outlettype=['signal','signal']);wire('audioinput','engine');wire('audioinput','engine',1,1)
 box('output',text='plugout~',numinlets=2,numoutlets=0);wire('engine','output');wire('engine','output',1,1)
 box('title','comment','LIRA • 8   /   Push port alpha',[8,8,350,20],presentation=1,presentation_rect=[8,8,350,20],fontsize=16)
 box('hint','comment','MIDI 36–43 = voices 1–8. Hold sustains each group. Master starts low.',[360,8,550,20],presentation=1,presentation_rect=[360,8,550,20])
@@ -163,6 +170,8 @@ parameters['inherited_shortname']=1
 patch={'patcher':{'fileversion':1,'appversion':{'major':9,'minor':0,'revision':0,'architecture':'x64','modernui':1},'classnamespace':'box','rect':[0,0,1050,700],'openinpresentation':1,'devicewidth':1035,'default_fontsize':11,'default_fontname':'Arial','boxes':boxes,'lines':lines,'parameters':parameters,'dependency_cache':[]}}
 from ui import apply_ui
 apply_ui(patch['patcher'], params, ROOT)
+from audio_input import add_audio_routing
+add_audio_routing(patch['patcher'], ROOT)
 data=json.dumps(patch,indent=2).encode()+b'\x00'
 (OUT/'LIRA-Push.maxpat').write_bytes(data[:-1])
 # Same instrument container chunks as Ableton's bundled Max Instrument template.

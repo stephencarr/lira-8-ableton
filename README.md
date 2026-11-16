@@ -6,7 +6,7 @@ Based on [Miguel Moreno's LIRA-8](https://github.com/MikeMorenoAudio/LIRA-8), or
 
 **Download and load**
 
-- [LIRA-Push-Pads.amxd](dist/LIRA-Push-Pads.amxd): the instrument, currently pad edition alpha 8. Load on a MIDI track.
+- [LIRA-Push-Pads.amxd](dist/LIRA-Push-Pads.amxd): the instrument, currently pad edition alpha 9, with external audio input. Load on a MIDI track.
 - [LIRA-Delay.amxd](dist/LIRA-Delay.amxd): the new audio effect. Load on an audio track, a return track, or after another instrument.
 - Keep [License.txt](License.txt) with copies you redistribute. On a GitHub file page, use **Download raw file**, or download the whole repository as a ZIP.
 
@@ -29,9 +29,23 @@ On Push, select LIRA, enable **Pad Control** on the Output bank, and press **Not
 
 Use Push's device-bank display controls to select **Voices 1–2, Voices 3–4, Voices 5–6, Voices 7–8, Hyper LFO, Delay, Output, Voice Mixer**. These are eight permanent banks. There is no Perform or Setup bank. The bank names identify the active section; the old Pad Page parameter is retained internally for compatibility and does not select banks.
 
+**Feed external audio into the synth**
+
+The instrument now accepts external audio inside its own signal path, before the shared delay and distortion. With Total FB enabled, that combined output can modulate the voices. This follows the EXT IN / TOTAL FB relationship described in [SOMA's LYRA-8 manual, pages 4 and 7](https://somasynths.com/wp-content/uploads/2020/11/LYRA-8_manual_Eng_V2_1.pdf#page=7).
+
+Use the **Output** bank on Push, or the **External Audio** section at the bottom of the desktop instrument window:
+
+- **Audio From:** Off, Input 1, Input 2, Input 1/2, or Track 1–64. Hardware inputs refer to the current host audio device; on Push standalone they are Push's inputs.
+- **Audio In:** incoming level, starting at zero. Raise it to hear the external signal; 127 applies no additional input attenuation before the mono sum.
+- **Audio Tap:** Pre FX, Post FX, or Post Mixer for a track source. This has no effect on hardware-input choices.
+
+Track choices refer to current track positions, so check them after reordering tracks. The desktop panel shows the resolved source name. A missing or ambiguous source is muted. The choices and eight banks stay fixed; the device does not rebuild bank layouts or parameter ranges at runtime. Hold controls remain on the voice-pair banks.
+
+To hear cross-modulation, select an audio source and raise Audio In, latch a voice, choose **LFO / FB** as its pair's Source, raise that pair's Mod, and enable **Total FB** on the Hyper LFO bank. External audio can then affect the voice through the existing output-feedback loop. Delay Source **Self**, with Mod 1/2 raised, also lets the incoming signal affect delay-time modulation. Input gain and source selection are saved with the Set. With Audio From Off or Audio In at zero, the new input contributes no audio; the previous synthesis expression is preserved.
+
 **Process another track through LIRA Delay**
 
-This is a separate effect instance with the same delay and distortion processing. It does not inject audio into the instrument instance's own feedback network.
+The companion effect remains available for ordinary inserts and sends. It is a separate effect instance; use the synth's input above when external audio should participate in that synth's own feedback network.
 
 For a shared send effect:
 
@@ -52,6 +66,8 @@ For an insert, simply put LIRA Delay after the source instrument or on the sourc
 The effect has three Push banks: **Delay, Hyper LFO, Output**. Input at 127 is unity gain; reducing it stops new material entering the delay without immediately clearing existing repeats. Master sets output level. Delay Mix and distortion Mix are separate controls. Select LFO as the delay modulation source and raise Mod 1/2 to hear the Hyper LFO affect delay time. AND/OR is omitted because it only feeds voice FM in the original instrument.
 
 Stereo input is averaged to mono, and the same mono output is sent to both channels, matching the LIRA signal path. Even at dry Mix, the signal still passes through the output saturation and any distortion blend; use Live's device bypass for an unprocessed stereo signal. The delay retains the original low-level noise excitation and can self-oscillate at high feedback. Start with a low listening level.
+
+For a microphone on **Push Input 1**, use an audio track with **Ext. In → 1**, **Monitor In**, and LIRA Delay. A useful insert starting point is Input 127, Master 80, Delay Mix 64, Feedback 30 and Dist Mix 0. A directly connected dynamic mic generally needs the **High** input mode in Setup → Audio. Push does not supply phantom power; a mic requiring it needs external power. Use headphones for live mic monitoring. See Ableton's [Push microphone FAQ](https://help.ableton.com/hc/en-us/articles/8483166334748-Push-3-Technical-FAQ) and [audio-track instructions](https://www.ableton.com/en/push/manual/#recording-audio).
 
 **Source and builds**
 
@@ -74,12 +90,15 @@ python3 tests/check-delay.py
 node tests/test-pads.cjs
 LIRA_ID_SIGN=-1 node tests/test-pads.cjs
 node tests/test-expression.cjs
+node tests/test-audio-input.cjs
+LIRA_ID_SIGN=-1 node tests/test-audio-input.cjs
 ```
 
 - `src/build.py`: base Gen synthesis and Max instrument generator.
 - `src/ui.py`: compact strip, grouped desktop window and preset recall.
 - `src/inline_filters.py`: expands high-pass filter state at its call sites.
 - `src/build-pads.py`, `src/pads.js`, `src/expression.js`: fixed Push banks, pad ownership/LEDs, mixer, latches and pressure handling.
+- `src/audio_input.py`, `src/audio-input.js`: embedded native Live DeviceIO routing, fixed source selectors and input-status display.
 - `src/build-delay.py`: extracts the instrument's generated Hyper LFO, delay and distortion code into a native Max audio effect using `plugin~` and `plugout~`.
 - `tests/`: structural and mocked controller regression checks.
 - `assets/pd-preset.txt`: the comparison patch used by the recall button.
@@ -87,13 +106,15 @@ node tests/test-expression.cjs
 - `build/`: ignored base-instrument intermediate files.
 - `dist/`: ready-to-load devices, editable Max patches, embedded Gen/controller source and instrument bank definitions.
 
-Edit the generators, then rebuild; hand edits to `dist/` are overwritten. Builds are deterministic and the packaged instrument is byte-identical to the existing alpha 8 device. The original Pure Data reference is included so the port can be inspected and improved. Differences include explicit 64-sample feedback boundaries and a rectangular RMS approximation of Pure Data's windowed detector; exact waveform matching is not claimed.
+Edit the generators, then rebuild; hand edits to `dist/` are overwritten. Builds are deterministic. A regression check removes only the new input declarations and summing expression, then compares the remaining DSP against the alpha 8 hash. The original Pure Data reference is included so the port can be inspected and improved. Differences include explicit 64-sample feedback boundaries and a rectangular RMS approximation of Pure Data's windowed detector; exact waveform matching is not claimed.
 
 **Validation and current limits**
 
 The automated checks cover AMXD containers, patch wiring, saved parameters, bank mappings, embedded code, preservation of the synthesis engine, signed Live API IDs, pad acquisition/release, latch handling, saved mixer levels, forced LED repaint, reconnects and pressure on all eight voices. Controller tests use a mocked Live API and cannot prove hardware stability.
 
-LIRA Delay loaded successfully in desktop Live and received audio from a separate LIRA instrument track via Audio From / Post Mixer / Monitor In. With delay Mix at 127, its output rose from approximately −84 dBFS idle to −45 dBFS with a quiet source voice. The panel was visually checked. This is a host audio smoke test, not an exhaustive sound-quality or timing test. The new effect has not yet been tested on Push standalone.
+LIRA Delay loaded successfully in desktop Live and received audio from a separate LIRA instrument track via Audio From / Post Mixer / Monitor In. With delay Mix at 127, its output rose from approximately −84 dBFS idle to −45 dBFS with a quiet source voice. The panel was visually checked. The owner also confirmed microphone audio with delay through Push Input 1 and headphones on standalone.
+
+The integrated synth input was tested in desktop Live by routing another track through its native audio bus. A separate silent Gen harness records the oscillator before effects, comparing input gain zero, routing gate zero, and external audio with Total FB. To repeat this DSP test, run `python3 tests/make-audio-harness.py`, load the generated `build/LIRA-Feedback-Test.amxd` in Live, wait six seconds, then run `python3 tests/check-audio-capture.py`. The harness disables random delay noise and records at reduced level to make comparisons deterministic; it sends no audio to speakers. The new synth input still needs testing on Push standalone.
 
 The instrument's pad takeover has worked on the owner's Push. Alpha 8's refreshed mixer LEDs and full bottom-row behavior still need confirmation on hardware. Top-row bank selection remains disabled, and no crash-associated bank-selection API call is shipped. This repository contains the current source and devices, not the withdrawn crashing experimental builds. Save your Set before trying a new build.
 
