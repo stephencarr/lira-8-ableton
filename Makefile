@@ -14,6 +14,8 @@ test: all
 	node tests/test-expression.cjs
 	node tests/test-audio-input.cjs
 	LIRA_ID_SIGN=-1 node tests/test-audio-input.cjs
+	node tests/test-tuning.cjs
+	LIRA_ID_SIGN=-1 node tests/test-tuning.cjs
 
 clean:
 	rm -rf build

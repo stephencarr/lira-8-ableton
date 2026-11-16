@@ -6,7 +6,7 @@ Based on [Miguel Moreno's LIRA-8](https://github.com/MikeMorenoAudio/LIRA-8), or
 
 **Download and load**
 
-- [LIRA-Push-Pads.amxd](dist/LIRA-Push-Pads.amxd): the instrument, currently pad edition alpha 9, with external audio input. Load on a MIDI track.
+- [LIRA-Push-Pads.amxd](dist/LIRA-Push-Pads.amxd): the instrument, currently pad edition alpha 10, with temporary note tuning and external audio input. Load on a MIDI track.
 - [LIRA-Delay.amxd](dist/LIRA-Delay.amxd): the new audio effect. Load on an audio track, a return track, or after another instrument.
 - Keep [License.txt](License.txt) with copies you redistribute. On a GitHub file page, use **Download raw file**, or download the whole repository as a ZIP.
 
@@ -28,6 +28,16 @@ On Push, select LIRA, enable **Pad Control** on the Output bank, and press **Not
 - Bottom row: momentary voice playing. Pressure raises pitch by up to two semitones and increases sharpness together. Horizontal pitch movement and slide are ignored. Pressure requires Live/Push to deliver pressure data.
 
 Use Push's device-bank display controls to select **Voices 1–2, Voices 3–4, Voices 5–6, Voices 7–8, Hyper LFO, Delay, Output, Voice Mixer**. These are eight permanent banks. There is no Perform or Setup bank. The bank names identify the active section; the old Pad Page parameter is retained internally for compatibility and does not select banks.
+
+**Tune chords using notes (alpha 10 prototype)**
+
+Select LIRA on Push, enable Pad Control, and use Note mode. On a voice-pair bank, hold **Shift** while turning **Tune 1–8** to step through chromatic notes. The readout temporarily includes the note and octave, such as `C#2 75.79`. A `~` marks a starting pitch between notes. Pressing Shift alone changes only the display. Release it to keep the exact fractional tuning value and return to the normal numeric display and continuous tuning. Octaves follow Live: MIDI 36 is C1, MIDI 60 is C3; tuning uses A = 440 Hz.
+
+Hold Shift and turn **Pitch 1–4 / 5–8** to transpose the group in semitone steps relative to its pitch when Shift was pressed. All four intervals are preserved. Individual Tune selection accounts for the current group Pitch setting. These are oscillator base notes; FM, vibrato and pressure can still move the sounding pitch. Values stop at the original knob limits.
+
+The desktop instrument window also has a **Note tune** toggle for the same behavior without Push. Playback automation is passed through while its parameter reports active automation; PD preset recall is passed through unchanged. No extra parameter banks are added. Shift is observed, never grabbed, and the encoders keep their native mappings. The tuning mode resets when pad control releases the surface. The desktop toggle is independent and resets on device load.
+
+A real desktop Live harness verified all eight snapped pitches, parameter-to-DSP agreement, temporary note labels, group intervals, and return to continuous tuning. Run `python3 tests/make-tuning-harness.py`, load `build/LIRA-Tuning-Test.amxd`, wait four seconds, then run `python3 tests/check-tuning-capture.py` to repeat it. This silent harness sends no audio to speakers. Physical Shift observation and display refresh still need confirmation on Push standalone; this is a test build.
 
 **Feed external audio into the synth**
 
@@ -92,12 +102,15 @@ LIRA_ID_SIGN=-1 node tests/test-pads.cjs
 node tests/test-expression.cjs
 node tests/test-audio-input.cjs
 LIRA_ID_SIGN=-1 node tests/test-audio-input.cjs
+node tests/test-tuning.cjs
+LIRA_ID_SIGN=-1 node tests/test-tuning.cjs
 ```
 
 - `src/build.py`: base Gen synthesis and Max instrument generator.
 - `src/ui.py`: compact strip, grouped desktop window and preset recall.
 - `src/inline_filters.py`: expands high-pass filter state at its call sites.
 - `src/build-pads.py`, `src/pads.js`, `src/expression.js`: fixed Push banks, pad ownership/LEDs, mixer, latches and pressure handling.
+- `src/tuning.py`, `src/tuning.js`: reversible Shift note selection using the original voice tuning curves, plus desktop note mode.
 - `src/audio_input.py`, `src/audio-input.js`: embedded native Live DeviceIO routing, fixed source selectors and input-status display.
 - `src/build-delay.py`: extracts the instrument's generated Hyper LFO, delay and distortion code into a native Max audio effect using `plugin~` and `plugout~`.
 - `tests/`: structural and mocked controller regression checks.

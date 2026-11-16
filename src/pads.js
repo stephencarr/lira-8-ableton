@@ -1,11 +1,12 @@
 // Embedded in v8.codebox. Native LiveAPI only; no files, network or externals.
 inlets = 1;
-outlets = 4; // 0: saved controls, 1: reserved, 2: status, 3: DSP state sync
+outlets = 4; // 0: saved controls, 1: temporary tuning modifier, 2: status, 3: DSP state sync
 var surface = null, self = null, song = null, appAPI = null, trackView = null;
 var controls = [], grabbed = [], active = false, ready = false, enabled = true;
 var voices = [0,0,0,0,0,0,0,0], pageIndex = 0, queue = [];
 var levels = [127,127,127,127,127,127,127,127];
 var parameterRefs=[], surfaceSlot=-1;
+var hasShift=false, shiftBinding=null;
 var lastStatus = '', ticks = 0, discoveredCount = 0, redrawTicks = 0;
 // Existing Push palette: muted sage, blue-grey, lavender, mauve.
 var PAIRS = [53,55,57,59];
@@ -109,6 +110,7 @@ function discover() {
   // Fail closed instead of guessing names/coordinates on another controller.
   if(pads.length!==64) continue;
   surface=s; surfaceSlot=candidates[i].slot; controls=pads;
+  hasShift=names.indexOf('Shift_Button')!==-1;
   return true;
  }
  return false;
@@ -126,8 +128,28 @@ function acquire() {
    c.api=new LiveAPI(c.y===0?null:callback(c),'id '+c.id);
    if(c.y!==0)c.api.property='value'; // Observe AFTER grabbing (required by Push 3).
   }
-  active=true; redrawTicks=0; redraw(); status('Pads ready — use display banks');
+  active=true; bindshift(); redrawTicks=0; redraw(); status('Pads ready — use display banks');
  } catch(e) { release(); surface=null; status('Pad setup failed: '+e.message); }
+}
+function bindshift(){
+ // Observe only. Never grab Shift or the encoders: their native functions remain.
+ if(!hasShift)return;
+ try{
+  var id=idOf(surface.call('get_control','Shift_Button'));
+  if(!id)return;
+  var binding={api:null};shiftBinding=binding;
+  binding.api=new LiveAPI(function(a){
+   if(!active||shiftBinding!==binding||!a||a[0]!=='value')return;
+   var down=Number(a[1])>0;
+   schedule(function(){if(active&&shiftBinding===binding)outlet(1,'shift',down?1:0);});
+  },'id '+id);
+  binding.api.property='value';
+ }catch(e){unbindshift();post('LIRA note tuning: Shift observation unavailable\n');}
+}
+function unbindshift(){
+ var old=shiftBinding;shiftBinding=null;
+ if(old)try{old.api.property='';}catch(e){}
+ outlet(1,'shift',0);
 }
 function callback(c) {
  return function(a) {
@@ -163,6 +185,7 @@ function paint() {
  status('Pads ready — use display banks');
 }
 function release() {
+ unbindshift();
  if(active)outlet(0,'expressreset',0);
  active=false;
  for(var i=grabbed.length-1;i>=0;i--) {

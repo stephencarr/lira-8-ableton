@@ -85,3 +85,12 @@ assert '_parameter_range' not in boxes['audiorouter']['code']
 assert 'control_surfaces' not in boxes['audiorouter']['code']
 assert {'Audio In','Audio From','Audio Tap'} <= set(p['parameters']['parameterbanks']['6']['parameters'])
 print('PASS: muted external input preserves alpha 8 DSP; routing code embedded; source controls fit the existing Output bank.')
+assert boxes['notetuner']['code']==(root/'src/tuning.js').read_text()
+for n in [f'tune{i}' for i in range(1,9)]+['pitch1','pitch2']:
+ assert boxes[n]['saved_attribute_attributes']['valueof']['parameter_type']==0
+ assert boxes[n]['saved_attribute_attributes']['valueof']['parameter_units']=='%.0f'
+ assert any(e['patchline']['source']==['send_'+n,0] and e['patchline']['destination']==['tunedefer',0] for e in p['lines'])
+assert '_parameter_range' not in boxes['notetuner']['code']
+assert 'parameterbanks' not in boxes['notetuner']['code']
+assert boxes['tuneroute_root']['numoutlets']==11
+print('PASS: tuning intercepts only ten controls; parameter ranges, banks and DSP are unchanged.')
